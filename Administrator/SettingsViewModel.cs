@@ -6,6 +6,7 @@ using Prism.Events;
 using System;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Windows;
 
 namespace Administrator {
     public class SettingsViewModel : ViewModelBase {
@@ -39,6 +40,16 @@ namespace Administrator {
                 OnPropertyChanged("CategoryText");
             }
         }
+        private bool detailsRequired;
+
+        public bool DetailsRequired {
+            get { return detailsRequired; }
+            set {
+                detailsRequired = value;
+                OnPropertyChanged("DetailsRequired");
+            }
+        }
+
 
         private ObservableCollection<Category> categoryList;
         public ObservableCollection<Category> CategoryList {
@@ -55,10 +66,10 @@ namespace Administrator {
             DeleteCommand = new DelegateCommand<Area>(ExecuteDelete);
             AddCategoryCommand = new DelegateCommand(ExecuteAddCategory, CanExecuteAddCategory);
             DeleteCategoryCommand = new DelegateCommand<Category>(ExecuteCategoryDelete);
-            
+
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                AreaList = new ObservableCollection<Area>(unitofWork.Areas.GetAll());
                 CategoryList = new ObservableCollection<Category>(unitofWork.Categories.GetAll());
+                AreaList = new ObservableCollection<Area>(unitofWork.Areas.GetAll());
             }
         }
 
@@ -76,6 +87,7 @@ namespace Administrator {
                 AreaList.Add(area);
                 eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Area>>>().Publish(AreaList);
                 unitofWork.Complete();
+                AreaText = String.Empty;
             }
         }
         private bool CanExecuteAddArea() {
@@ -89,12 +101,15 @@ namespace Administrator {
         }
 
         private void ExecuteDelete(Area area) {
-            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                AreaList.Remove(area);
-                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Area>>>().Publish(AreaList);
-                var result = unitofWork.Areas.Find((x) => x.Id == area.Id).FirstOrDefault();
-                unitofWork.Areas.Remove(result);
-                unitofWork.Complete();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if(messageBoxResult == MessageBoxResult.Yes) {
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    AreaList.Remove(area);
+                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Area>>>().Publish(AreaList);
+                    var result = unitofWork.Areas.Find((x) => x.Id == area.Id).FirstOrDefault();
+                    unitofWork.Areas.Remove(result);
+                    unitofWork.Complete();
+                }
             }
         }
 
@@ -106,10 +121,12 @@ namespace Administrator {
 
         private void ExecuteAddCategory() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                var category = new Category() { Name = CategoryText };
+                var category = new Category() { Name = CategoryText, DetailsRequired = DetailsRequired };
                 unitofWork.Categories.Add(category);
                 CategoryList.Add(category);
                 eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
+                CategoryText = String.Empty;
+                DetailsRequired = default(bool);
                 unitofWork.Complete();
             }
         }
@@ -124,12 +141,15 @@ namespace Administrator {
         }
 
         private void ExecuteCategoryDelete(Category category) {
-            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                CategoryList.Remove(category);
-                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
-                var result = unitofWork.Categories.Find((x) => x.Id == category.Id).FirstOrDefault();
-                unitofWork.Categories.Remove(result);
-                unitofWork.Complete();
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if(messageBoxResult == MessageBoxResult.Yes) {
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    CategoryList.Remove(category);
+                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
+                    var result = unitofWork.Categories.Find((x) => x.Id == category.Id).FirstOrDefault();
+                    unitofWork.Categories.Remove(result);
+                    unitofWork.Complete();
+                }
             }
         }
 

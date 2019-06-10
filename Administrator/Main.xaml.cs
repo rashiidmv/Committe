@@ -14,6 +14,13 @@ namespace Administrator {
                 Content = new NewResident()
             };
             tabControl1.Items.Add(newResident);
+
+            TabItem contribution = new TabItem {
+                Header = "Contribution",
+                Content = new Contribution.ContributionView()
+            };
+            tabControl1.Items.Add(contribution);
+
             TabItem settings = new TabItem {
                 Header = "Settings",
                 Content = new Settings()

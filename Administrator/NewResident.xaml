@@ -5,6 +5,16 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Administrator"
              mc:Ignorable="d" Height="Auto" Width="Auto">
+    <UserControl.Resources>
+        <DataTemplate x:Key="ResidenceTemplate">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Margin="6,0,0,0" Width="40" Text="{Binding Number}"/>
+                <TextBlock Margin="6,0,0,0" Width="250" Text="{Binding Name}" />
+                <TextBlock Margin="6,0,0,0" Width="150"  Text="{Binding Guardian}"/>
+                <TextBlock Margin="6,0,0,0" Text="{Binding Area}"/>
+            </StackPanel>
+        </DataTemplate>
+    </UserControl.Resources>
     <Grid Background="BlanchedAlmond">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -35,13 +45,15 @@
             <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Guardian" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Number}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Guardian}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Name}" Margin="0,9,20,9"/>
-            <ComboBox  Grid.Row="4" Grid.Column="1" ItemsSource="{Binding AreaList}" DisplayMemberPath="Name" SelectedValuePath="Name" SelectedValue="{Binding Area}" Margin="0,9,20,9"/>
+            <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Number}" Margin="0,9,20,9" IsEnabled="{Binding IsEdit}"/>
+            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Guardian}" IsEnabled="False" Margin="0,9,20,9"  />
+            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Name}" Margin="0,9,20,9" />
+            <ComboBox  Grid.Row="4" Grid.Column="1" ItemsSource="{Binding AreaList}" DisplayMemberPath="Name" SelectedValuePath="Name" SelectedValue="{Binding Area}" Margin="0,9,20,9" />
             <StackPanel Grid.Row="5" Grid.Column="1" Orientation="Horizontal">
-                <Button   Content="Save Residence" Command="{Binding SaveResidenceCommand}" Width="100" Margin="0,8,20,8"/>
-                <Button  Content="Clear" Command="{Binding ClearResidenceCommand}" Width="100" Margin="0,8,20,8"/>
+                <Button   Content="Save Residence" Command="{Binding SaveResidenceCommand}" Width="84" Margin="0,8,20,8"/>
+                <Button   Content="New Residence" Command="{Binding NewResidenceCommand}" Width="84" Margin="0,8,20,8"/>
+                <Button  Content="Delete" Command="{Binding DeleteResidenceCommand}" Width="48" Margin="0,8,20,8"/>
+                <Button  Content="Clear" Command="{Binding ClearResidenceCommand}" Width="48" Margin="0,8,20,8"/>
             </StackPanel>
             <StackPanel Margin="8,8,8,8" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="Beige" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
@@ -57,7 +69,9 @@
                 </DockPanel>
             </StackPanel>
             <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
-                <ListBox Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ResidenceList}" SelectedValue="{Binding CurrentResidence}" DisplayMemberPath="Name"/>
+                <ListBox ItemTemplate="{StaticResource ResidenceTemplate}"
+                    Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ResidenceList}" SelectedValue="{Binding CurrentResidence}">
+                </ListBox>
             </DockPanel>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Background="Bisque">
@@ -88,12 +102,14 @@
             <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding Mobile}" Margin="0,9,20,9"/>
             <StackPanel Grid.Row="5" Grid.Column="1"  Orientation="Horizontal">
                 <CheckBox Name="Abroad" Content="Abroad" IsChecked="{Binding IsAbroad}" Margin="0,9,20,9"/>
-                <CheckBox Name="Guardian" Content="Guardian" IsChecked="{Binding IsGuardian}" Margin="0,9,20,9"/>
+                <CheckBox Name="Guardian" Content="Guardian" IsChecked="{Binding IsGuardian}" IsEnabled="{Binding EnbalbeIsGuardian}" Margin="0,9,20,9"/>
             </StackPanel>
             <TextBox  IsEnabled="{Binding ElementName=Abroad, Path=IsChecked}" Grid.Row="6" Grid.Column="1" Text="{Binding Country}" Margin="0,9,20,9"/>
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <Button   Content="Save Member" Command="{Binding SaveMemberCommand}" Width="100" Margin="0,8,20,8"/>
-                <Button  Content="Clear" Width="100" Margin="0,8,20,8"/>
+                <Button   Content="New Member" Command="{Binding NewMemberCommand}" Width="84" Margin="0,8,20,8"/>
+                <Button  Content="Delete" Command="{Binding DeleteMemberCommand}" Width="48" Margin="0,8,20,8"/>
+                <Button Command="{Binding ClearMemberCommand}" Content="Clear" Width="100" Margin="0,8,20,8"/>
             </StackPanel>
             <ListBox ItemsSource="{Binding MemberList}" SelectedValue="{Binding CurrentMember}" DisplayMemberPath="Name"  Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood" Margin="8,8,8,8"/>
         </Grid>

@@ -50,6 +50,8 @@
   <ItemGroup>
     <Compile Include="Area.cs" />
     <Compile Include="Category.cs" />
+    <Compile Include="Contribution.cs" />
+    <Compile Include="ContributionDetails.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Residence.cs" />
     <Compile Include="ResidenceMember.cs" />

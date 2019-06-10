@@ -10,7 +10,7 @@ namespace MahalluManager.DataAccess {
             Context = context;
         }
         public void Add(TEntity entity) {
-            Context.Set<TEntity>().Add(entity);
+            Context.Set<TEntity>().Add(entity); 
         }
 
         public void AddRange(IEnumerable<TEntity> entities) {

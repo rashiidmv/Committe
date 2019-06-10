@@ -32,15 +32,6 @@ namespace MahalluManager.Model {
             }
         }
 
-        private string guardian;
-        public string Guardian {
-            get { return guardian; }
-            set {
-                guardian = value;
-                OnPropertyChanged("Guardian");
-            }
-        }
-
         private string area;
         public string Area {
             get { return area; }

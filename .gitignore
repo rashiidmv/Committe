@@ -1,0 +1,16 @@
+################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/packages
+*.user
+/.vs/config
+/.vs
+/Apttus.Contracts.WebAPI/obj/*
+/Apttus.Contracts.Core/bin/*
+bin
+obj
+backup
+TestResults
+LogFiles
+

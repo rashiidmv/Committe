@@ -1,4 +1,6 @@
 ﻿using MahalluManager.Infra;
+using System.Collections.ObjectModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MahalluManager.Model {
     public class ResidenceMember : ViewModelBase {
@@ -69,5 +71,15 @@ namespace MahalluManager.Model {
             }
         }
 
+        private bool isGuardian;
+
+        public bool IsGuardian {
+            get { return isGuardian; }
+            set {
+                isGuardian = value;
+                OnPropertyChanged("IsGuardian");
+                OnPropertyChanged("Guardian");
+            }
+        }
     }
 }

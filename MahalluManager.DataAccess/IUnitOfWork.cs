@@ -7,6 +7,8 @@ namespace MahalluManager.DataAccess {
         IRepository<ResidenceMember> ResidenceMembers { get; }
         IRepository<Area> Areas { get; }
         IRepository<Category> Categories { get; }
+        IRepository<Contribution> Contributions { get; }
+        IRepository<ContributionDetail> ContributionDetails { get; }
 
         int Complete();
     }

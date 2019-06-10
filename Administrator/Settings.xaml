@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Administrator"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             Height="Auto" Width="Auto">
     <UserControl.Resources>
         <DataTemplate x:Key="DefaultTemplate">
             <StackPanel Orientation="Horizontal">
@@ -20,7 +20,8 @@
                 <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
                         Command="{Binding DataContext.DeleteCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
                         CommandParameter="{Binding}"/>
-                <TextBlock Text="{Binding Name}" />
+                <CheckBox Content="Details Required" IsChecked="{Binding DetailsRequired}" IsEnabled="False"/>
+                <TextBlock Margin="20,0,0,0" Text="{Binding Name}" />
             </StackPanel>
         </DataTemplate>
     </UserControl.Resources>
@@ -42,11 +43,13 @@
             <ListBox ItemTemplate="{StaticResource DefaultTemplate}" ItemsSource="{Binding AreaList}" SelectedValuePath="Id" Margin="0,8,0,8"/>
         </DockPanel>
         <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8">
-            <DockPanel LastChildFill="True" DockPanel.Dock="Top">
-                <Button Command="{Binding AddCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
+            <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top">
                 <TextBlock TextWrapping="Wrap" Text="New Category" Margin="0,8,20,8"/>
-                <TextBox Text="{Binding CategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
-            </DockPanel>
+                <TextBox Width="140" Text="{Binding CategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
+                <TextBlock TextWrapping="Wrap" Text="Details Required" Margin="0,8,20,8"/>
+                <CheckBox IsChecked="{Binding DetailsRequired}" Margin="0,8,20,8"/>
+                <Button Command="{Binding AddCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
+            </StackPanel>
             <ListBox ItemTemplate="{StaticResource CategoryListTemplate}" ItemsSource="{Binding CategoryList}" SelectedValuePath="Id" Margin="0,8,0,8"/>
         </DockPanel>
     </Grid>

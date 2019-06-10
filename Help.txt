@@ -1,0 +1,4 @@
+for db upgrade
+1. add property as nullable
+2. add column in the db
+3. 

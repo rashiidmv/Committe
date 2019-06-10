@@ -7,5 +7,7 @@ namespace MahalluManager.DataAccess {
         public DbSet<ResidenceMember> ResidenceMember { get; set; }
         public DbSet<Area> Area { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<Contribution> Contribution { get; set; }
+        public DbSet<ContributionDetail> ContributionDetail { get; set; }
     }
 }
