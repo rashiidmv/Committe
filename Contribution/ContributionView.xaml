@@ -37,7 +37,7 @@
             <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Total Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <ComboBox  Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CategoryList}" SelectedValuePath="Name" 
+            <ComboBox  Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CategoryList}" 
                        DisplayMemberPath="Name" SelectedValue="{Binding Category}" 
                                        Margin="0,9,20,9" IsEnabled="{Binding IsEnable}"/>
             <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
@@ -59,15 +59,17 @@
                 <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
                     <TextBlock Text="Search by.." Margin="0,8,20,0"/>
                     <RadioButton Content="Year" IsChecked="{Binding SearchByYear}" Margin="0,8,20,0"/>
-                    <RadioButton Content="House Number" IsChecked="{Binding SearchByHouseNumber}" Margin="0,8,20,0" />
+                    <RadioButton Content="House Number" IsChecked="{Binding SearchByHouseNumber}"  Margin="0,8,20,0" />
                     <RadioButton Content="Member Name" IsChecked="{Binding SearchByMemberName}" Margin="0,8,20,0" />
                     <RadioButton Content="Category" IsChecked="{Binding SearchByCategory}" Margin="0,8,20,0"/>
                 </StackPanel>
-                <DockPanel LastChildFill="True" Margin="40,0,0,0">
+                <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
+                    <TextBox MinWidth="260" Width="Auto" Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />
+                    <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding SearchableYears}" SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowYearSearch}" Margin="0,6,20,6" Height="20" />
+                    <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding CategoryList}" SelectedValuePath="Name"  SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowCategorySearch}" DisplayMemberPath="Name"  Margin="0,6,20,6" Height="20" />
                     <Button Command="{Binding ClearSearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Clear" Height="24" Margin="0,6,20,6"/>
                     <Button Command="{Binding SearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Search" Height="24" Margin="0,6,20,6"/>
-                    <TextBox Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}"  Margin="0,6,20,6" Height="20" />
-                </DockPanel>
+                </StackPanel>
             </StackPanel>
             <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
                 <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}" SelectedValue="{Binding CurrentContribution}">

@@ -6,6 +6,7 @@ using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 
 namespace Contribution {
@@ -18,15 +19,115 @@ namespace Contribution {
                 CategoryList = e;
             });
             ClearContributionCommand = new DelegateCommand(ExecuteClearContribution, CanExecuteClearContribution);
+            SearchContributionCommand = new DelegateCommand(ExecuteSearchContribution, CanExecuteSearchContribution);
             ClearSearchContributionCommand = new DelegateCommand(ExecuteClearSearchContribution);
             DeleteContributionCommand = new DelegateCommand(ExecuteDeleteContribution, CanExecuteDeleteContribution);
             NewContributionCommand = new DelegateCommand(ExecuteNewContribution);
             SaveContributionCommand = new DelegateCommand(ExecuteSaveContribution, CanExecuteSaveContribution);
             RefreshContribution();
             TestItems = new List<string>() { "rashid", "Rashid", "Hiba", "Hiaa", "Ayaan", "Aynu" };
-
             InitializeDatePicker();
+            InitializeSearchPanel();
         }
+
+        
+
+        private List<String> searchableYears;
+
+        public List<String> SearchableYears {
+            get { return searchableYears; }
+            set {
+                searchableYears = value;
+                OnPropertyChanged("SearchableYears");
+            }
+        }
+
+
+        private Visibility showYearSearch;
+        public Visibility ShowYearSearch {
+            get {
+                return SearchByYear ? Visibility.Visible : Visibility.Collapsed;
+            }
+            private set { showYearSearch = value; }
+        }
+
+        private Visibility showOtherSearch;
+        public Visibility ShowOtherSearch {
+            get {
+                return (SearchByHouseNumber || SearchByMemberName) ? Visibility.Visible : Visibility.Collapsed;
+            }
+            private set {
+                showOtherSearch = value;
+            }
+        }
+
+        private Visibility showCategorySearch;
+
+        public Visibility ShowCategorySearch {
+            get { return SearchByCategory ? Visibility.Visible : Visibility.Collapsed; }
+            private set { showCategorySearch = value; }
+        }
+
+        private bool searchByYear;
+        public bool SearchByYear {
+            get { return searchByYear; }
+            set {
+                searchByYear = value;
+                if(searchByYear) {
+                    SearchByHouseNumber = SearchByMemberName = SearchByCategory = false;
+                    SearchContributionText = String.Empty;
+                }
+                OnPropertyChanged("SearchByYear");
+                OnPropertyChanged("ShowYearSearch");
+            }
+        }
+
+        private bool searchByHouseNumber;
+
+        public bool SearchByHouseNumber {
+            get { return searchByHouseNumber; }
+            set {
+                searchByHouseNumber = value;
+                if(searchByHouseNumber) {
+                    SearchByYear = SearchByMemberName = SearchByCategory = false;
+                    SearchContributionText = String.Empty;
+                }
+                OnPropertyChanged("SearchByHouseNumber");
+                OnPropertyChanged("ShowOtherSearch");
+
+            }
+        }
+
+        private bool searchByMemberName;
+
+        public bool SearchByMemberName {
+            get { return searchByMemberName; }
+            set {
+                searchByMemberName = value;
+                if(searchByMemberName) {
+                    SearchByYear = SearchByHouseNumber = SearchByCategory = false;
+                    SearchContributionText = String.Empty;
+                }
+                OnPropertyChanged("SearchByMemberName");
+                OnPropertyChanged("ShowOtherSearch");
+            }
+        }
+
+        private bool searchByCategory;
+
+        public bool SearchByCategory {
+            get { return searchByCategory; }
+            set {
+                searchByCategory = value;
+                if(searchByCategory) {
+                    SearchByYear = SearchByHouseNumber = SearchByMemberName = false;
+                    SearchContributionText = String.Empty;
+                }
+                OnPropertyChanged("SearchByCategory");
+                OnPropertyChanged("ShowCategorySearch");
+            }
+        }
+
 
 
         private DelegateCommand saveContributionCommand;
@@ -115,6 +216,21 @@ namespace Contribution {
             }
         }
 
+        private DelegateCommand searchContributionCommand;
+
+        public DelegateCommand SearchContributionCommand {
+            get { return searchContributionCommand; }
+            set { searchContributionCommand = value; }
+        }
+
+        private bool CanExecuteSearchContribution() {
+            return ContributionList != null && !String.IsNullOrEmpty(SearchContributionText);
+        }
+
+        private void ExecuteSearchContribution() {
+            throw new NotImplementedException();
+        }
+
         private DelegateCommand clearSearchContributionCommand;
 
         public DelegateCommand ClearSearchContributionCommand {
@@ -135,6 +251,16 @@ namespace Contribution {
             EndDate = DateTime.Now.AddMonths(2);
         }
 
+        private void InitializeSearchPanel() {
+            SearchByYear = true;
+            SearchByHouseNumber = false;
+            SearchByMemberName = false;
+            SearchableYears = new List<string>();
+            for(int i=-10;i<=10;i++) {
+                SearchableYears.Add(DateTime.Now.AddYears(i).Year.ToString());
+            }
+
+        }
 
         private DateTime startDate;
         public DateTime StartDate {
@@ -160,7 +286,7 @@ namespace Contribution {
             set {
                 searchContributionText = value;
                 OnPropertyChanged("SearchContributionText");
-                //SearchCommand.RaiseCanExecuteChanged();
+                SearchContributionCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -180,10 +306,11 @@ namespace Contribution {
             set {
                 categoryList = value;
                 OnPropertyChanged("CategoryList");
+                if(CategoryList != null) {
+                    Category = CategoryList.FirstOrDefault(x => x.Name == CurrentContribution.CategoryName);
+                }
             }
         }
-
-
 
         private ObservableCollection<MahalluManager.Model.Contribution> contributionList;
         public ObservableCollection<MahalluManager.Model.Contribution> ContributionList {
@@ -207,9 +334,9 @@ namespace Contribution {
             }
         }
 
-        private String category;
+        private Category category;
 
-        public String Category {
+        public Category Category {
             get { return category; }
             set {
                 category = value;
@@ -298,7 +425,9 @@ namespace Contribution {
 
         private void CurrentContributionChanged() {
             if(CurrentContribution != null) {
-                Category = CurrentContribution.CategoryName;
+                if(CategoryList != null) {
+                    Category = CategoryList.FirstOrDefault(x => x.Name == CurrentContribution.CategoryName);
+                }
                 TotalAmount = CurrentContribution.ToatalAmount.ToString();
                 CreatedOn = CurrentContribution.CreatedOn;
                 ReceiptNumber = currentContribution.ReceiptNo;
@@ -319,12 +448,14 @@ namespace Contribution {
             }
         }
         private void ClearContribution() {
-            Category = TotalAmount = ReceiptNumber = string.Empty;
+            Category = null;
+            TotalAmount = ReceiptNumber = string.Empty;
             CreatedOn = DateTime.Now;
         }
 
         private bool ValidateContribution() {
-            if(String.IsNullOrEmpty(Category) ||
+            if(Category == null ||
+                String.IsNullOrEmpty(Category.Name) ||
                 String.IsNullOrEmpty(TotalAmount)) {
                 MessageBox.Show("Please enter Category and Total Amount");
                 return false;
@@ -336,7 +467,7 @@ namespace Contribution {
             var contribution = new MahalluManager.Model.Contribution();
             contribution.ToatalAmount = Convert.ToDecimal(TotalAmount?.Trim());
             contribution.ReceiptNo = ReceiptNumber?.Trim();
-            contribution.CategoryName = Category?.Trim();
+            contribution.CategoryName = Category.Name?.Trim();
             contribution.CreatedOn = CreatedOn;
             return contribution;
         }
