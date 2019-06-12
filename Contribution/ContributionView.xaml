@@ -72,7 +72,16 @@
                 </StackPanel>
             </StackPanel>
             <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
-                <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}" SelectedValue="{Binding CurrentContribution}">
+                <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}"
+                          SelectedValue="{Binding CurrentContribution}" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                        <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*"/>
+                        <DataGridTextColumn Header="Total Amount" Binding="{Binding ToatalAmount}" Width="*"/>
+                        <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" Width="*"/>
+                        <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNo}" Width="*"/>
+                    </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>
         </Grid>
