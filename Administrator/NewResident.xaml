@@ -5,17 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Administrator"
              mc:Ignorable="d" Height="Auto" Width="Auto">
-    <UserControl.Resources>
-        <DataTemplate x:Key="ResidenceTemplate">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock Margin="6,0,0,0" Width="40" Text="{Binding Number}"/>
-                <TextBlock Margin="6,0,0,0" Width="250" Text="{Binding Name}" />
-                <TextBlock Margin="6,0,0,0" Width="150"  Text="{Binding Guardian}"/>
-                <TextBlock Margin="6,0,0,0" Text="{Binding Area}"/>
-            </StackPanel>
-        </DataTemplate>
-    </UserControl.Resources>
-    <Grid Background="BlanchedAlmond">
+     <Grid Background="BlanchedAlmond">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -69,9 +59,15 @@
                 </DockPanel>
             </StackPanel>
             <DockPanel Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
-                <ListBox ItemTemplate="{StaticResource ResidenceTemplate}"
-                    Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ResidenceList}" SelectedValue="{Binding CurrentResidence}">
-                </ListBox>
+                <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ResidenceList}"
+                          SelectedValue="{Binding CurrentResidence}" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True" >
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="House Number" Binding="{Binding Number}" Width="*"/>
+                        <DataGridTextColumn Header="House Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Area" Binding="{Binding Area}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
             </DockPanel>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2" Background="Bisque">
@@ -111,7 +107,21 @@
                 <Button  Content="Delete" Command="{Binding DeleteMemberCommand}" Width="48" Margin="0,8,20,8"/>
                 <Button Command="{Binding ClearMemberCommand}" Content="Clear" Width="100" Margin="0,8,20,8"/>
             </StackPanel>
-            <ListBox ItemsSource="{Binding MemberList}" SelectedValue="{Binding CurrentMember}" DisplayMemberPath="Name"  Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood" Margin="8,8,8,8"/>
+            <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
+                <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding MemberList}"
+                          SelectedValue="{Binding CurrentMember}" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridCheckBoxColumn Header="Guardian" Binding="{Binding IsGuardian}" Width="Auto" CanUserResize="False"/>
+                        <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="*"/>
+                        <DataGridTextColumn Header="Date of Birth" Binding="{Binding DOB}" Width="*"/>
+                        <DataGridTextColumn Header="Job" Binding="{Binding Job}" Width="*"/>
+                        <DataGridCheckBoxColumn Header="Abroad" Binding="{Binding Abroad}" Width="Auto" CanUserResize="False"/>
+                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
         </Grid>
     </Grid>
 </UserControl>

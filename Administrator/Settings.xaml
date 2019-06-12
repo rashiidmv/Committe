@@ -6,25 +6,6 @@
              xmlns:local="clr-namespace:Administrator"
              mc:Ignorable="d" 
              Height="Auto" Width="Auto">
-    <UserControl.Resources>
-        <DataTemplate x:Key="DefaultTemplate">
-            <StackPanel Orientation="Horizontal">
-                <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
-                        Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
-                        CommandParameter="{Binding}"/>
-                <TextBlock Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-        <DataTemplate x:Key="CategoryListTemplate">
-            <StackPanel Orientation="Horizontal">
-                <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
-                        Command="{Binding DataContext.DeleteCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
-                        CommandParameter="{Binding}"/>
-                <CheckBox Content="Details Required" IsChecked="{Binding DetailsRequired}" IsEnabled="False"/>
-                <TextBlock Margin="20,0,0,0" Text="{Binding Name}" />
-            </StackPanel>
-        </DataTemplate>
-    </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -40,7 +21,23 @@
                 <TextBlock TextWrapping="Wrap" Text="New Area" Margin="0,8,20,8"/>
                 <TextBox Text="{Binding AreaText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
             </DockPanel>
-            <ListBox ItemTemplate="{StaticResource DefaultTemplate}" ItemsSource="{Binding AreaList}" SelectedValuePath="Id" Margin="0,8,0,8"/>
+            <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding AreaList}"
+                          SelectedValuePath="Id" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="5*"/>
+                    <DataGridTemplateColumn Header="Delete" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="16" Margin="0,0,4,0" Content="X" FontWeight="Bold" Foreground="Red"
+                        Command="{Binding DataContext.DeleteCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </DockPanel>
         <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8">
             <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top">
@@ -50,7 +47,24 @@
                 <CheckBox IsChecked="{Binding DetailsRequired}" Margin="0,8,20,8"/>
                 <Button Command="{Binding AddCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
             </StackPanel>
-            <ListBox ItemTemplate="{StaticResource CategoryListTemplate}" ItemsSource="{Binding CategoryList}" SelectedValuePath="Id" Margin="0,8,0,8"/>
+            <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding CategoryList}"
+                          SelectedValuePath="Id" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="4*"/>
+                    <DataGridCheckBoxColumn Header="Details Required" Binding="{Binding DetailsRequired}" Width="Auto"  CanUserResize="False"/>
+                    <DataGridTemplateColumn Header="Delete" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
+                        Command="{Binding DataContext.DeleteCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
         </DockPanel>
     </Grid>
 </UserControl>
