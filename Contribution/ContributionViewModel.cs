@@ -307,7 +307,7 @@ namespace Contribution {
                 categoryList = value;
                 OnPropertyChanged("CategoryList");
                 if(CategoryList != null) {
-                    Category = CategoryList.FirstOrDefault(x => x.Name == CurrentContribution.CategoryName);
+                    Category = CategoryList.FirstOrDefault(x => x.Name == CurrentContribution?.CategoryName);
                 }
             }
         }
