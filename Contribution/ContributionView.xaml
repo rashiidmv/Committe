@@ -122,7 +122,19 @@
                 <Button  Content="Delete" Command="{Binding DeleteDetailCommand}" Width="48" Margin="0,8,20,8"/>
                 <Button Command="{Binding ClearDetailCommand}" Content="Clear" Width="100" Margin="0,8,20,8"/>
             </StackPanel>
-            <ListBox ItemsSource="{Binding MemberList}" SelectedValue="{Binding CurrentMember}" DisplayMemberPath="Name"  Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood" Margin="8,8,8,8"/>
+            <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
+                <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}"
+                          SelectedValue="{Binding CurrentContribution}" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                        <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
+                        <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" Width="*"/>
+                        <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNo}" Width="*"/>
+                        <DataGridTextColumn Header="Care of" Binding="{Binding CareOf}" Width="*"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </DockPanel>
         </Grid>
     </Grid>
 </UserControl>
