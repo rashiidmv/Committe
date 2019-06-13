@@ -27,12 +27,16 @@ namespace Contribution {
 
 
             ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
+            DeleteDetailCommand = new DelegateCommand(ExecueDeleteDetail, CanExecueDeleteDetail);
+            NewDetailCommand = new DelegateCommand(ExecuteNewDetail);
             RefreshContribution();
-            TestItems = new List<string>() { "rashid", "Rashid", "Hiba", "Hiaa", "Ayaan", "Aynu" };
+            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job +"_"+x.DOB+"@").ToList();
             InitializeDatePicker();
             InitializeSearchPanel();
         }
 
+
+        private IEnumerable<ResidenceMember> members = null;
 
 
         private List<String> searchableYears;
@@ -131,6 +135,20 @@ namespace Contribution {
             }
         }
 
+
+
+        private DelegateCommand newDetailCommand;
+        public DelegateCommand NewDetailCommand {
+            get { return newDetailCommand; }
+            set {
+                newDetailCommand = value;
+                OnPropertyChanged("NewDetailCommand");
+            }
+        }
+        private void ExecuteNewDetail() {
+            CurrentContributionDetail = null;
+        }
+
         private DelegateCommand clearDetailCommand;
 
         public DelegateCommand ClearDetailCommand {
@@ -146,6 +164,37 @@ namespace Contribution {
             CurrentContributionDetail = null;
         }
 
+        private DelegateCommand deleteDetailCommand;
+
+        public DelegateCommand DeleteDetailCommand {
+            get { return deleteDetailCommand; }
+            set {
+                deleteDetailCommand = value;
+                OnPropertyChanged("DeleteDetailCommand");
+            }
+        }
+
+        private bool CanExecueDeleteDetail() {
+            return CurrentContributionDetail != null;
+        }
+
+        private void ExecueDeleteDetail() {
+            MessageBoxResult result = MessageBox.Show("Are you sure to delete " + CurrentContributionDetail.MemberId, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if(result == MessageBoxResult.Yes) {
+                if(CurrentContributionDetail != null) {
+                    using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                        ContributionDetail contributionDetail = unitofWork.ContributionDetails.Get(CurrentContributionDetail.Id);
+                        if(contributionDetail != null) {
+                            unitofWork.ContributionDetails.Remove(contributionDetail);
+                            unitofWork.Complete();
+
+                            ContributionDetailList.Remove(CurrentContributionDetail);
+                            CurrentContributionDetail = null;
+                        }
+                    }
+                }
+            }
+        }
 
 
         private DelegateCommand saveContributionCommand;
@@ -338,6 +387,16 @@ namespace Contribution {
                 OnPropertyChanged("ContributionList");
             }
         }
+
+        private ObservableCollection<ContributionDetail> contributionDetailList;
+        public ObservableCollection<ContributionDetail> ContributionDetailList {
+            get { return contributionDetailList; }
+            set {
+                contributionDetailList = value;
+                OnPropertyChanged("ContributionDetailList");
+            }
+        }
+
         private MahalluManager.Model.Contribution currentContribution;
         public MahalluManager.Model.Contribution CurrentContribution {
             get { return currentContribution; }
@@ -360,13 +419,13 @@ namespace Contribution {
                 currentContributionDetail = value;
                 CurrentContributionDetailChanged();
                 ClearDetailCommand.RaiseCanExecuteChanged();
-                //DeleteMemberCommand.RaiseCanExecuteChanged();
+                DeleteDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContributionDetail");
                 //OnPropertyChanged("EnbalbeIsGuardian");
             }
         }
 
-        
+
 
         private Category category;
 
@@ -425,7 +484,8 @@ namespace Contribution {
         private string memberName;
         public string MemberName {
             get { return memberName; }
-            set { memberName = value;
+            set {
+                memberName = value;
                 OnPropertyChanged("MemberName");
             }
         }
@@ -433,7 +493,8 @@ namespace Contribution {
         private string amount;
         public string Amount {
             get { return amount; }
-            set { amount = value;
+            set {
+                amount = value;
                 OnPropertyChanged("Amount");
             }
         }
@@ -442,7 +503,8 @@ namespace Contribution {
 
         public string Date {
             get { return date; }
-            set { date = value;
+            set {
+                date = value;
                 OnPropertyChanged("Date");
             }
         }
@@ -451,7 +513,8 @@ namespace Contribution {
 
         public string CareOf {
             get { return careOf; }
-            set { careOf = value;
+            set {
+                careOf = value;
                 OnPropertyChanged("CareOf");
             }
         }
@@ -472,15 +535,22 @@ namespace Contribution {
             return CurrentContribution != null;
         }
 
-        private IEnumerable<string> testItems;
+        private IEnumerable<string> searchableMembers;
 
-        public IEnumerable<string> TestItems {
-            get { return testItems; }
-            set { testItems = value; }
+        public IEnumerable<string> SearchableMembers {
+            get { return searchableMembers; }
+            set { searchableMembers = value; }
         }
 
         private void RefreshContribution() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                members = unitofWork.ResidenceMembers.GetAll();
+                foreach(var member in members) {
+                    Residence residence = unitofWork.Residences.Get(member.Residence_Id);
+                    member.Job = residence.Name;
+                    member.DOB = residence.Number;
+                }
+
                 ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitofWork.Contributions.GetAll());
                 if(ContributionList != null && ContributionList.Count > 0) {
                     CurrentContribution = ContributionList[0];
@@ -498,22 +568,25 @@ namespace Contribution {
                 TotalAmount = CurrentContribution.ToatalAmount.ToString();
                 CreatedOn = CurrentContribution.CreatedOn;
                 ReceiptNumber = currentContribution.ReceiptNo;
-                //using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                //    MemberList = new ObservableCollection<ResidenceMember>(unitofWork.ResidenceMembers.Find((x) => x.Residence_Id == CurrentResidence.Id));
-                //    if(MemberList != null && MemberList.Count > 0) {
-                //        CurrentMember = MemberList[0];
-                //    } else {
-                //        ClearResidenceDetails();
-                //    }
-                //}
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    ContributionDetailList = new ObservableCollection<ContributionDetail>(unitofWork.ContributionDetails.Find((x) => x.Contribution_Id == CurrentContribution.Id));
+                    if(ContributionDetailList != null && ContributionDetailList.Count > 0) {
+                        CurrentContributionDetail = ContributionDetailList[0];
+                    } else {
+                        ClearContributionsDetailsList();
+                    }
+                }
                 //SetGuardian();
                 IsEnable = false;
             } else {
                 IsEnable = true;
                 ClearContribution();
-                //ClearResidenceDetails();
+                ClearContributionsDetailsList();
             }
         }
+
+
+
         private void ClearContribution() {
             Category = null;
             TotalAmount = ReceiptNumber = string.Empty;
@@ -553,6 +626,10 @@ namespace Contribution {
 
         private void ClearContributionDetails() {
             MemberName = Amount = Date = ReceiptNumber = CareOf = String.Empty;
+        }
+        private void ClearContributionsDetailsList() {
+            ContributionDetailList.Clear();
+            CurrentContributionDetail = null;
         }
     }
 }

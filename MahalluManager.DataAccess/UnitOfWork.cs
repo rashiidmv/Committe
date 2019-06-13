@@ -12,6 +12,7 @@ namespace MahalluManager.DataAccess {
             Areas = new Repository<Area>(mahalluDBContext);
             Categories = new Repository<Category>(mahalluDBContext);
             Contributions = new Repository<Contribution>(mahalluDBContext);
+            ContributionDetails = new Repository<ContributionDetail>(mahalluDBContext);
 
         }
         public IResidenceRepository Residences { get; private set; }

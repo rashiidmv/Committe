@@ -111,7 +111,7 @@
                      
                       Margin="0,9,20,9"/>-->
             <toolkit:AutoCompleteBox  Grid.Row="1" Grid.Column="1" Margin="0,9,20,9"
-                ItemsSource="{Binding TestItems}"   SelectedItem="{Binding MemberName, Mode=TwoWay}" />
+                ItemsSource="{Binding SearchableMembers}"   SelectedItem="{Binding MemberName, Mode=TwoWay}" />
             <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9"/>
             <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9"/>
             <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9"/>
