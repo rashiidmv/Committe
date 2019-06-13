@@ -24,13 +24,16 @@ namespace Contribution {
             DeleteContributionCommand = new DelegateCommand(ExecuteDeleteContribution, CanExecuteDeleteContribution);
             NewContributionCommand = new DelegateCommand(ExecuteNewContribution);
             SaveContributionCommand = new DelegateCommand(ExecuteSaveContribution, CanExecuteSaveContribution);
+
+
+            ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
             RefreshContribution();
             TestItems = new List<string>() { "rashid", "Rashid", "Hiba", "Hiaa", "Ayaan", "Aynu" };
             InitializeDatePicker();
             InitializeSearchPanel();
         }
 
-        
+
 
         private List<String> searchableYears;
 
@@ -126,6 +129,21 @@ namespace Contribution {
                 OnPropertyChanged("SearchByCategory");
                 OnPropertyChanged("ShowCategorySearch");
             }
+        }
+
+        private DelegateCommand clearDetailCommand;
+
+        public DelegateCommand ClearDetailCommand {
+            get { return clearDetailCommand; }
+            set { clearDetailCommand = value; }
+        }
+
+        private bool CanExecuteClearDetail() {
+            return CurrentContributionDetail != null;
+        }
+
+        private void ExecuteClearDetail() {
+            CurrentContributionDetail = null;
         }
 
 
@@ -256,7 +274,7 @@ namespace Contribution {
             SearchByHouseNumber = false;
             SearchByMemberName = false;
             SearchableYears = new List<string>();
-            for(int i=-10;i<=10;i++) {
+            for(int i = -10; i <= 10; i++) {
                 SearchableYears.Add(DateTime.Now.AddYears(i).Year.ToString());
             }
 
@@ -334,6 +352,22 @@ namespace Contribution {
             }
         }
 
+        private ContributionDetail currentContributionDetail;
+
+        public ContributionDetail CurrentContributionDetail {
+            get { return currentContributionDetail; }
+            set {
+                currentContributionDetail = value;
+                CurrentContributionDetailChanged();
+                ClearDetailCommand.RaiseCanExecuteChanged();
+                //DeleteMemberCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged("CurrentContributionDetail");
+                //OnPropertyChanged("EnbalbeIsGuardian");
+            }
+        }
+
+        
+
         private Category category;
 
         public Category Category {
@@ -388,6 +422,39 @@ namespace Contribution {
             }
         }
 
+        private string memberName;
+        public string MemberName {
+            get { return memberName; }
+            set { memberName = value;
+                OnPropertyChanged("MemberName");
+            }
+        }
+
+        private string amount;
+        public string Amount {
+            get { return amount; }
+            set { amount = value;
+                OnPropertyChanged("Amount");
+            }
+        }
+
+        private string date;
+
+        public string Date {
+            get { return date; }
+            set { date = value;
+                OnPropertyChanged("Date");
+            }
+        }
+
+        private string careOf;
+
+        public string CareOf {
+            get { return careOf; }
+            set { careOf = value;
+                OnPropertyChanged("CareOf");
+            }
+        }
 
 
         private DelegateCommand clearContributionCommand;
@@ -470,6 +537,22 @@ namespace Contribution {
             contribution.CategoryName = Category.Name?.Trim();
             contribution.CreatedOn = CreatedOn;
             return contribution;
+        }
+
+        private void CurrentContributionDetailChanged() {
+            if(CurrentContributionDetail != null) {
+                MemberName = CurrentContributionDetail.MemberId.ToString();
+                Amount = CurrentContributionDetail.Amount.ToString();
+                Date = CurrentContributionDetail.CreatedOn.ToString(); ;
+                ReceiptNumber = CurrentContributionDetail.ReceiptNo;
+                CareOf = CurrentContributionDetail.CareOf;
+            } else {
+                ClearContributionDetails();
+            }
+        }
+
+        private void ClearContributionDetails() {
+            MemberName = Amount = Date = ReceiptNumber = CareOf = String.Empty;
         }
     }
 }
