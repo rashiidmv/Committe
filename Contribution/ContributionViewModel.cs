@@ -29,18 +29,52 @@ namespace Contribution {
             ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
             DeleteDetailCommand = new DelegateCommand(ExecueDeleteDetail, CanExecueDeleteDetail);
             NewDetailCommand = new DelegateCommand(ExecuteNewDetail);
+            SaveDetailCommand = new DelegateCommand(ExecuteSaveDetail, CanExecuteSaveDetail);
+            IsMember = true;
             RefreshContribution();
-            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job +"_"+x.DOB+"@").ToList();
+            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@").ToList();
             InitializeDatePicker();
             InitializeSearchPanel();
         }
 
-
         private IEnumerable<ResidenceMember> members = null;
+
+        private bool disableDetail;
+        public bool DisableDetail {
+            get { return disableDetail; }
+            set {
+                disableDetail = value;
+                OnPropertyChanged("DisableDetail");
+            }
+        }
+
+
+        private bool isMember;
+        public bool IsMember {
+            get { return isMember; }
+            set {
+                isMember = value;
+                MemberName = String.Empty;
+                OnPropertyChanged("IsMember");
+                OnPropertyChanged("MemberNameTextVisibility");
+                OnPropertyChanged("MemberNameAutoTextVisibility");
+            }
+        }
+
+        private Visibility memberNameTextVisibility;
+        public Visibility MemberNameTextVisibility {
+            get { return IsMember ? Visibility.Collapsed : Visibility.Visible; }
+            private set { memberNameTextVisibility = value; }
+        }
+
+        private Visibility memberNameAutoTextVisibility;
+        public Visibility MemberNameAutoTextVisibility {
+            get { return IsMember ? Visibility.Visible : Visibility.Collapsed; }
+            private set { memberNameAutoTextVisibility = value; }
+        }
 
 
         private List<String> searchableYears;
-
         public List<String> SearchableYears {
             get { return searchableYears; }
             set {
@@ -106,7 +140,6 @@ namespace Contribution {
         }
 
         private bool searchByMemberName;
-
         public bool SearchByMemberName {
             get { return searchByMemberName; }
             set {
@@ -121,7 +154,6 @@ namespace Contribution {
         }
 
         private bool searchByCategory;
-
         public bool SearchByCategory {
             get { return searchByCategory; }
             set {
@@ -135,7 +167,36 @@ namespace Contribution {
             }
         }
 
-
+        private DelegateCommand saveDetailCommand;
+        public DelegateCommand SaveDetailCommand {
+            get { return saveDetailCommand; }
+            set { saveDetailCommand = value; }
+        }
+        private bool CanExecuteSaveDetail() {
+            return CurrentContributionDetail == null;
+        }
+        private void ExecuteSaveDetail() {
+            //if(CurrentContribution != null) {
+            //    MessageBoxResult result = MessageBox.Show("You can't edit existing contribution detail,\nPlease click on 'New Detail' button to create new contributions detail ", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    return;
+            //}
+            if(ValidateContributionDetail()) {
+                using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                    ContributionDetail contributionDetail = GetContributionDetails();
+                    //if(CurrentContributionDetail != null) {
+                    //    ResidenceMember existingMember = unitOfWork.ResidenceMembers.Find((x) => x.Id == CurrentContributionDetail.Id).FirstOrDefault();
+                    //    if(existingMember != null) {
+                    //        unitOfWork.ResidenceMembers.Remove(existingMember);
+                    //        ContributionDetailList.Remove(C);
+                    //    }
+                    //}
+                    unitOfWork.ContributionDetails.Add(contributionDetail);
+                    unitOfWork.Complete();
+                    ContributionDetailList.Add(contributionDetail);
+                    CurrentContributionDetail = contributionDetail;
+                }
+            }
+        }
 
         private DelegateCommand newDetailCommand;
         public DelegateCommand NewDetailCommand {
@@ -150,7 +211,6 @@ namespace Contribution {
         }
 
         private DelegateCommand clearDetailCommand;
-
         public DelegateCommand ClearDetailCommand {
             get { return clearDetailCommand; }
             set { clearDetailCommand = value; }
@@ -179,7 +239,7 @@ namespace Contribution {
         }
 
         private void ExecueDeleteDetail() {
-            MessageBoxResult result = MessageBox.Show("Are you sure to delete " + CurrentContributionDetail.MemberId, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Are you sure to delete " + CurrentContributionDetail.MemberName, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if(result == MessageBoxResult.Yes) {
                 if(CurrentContributionDetail != null) {
                     using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
@@ -208,12 +268,12 @@ namespace Contribution {
             return CurrentContribution == null;
         }
         private void ExecuteSaveContribution() {
-            if(CurrentContribution != null) {
-                MessageBoxResult result = MessageBox.Show("You can't edit existing contribution,\nPlease click on 'New Contribution' button to create new contributions ", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
-                return;
-            }
-            using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
-                if(ValidateContribution()) {
+            //if(CurrentContribution != null) {
+            //    MessageBoxResult result = MessageBox.Show("You can't edit existing contribution,\nPlease click on 'New Contribution' button to create new contributions ", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
+            //    return;
+            //}
+            if(ValidateContribution()) {
+                using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
                     MahalluManager.Model.Contribution contribution = GetContribution();
                     // List<ResidenceMember> tempMemberList = null;
                     //if(CurrentContribution != null) {
@@ -284,7 +344,6 @@ namespace Contribution {
         }
 
         private DelegateCommand searchContributionCommand;
-
         public DelegateCommand SearchContributionCommand {
             get { return searchContributionCommand; }
             set { searchContributionCommand = value; }
@@ -295,11 +354,10 @@ namespace Contribution {
         }
 
         private void ExecuteSearchContribution() {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         private DelegateCommand clearSearchContributionCommand;
-
         public DelegateCommand ClearSearchContributionCommand {
             get { return clearSearchContributionCommand; }
             set { clearSearchContributionCommand = value; }
@@ -420,6 +478,7 @@ namespace Contribution {
                 CurrentContributionDetailChanged();
                 ClearDetailCommand.RaiseCanExecuteChanged();
                 DeleteDetailCommand.RaiseCanExecuteChanged();
+                SaveDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContributionDetail");
                 //OnPropertyChanged("EnbalbeIsGuardian");
             }
@@ -611,15 +670,53 @@ namespace Contribution {
             contribution.CreatedOn = CreatedOn;
             return contribution;
         }
+        private ContributionDetail GetContributionDetails() {
+            var contributionDetail = new ContributionDetail();
+            if(IsMember) {
+                try {
+                    String temp = MemberName;
+                    String memberName = temp.Substring(0, temp.IndexOf("@") - 1).Trim();
+                    contributionDetail.MemberName = memberName?.Trim();
+
+                    String houseName = temp.Substring(temp.IndexOf("@") + 1);
+                    houseName = houseName.Substring(0, houseName.IndexOf("_"));
+                    contributionDetail.HouserName = houseName;
+
+                    String houseNumber = temp.Substring(temp.IndexOf("_") + 1);
+                    houseNumber = houseNumber.Substring(0, houseNumber.IndexOf("@"));
+                    contributionDetail.HouserNumber = Convert.ToInt32(houseNumber);
+
+                } catch(Exception) {
+                    MessageBox.Show("Please don't change anything member, unless he is an outsider");
+                }
+            } else {
+                contributionDetail.MemberName = MemberName?.Trim();
+            }
+
+            //contributionDetail.Amount = Amount.Trim();
+            contributionDetail.CreatedOn = CreatedOn;
+            contributionDetail.ReceiptNo = ReceiptNumber?.Trim();
+            contributionDetail.CareOf = CareOf?.Trim();
+            contributionDetail.Contribution_Id = 1;// currentContribution.Id;
+            return contributionDetail;
+        }
 
         private void CurrentContributionDetailChanged() {
             if(CurrentContributionDetail != null) {
-                MemberName = CurrentContributionDetail.MemberId.ToString();
+                MemberName = CurrentContributionDetail.MemberName;
                 Amount = CurrentContributionDetail.Amount.ToString();
                 Date = CurrentContributionDetail.CreatedOn.ToString(); ;
                 ReceiptNumber = CurrentContributionDetail.ReceiptNo;
                 CareOf = CurrentContributionDetail.CareOf;
+                if(CurrentContributionDetail.HouserNumber > 0) {
+                    IsMember = true;
+                } else {
+                    IsMember = false;
+                }
+                DisableDetail = false;
             } else {
+                IsMember = true;
+                DisableDetail = true;
                 ClearContributionDetails();
             }
         }
@@ -630,6 +727,22 @@ namespace Contribution {
         private void ClearContributionsDetailsList() {
             ContributionDetailList.Clear();
             CurrentContributionDetail = null;
+        }
+
+        private bool ValidateContributionDetail() {
+            if(CurrentContribution == null) {
+                MessageBox.Show("Please select contribution first to add a details");
+                return false;
+            }
+            if(String.IsNullOrEmpty(MemberName)) {
+                MessageBox.Show("Please enter Member Name");
+                return false;
+            }
+            if(String.IsNullOrEmpty(Amount)) {
+                MessageBox.Show("Please enter Amount");
+                return false;
+            }
+            return true;
         }
     }
 }

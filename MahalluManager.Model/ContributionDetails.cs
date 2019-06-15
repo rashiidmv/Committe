@@ -14,18 +14,28 @@ namespace MahalluManager.Model {
             }
         }
 
-        private int resideneId;
-
-        public int ResidenceId {
-            get { return resideneId; }
-            set { resideneId = value; }
+        private int houserNumber;
+        public int HouserNumber {
+            get { return houserNumber; }
+            set { houserNumber = value;
+                OnPropertyChanged("HouserNumber");
+            }
         }
 
-        private int memberId;
+        private String houserName;
+        public String HouserName {
+            get { return houserName; }
+            set { houserName = value;
+                OnPropertyChanged("HouserName");
+            }
+        }
 
-        public int MemberId {
-            get { return memberId; }
-            set { memberId = value; }
+        private String memberName;
+        public String MemberName {
+            get { return memberName; }
+            set { memberName = value;
+                OnPropertyChanged("MemberName");
+            }
         }
         private decimal amount;
 

@@ -102,7 +102,8 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contribution Details" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock  Grid.Row="1" Text="Member Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+            <CheckBox  Grid.Row="1" Content="Member Name" VerticalAlignment="Center" Margin="10,0,0,0"
+                       IsChecked="{Binding IsMember}" IsEnabled="{Binding DisableDetail}"/>
             <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -110,12 +111,16 @@
             <!--<TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MemberName,UpdateSourceTrigger=PropertyChanged}"
                      
                       Margin="0,9,20,9"/>-->
-            <toolkit:AutoCompleteBox  Grid.Row="1" Grid.Column="1" Margin="0,9,20,9"
-                ItemsSource="{Binding SearchableMembers}"   SelectedItem="{Binding MemberName, Mode=TwoWay}" />
-            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9"/>
+            <toolkit:AutoCompleteBox  Grid.Row="1" Grid.Column="1" Margin="0,9,20,9" 
+                ItemsSource="{Binding SearchableMembers}"  Text="{Binding MemberName}"
+                                      SelectedItem="{Binding MemberName, Mode=TwoWay}"
+                                      Visibility="{Binding MemberNameAutoTextVisibility}" IsEnabled="{Binding DisableDetail}"/>
+            <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MemberName}" 
+                      Margin="0,9,20,9" Visibility="{Binding MemberNameTextVisibility}" IsEnabled="{Binding DisableDetail}"/>
+            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
+            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
+            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
+            <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <Button   Content="Save Detail" Command="{Binding SaveDetailCommand}" Width="100" Margin="0,8,20,8"/>
                 <Button   Content="New Detail" Command="{Binding NewDetailCommand}" Width="84" Margin="0,8,20,8"/>
@@ -128,6 +133,8 @@
                           CanUserAddRows="False" IsReadOnly="True">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                        <DataGridTextColumn Header="Houser Number" Binding="{Binding HouserNumber}" Width="*"/>
+                        <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
                         <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
                         <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" Width="*"/>
                         <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNo}" Width="*"/>

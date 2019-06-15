@@ -227,7 +227,6 @@ namespace Administrator {
                     CurrentMember = residenceMember;
                 }
             }
-
         }
 
         private bool CanExecuteSaveMember() {
