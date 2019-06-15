@@ -42,7 +42,6 @@
                                        Margin="0,9,20,9" IsEnabled="{Binding IsEnable}"/>
             <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
                       IsEnabled="{Binding IsEnable}"/>
-            <!--<TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding CreatedOn}" Margin="0,12,20,9" />-->
             <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
@@ -118,7 +117,11 @@
             <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MemberName}" 
                       Margin="0,9,20,9" Visibility="{Binding MemberNameTextVisibility}" IsEnabled="{Binding DisableDetail}"/>
             <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
-            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
+            <!--<TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>-->
+            <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding Date}" 
+                        DisplayDateStart="{Binding StartDate}"  
+                        DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
+                        IsEnabled="{Binding DisableDetail}"/>
             <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
             <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">

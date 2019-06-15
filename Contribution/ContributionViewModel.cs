@@ -38,6 +38,7 @@ namespace Contribution {
         }
 
         private IEnumerable<ResidenceMember> members = null;
+        private decimal _amount;
 
         private bool disableDetail;
         public bool DisableDetail {
@@ -54,7 +55,9 @@ namespace Contribution {
             get { return isMember; }
             set {
                 isMember = value;
-                MemberName = String.Empty;
+                if(CurrentContributionDetail == null) {
+                    MemberName = String.Empty;
+                }
                 OnPropertyChanged("IsMember");
                 OnPropertyChanged("MemberNameTextVisibility");
                 OnPropertyChanged("MemberNameAutoTextVisibility");
@@ -480,6 +483,8 @@ namespace Contribution {
                 DeleteDetailCommand.RaiseCanExecuteChanged();
                 SaveDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContributionDetail");
+                //OnPropertyChanged("MemberNameTextVisibility");
+                //OnPropertyChanged("MemberNameAutoTextVisibility");
                 //OnPropertyChanged("EnbalbeIsGuardian");
             }
         }
@@ -558,9 +563,8 @@ namespace Contribution {
             }
         }
 
-        private string date;
-
-        public string Date {
+        private DateTime date;
+        public DateTime Date {
             get { return date; }
             set {
                 date = value;
@@ -603,6 +607,7 @@ namespace Contribution {
 
         private void RefreshContribution() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                //auto complete text
                 members = unitofWork.ResidenceMembers.GetAll();
                 foreach(var member in members) {
                     Residence residence = unitofWork.Residences.Get(member.Residence_Id);
@@ -693,26 +698,27 @@ namespace Contribution {
                 contributionDetail.MemberName = MemberName?.Trim();
             }
 
-            //contributionDetail.Amount = Amount.Trim();
+            contributionDetail.Amount = _amount;
             contributionDetail.CreatedOn = CreatedOn;
             contributionDetail.ReceiptNo = ReceiptNumber?.Trim();
             contributionDetail.CareOf = CareOf?.Trim();
-            contributionDetail.Contribution_Id = 1;// currentContribution.Id;
+            contributionDetail.Contribution_Id = CurrentContribution.Id;
             return contributionDetail;
         }
 
         private void CurrentContributionDetailChanged() {
             if(CurrentContributionDetail != null) {
-                MemberName = CurrentContributionDetail.MemberName;
-                Amount = CurrentContributionDetail.Amount.ToString();
-                Date = CurrentContributionDetail.CreatedOn.ToString(); ;
-                ReceiptNumber = CurrentContributionDetail.ReceiptNo;
-                CareOf = CurrentContributionDetail.CareOf;
                 if(CurrentContributionDetail.HouserNumber > 0) {
                     IsMember = true;
                 } else {
                     IsMember = false;
                 }
+                MemberName = CurrentContributionDetail.MemberName;
+                Amount = CurrentContributionDetail.Amount.ToString();
+                Date = CurrentContributionDetail.CreatedOn;
+                ReceiptNumber = CurrentContributionDetail.ReceiptNo;
+                CareOf = CurrentContributionDetail.CareOf;
+
                 DisableDetail = false;
             } else {
                 IsMember = true;
@@ -722,7 +728,8 @@ namespace Contribution {
         }
 
         private void ClearContributionDetails() {
-            MemberName = Amount = Date = ReceiptNumber = CareOf = String.Empty;
+            MemberName = Amount = ReceiptNumber = CareOf = String.Empty;
+            Date = DateTime.Now;
         }
         private void ClearContributionsDetailsList() {
             ContributionDetailList.Clear();
@@ -740,6 +747,14 @@ namespace Contribution {
             }
             if(String.IsNullOrEmpty(Amount)) {
                 MessageBox.Show("Please enter Amount");
+                return false;
+            }
+            if(!Decimal.TryParse(Amount, out _amount)) {
+                MessageBox.Show("Please enter valid Amount");
+                return false;
+            }
+            if(_amount <= 0) {
+                MessageBox.Show("Please enter Amount greater than zero");
                 return false;
             }
             return true;
