@@ -39,7 +39,7 @@
             <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <ComboBox  Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CategoryList}" 
                        DisplayMemberPath="Name" SelectedValue="{Binding Category}" 
-                                       Margin="0,9,20,9" IsEnabled="{Binding IsEnable}"/>
+                                       Margin="0,9,20,9" IsEnabled="{Binding IsEnableCategory}"/>
             <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
                       IsEnabled="{Binding IsEnable}"/>
             <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
@@ -102,7 +102,7 @@
             </Grid.ColumnDefinitions>
             <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contribution Details" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <CheckBox  Grid.Row="1" Content="Member Name" VerticalAlignment="Center" Margin="10,0,0,0"
-                       IsChecked="{Binding IsMember}" IsEnabled="{Binding DisableDetail}"/>
+                       IsChecked="{Binding IsMember}" IsEnabled="{Binding IsEnableDetail}"/>
             <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
             <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -113,17 +113,17 @@
             <toolkit:AutoCompleteBox  Grid.Row="1" Grid.Column="1" Margin="0,9,20,9" 
                 ItemsSource="{Binding SearchableMembers}"  Text="{Binding MemberName}"
                                       SelectedItem="{Binding MemberName, Mode=TwoWay}"
-                                      Visibility="{Binding MemberNameAutoTextVisibility}" IsEnabled="{Binding DisableDetail}"/>
+                                      Visibility="{Binding MemberNameAutoTextVisibility}" IsEnabled="{Binding IsEnableDetail}"/>
             <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MemberName}" 
-                      Margin="0,9,20,9" Visibility="{Binding MemberNameTextVisibility}" IsEnabled="{Binding DisableDetail}"/>
-            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
-            <!--<TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>-->
+                      Margin="0,9,20,9" Visibility="{Binding MemberNameTextVisibility}" IsEnabled="{Binding IsEnableDetail}"/>
+            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
+            <!--<TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Date}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>-->
             <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding Date}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
-                        IsEnabled="{Binding DisableDetail}"/>
-            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
-            <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding DisableDetail}"/>
+                        IsEnabled="{Binding IsEnableDetail}"/>
+            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
+            <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
             <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                 <Button   Content="Save Detail" Command="{Binding SaveDetailCommand}" Width="100" Margin="0,8,20,8"/>
                 <Button   Content="New Detail" Command="{Binding NewDetailCommand}" Width="84" Margin="0,8,20,8"/>

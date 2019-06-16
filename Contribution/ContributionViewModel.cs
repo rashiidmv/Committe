@@ -28,7 +28,7 @@ namespace Contribution {
 
             ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
             DeleteDetailCommand = new DelegateCommand(ExecueDeleteDetail, CanExecueDeleteDetail);
-            NewDetailCommand = new DelegateCommand(ExecuteNewDetail);
+            NewDetailCommand = new DelegateCommand(ExecuteNewDetail, CanExecuteNewDetail);
             SaveDetailCommand = new DelegateCommand(ExecuteSaveDetail, CanExecuteSaveDetail);
             IsMember = true;
             RefreshContribution();
@@ -40,12 +40,12 @@ namespace Contribution {
         private IEnumerable<ResidenceMember> members = null;
         private decimal _amount;
 
-        private bool disableDetail;
-        public bool DisableDetail {
-            get { return disableDetail; }
+        private bool isEnableDetail;
+        public bool IsEnableDetail {
+            get { return isEnableDetail && Category!=null && Category.DetailsRequired; }
             set {
-                disableDetail = value;
-                OnPropertyChanged("DisableDetail");
+                isEnableDetail = value;
+                OnPropertyChanged("IsEnableDetail");
             }
         }
 
@@ -176,7 +176,7 @@ namespace Contribution {
             set { saveDetailCommand = value; }
         }
         private bool CanExecuteSaveDetail() {
-            return CurrentContributionDetail == null;
+            return CurrentContributionDetail == null && Category!=null && Category.DetailsRequired;
         }
         private void ExecuteSaveDetail() {
             //if(CurrentContribution != null) {
@@ -212,6 +212,9 @@ namespace Contribution {
         private void ExecuteNewDetail() {
             CurrentContributionDetail = null;
         }
+        private bool CanExecuteNewDetail() {
+            return Category != null && Category.DetailsRequired;
+        }
 
         private DelegateCommand clearDetailCommand;
         public DelegateCommand ClearDetailCommand {
@@ -220,7 +223,7 @@ namespace Contribution {
         }
 
         private bool CanExecuteClearDetail() {
-            return CurrentContributionDetail != null;
+            return CurrentContributionDetail != null && Category != null && Category.DetailsRequired;
         }
 
         private void ExecuteClearDetail() {
@@ -238,7 +241,7 @@ namespace Contribution {
         }
 
         private bool CanExecueDeleteDetail() {
-            return CurrentContributionDetail != null;
+            return CurrentContributionDetail != null && Category != null && Category.DetailsRequired;
         }
 
         private void ExecueDeleteDetail() {
@@ -403,9 +406,20 @@ namespace Contribution {
 
         public bool IsEnable {
             get { return isEnable; }
-            set { isEnable = value; }
+            set {
+                isEnable = value;
+                OnPropertyChanged("IsEnable");
+            }
         }
 
+        private bool isEnableCategory;
+        public bool IsEnableCategory {
+            get { return isEnableCategory; }
+            set {
+                isEnableCategory = value;
+                OnPropertyChanged("IsEnableCategory");
+            }
+        }
 
         private String searchContributionText;
 
@@ -465,9 +479,12 @@ namespace Contribution {
                 currentContribution = value;
                 CurrentContributionChanged();
                 OnPropertyChanged("IsEnable");
+                OnPropertyChanged("IsEnableCategory");
+                OnPropertyChanged("Category");
                 ClearContributionCommand.RaiseCanExecuteChanged();
                 DeleteContributionCommand.RaiseCanExecuteChanged();
                 SaveContributionCommand.RaiseCanExecuteChanged();
+                NewDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContribution");
             }
         }
@@ -497,22 +514,12 @@ namespace Contribution {
             get { return category; }
             set {
                 category = value;
+                OnCategoryChanged();
                 OnPropertyChanged("Category");
             }
         }
 
-        //private Category categoryDetail;
-        //public Category CategoryDetail {
-        //    get { return categoryDetail; }
-        //    set {
-        //        categoryDetail = value;
-        //        OnPropertyChanged("CategoryId");
-        //    }
-        //}
-
-
         private String totalAmount;
-
         public String TotalAmount {
             get { return totalAmount; }
             set {
@@ -522,7 +529,6 @@ namespace Contribution {
         }
 
         private DateTime createdOn;
-
         public DateTime CreatedOn {
             get {
                 if(createdOn == DateTime.MinValue)
@@ -536,7 +542,6 @@ namespace Contribution {
         }
 
         private String receiptNumber;
-
         public String ReceiptNumber {
             get { return receiptNumber; }
             set {
@@ -592,6 +597,7 @@ namespace Contribution {
 
         private void ExecuteClearContribution() {
             CurrentContribution = null;
+            IsEnableDetail = false;
         }
 
         private bool CanExecuteClearContribution() {
@@ -620,6 +626,7 @@ namespace Contribution {
                     CurrentContribution = ContributionList[0];
                 } else {
                     IsEnable = true;
+                    IsEnableCategory = true;
                 }
             }
         }
@@ -642,8 +649,12 @@ namespace Contribution {
                 }
                 //SetGuardian();
                 IsEnable = false;
+                IsEnableCategory = false;
+                IsEnableDetail = false;
             } else {
                 IsEnable = true;
+                IsEnableDetail = false;
+                IsEnableCategory = true;
                 ClearContribution();
                 ClearContributionsDetailsList();
             }
@@ -659,9 +670,21 @@ namespace Contribution {
 
         private bool ValidateContribution() {
             if(Category == null ||
-                String.IsNullOrEmpty(Category.Name) ||
-                String.IsNullOrEmpty(TotalAmount)) {
-                MessageBox.Show("Please enter Category and Total Amount");
+                String.IsNullOrEmpty(Category.Name)) {
+                MessageBox.Show("Please enter Category");
+                return false;
+            }
+            if(String.IsNullOrEmpty(TotalAmount) && !Category.DetailsRequired) {
+                MessageBox.Show("Please enter Total Amount");
+                return false;
+            }
+            _amount = 0;
+            if(!String.IsNullOrEmpty(TotalAmount) && !Decimal.TryParse(TotalAmount, out _amount) && !Category.DetailsRequired) {
+                MessageBox.Show("Please enter valid Total Amount");
+                return false;
+            }
+            if(!String.IsNullOrEmpty(TotalAmount) && _amount <= 0 && !Category.DetailsRequired) {
+                MessageBox.Show("Please enter Total Amount greater than zero");
                 return false;
             }
             return true;
@@ -669,7 +692,9 @@ namespace Contribution {
 
         private MahalluManager.Model.Contribution GetContribution() {
             var contribution = new MahalluManager.Model.Contribution();
-            contribution.ToatalAmount = Convert.ToDecimal(TotalAmount?.Trim());
+            if(!Category.DetailsRequired) {
+                contribution.ToatalAmount = Convert.ToDecimal(TotalAmount?.Trim());
+            }
             contribution.ReceiptNo = ReceiptNumber?.Trim();
             contribution.CategoryName = Category.Name?.Trim();
             contribution.CreatedOn = CreatedOn;
@@ -719,10 +744,10 @@ namespace Contribution {
                 ReceiptNumber = CurrentContributionDetail.ReceiptNo;
                 CareOf = CurrentContributionDetail.CareOf;
 
-                DisableDetail = false;
+                IsEnableDetail = false;
             } else {
                 IsMember = true;
-                DisableDetail = true;
+                IsEnableDetail = true;
                 ClearContributionDetails();
             }
         }
@@ -749,6 +774,7 @@ namespace Contribution {
                 MessageBox.Show("Please enter Amount");
                 return false;
             }
+            _amount = 0;
             if(!Decimal.TryParse(Amount, out _amount)) {
                 MessageBox.Show("Please enter valid Amount");
                 return false;
@@ -758,6 +784,20 @@ namespace Contribution {
                 return false;
             }
             return true;
+        }
+        private void OnCategoryChanged() {
+            if(Category != null && Category.DetailsRequired && CurrentContribution != null) {
+                IsEnableDetail = true;
+                IsEnable = false;
+            } else if(Category != null && !Category.DetailsRequired && CurrentContribution == null) {
+                IsEnableDetail = false;
+                IsEnable = true;
+            } else {
+                IsEnable = false;
+            }
+            ReceiptNumber = string.Empty;
+            TotalAmount = string.Empty;
+            CreatedOn = DateTime.Now;
         }
     }
 }
