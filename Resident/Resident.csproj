@@ -39,6 +39,7 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="Prism, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xaml" />
@@ -56,13 +57,25 @@
       <DependentUpon>Main.xaml</DependentUpon>
     </Compile>
     <Compile Include="MainViewModel.cs" />
+    <Compile Include="NewResident.xaml.cs">
+      <DependentUpon>NewResident.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewResidentViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ResidentModule.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\MahalluManager.DataAccess\MahalluManager.DataAccess.csproj">
+      <Project>{e4e1222d-282e-468c-9329-c2de5d877d63}</Project>
+      <Name>MahalluManager.DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MahalluManager.Infra\MahalluManager.Infra.csproj">
       <Project>{0dcc9302-a5e4-4b24-8286-974c843dc970}</Project>
       <Name>MahalluManager.Infra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MahalluManager.Model\MahalluManager.Model.csproj">
+      <Project>{8118725e-51f1-4c9d-bc83-8e261ca3489f}</Project>
+      <Name>MahalluManager.Model</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -70,6 +83,13 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="NewResident.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

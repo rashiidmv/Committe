@@ -1,4 +1,5 @@
 ﻿using MahalluManager.Infra;
+using Resident;
 using System.Windows.Controls;
 
 namespace Administrator {

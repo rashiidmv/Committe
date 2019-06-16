@@ -9,7 +9,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 
-namespace Administrator {
+namespace Resident {
     public class NewResidentViewModel : ViewModelBase {
         public NewResidentViewModel() {
             eventAggregator.GetEvent<PubSubEvent<Area>>().Subscribe((e) => {
