@@ -197,6 +197,7 @@ namespace Contribution {
                     unitOfWork.Complete();
                     ContributionDetailList.Add(contributionDetail);
                     CurrentContributionDetail = contributionDetail;
+                    TotalAmount = (Convert.ToDecimal(TotalAmount) + _amount).ToString(); ;
                 }
             }
         }
@@ -478,6 +479,7 @@ namespace Contribution {
             set {
                 currentContribution = value;
                 CurrentContributionChanged();
+                CalculateTotalAmount();
                 OnPropertyChanged("IsEnable");
                 OnPropertyChanged("IsEnableCategory");
                 OnPropertyChanged("Category");
@@ -486,6 +488,16 @@ namespace Contribution {
                 SaveContributionCommand.RaiseCanExecuteChanged();
                 NewDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContribution");
+            }
+        }
+
+        private void CalculateTotalAmount() {
+            if(ContributionDetailList != null && contributionDetailList.Count > 0) {
+                decimal amount = 0;
+                foreach(var contributionDetail in ContributionDetailList) {
+                    amount += contributionDetail.Amount;
+                }
+                TotalAmount = amount.ToString();
             }
         }
 
