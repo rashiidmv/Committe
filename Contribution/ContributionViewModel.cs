@@ -42,7 +42,7 @@ namespace Contribution {
 
         private bool isEnableDetail;
         public bool IsEnableDetail {
-            get { return isEnableDetail && Category!=null && Category.DetailsRequired; }
+            get { return isEnableDetail && Category != null && Category.DetailsRequired; }
             set {
                 isEnableDetail = value;
                 OnPropertyChanged("IsEnableDetail");
@@ -176,7 +176,7 @@ namespace Contribution {
             set { saveDetailCommand = value; }
         }
         private bool CanExecuteSaveDetail() {
-            return CurrentContributionDetail == null && Category!=null && Category.DetailsRequired;
+            return CurrentContributionDetail == null && Category != null && Category.DetailsRequired;
         }
         private void ExecuteSaveDetail() {
             //if(CurrentContribution != null) {
@@ -795,9 +795,11 @@ namespace Contribution {
             } else {
                 IsEnable = false;
             }
-            ReceiptNumber = string.Empty;
-            TotalAmount = string.Empty;
-            CreatedOn = DateTime.Now;
+            if(CurrentContribution == null) {
+                ReceiptNumber = string.Empty;
+                TotalAmount = string.Empty;
+                CreatedOn = DateTime.Now;
+            }
         }
     }
 }
