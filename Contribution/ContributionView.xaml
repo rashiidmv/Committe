@@ -18,6 +18,7 @@
         </Grid.ColumnDefinitions>
         <Grid Grid.Row="0" Grid.Column="0" Background="AliceBlue" Grid.RowSpan="2">
             <Grid.RowDefinitions>
+                <RowDefinition Height="140"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="40"/>
@@ -31,30 +32,48 @@
                 <ColumnDefinition Width="130"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contributions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-            <TextBlock  Grid.Row="1" Text="Category" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Total Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <ComboBox  Grid.Row="1" Grid.Column="1" ItemsSource="{Binding CategoryList}" 
+            <Grid Grid.Row="0" Grid.ColumnSpan="2" Background="CadetBlue" Margin="8,8,8,8" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding BalanceSummary}" FontSize="24" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"/>
+                <TextBlock Text="Total Income" FontSize="16" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
+                <TextBlock Text="Total Expense" FontSize="16" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
+                <TextBlock Text="Total Balance" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+                <TextBlock Text="{Binding TotalIncome}" FontSize="16" Foreground="Green" Margin="12,0,8,0" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="{Binding TotalExpense}" FontSize="16" Foreground="Red" Margin="12,0,8,0" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="{Binding TotalBalance}" FontSize="16" Foreground="White" Margin="12,0,8,0" HorizontalAlignment="Left"  FontWeight="Bold" Grid.Row="3" Grid.Column="1"/>
+            </Grid>
+            <TextBlock  Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contributions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+            <TextBlock  Grid.Row="2" Text="Category" VerticalAlignment="Center" Margin="40,0,0,0"/>
+            <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Total Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
+            <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
+            <TextBlock  Grid.Row="5" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
+            <ComboBox  Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CategoryList}" 
                        DisplayMemberPath="Name" SelectedValue="{Binding Category}" 
                                        Margin="0,9,20,9" IsEnabled="{Binding IsEnableCategory}"/>
-            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
+            <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
                       IsEnabled="{Binding IsEnable}"/>
-            <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
+            <DatePicker Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
                         IsEnabled="{Binding IsEnable}" />
-            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,12,20,9" 
+            <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,12,20,9" 
                       IsEnabled="{Binding IsEnable}"/>
-            <StackPanel Grid.Row="5" Grid.Column="1"  Orientation="Horizontal">
+            <StackPanel Grid.Row="6" Grid.Column="1"  Orientation="Horizontal">
                 <Button   Content="Save Contribution" Command="{Binding SaveContributionCommand}" Width="100" Margin="40,8,20,8"/>
                 <Button   Content="New Contribution" Command="{Binding NewContributionCommand}" Width="100" Margin="0,8,20,8"/>
                 <Button  Content="Delete" Command="{Binding DeleteContributionCommand}" Width="48" Margin="0,8,20,8"/>
                 <Button  Content="Clear" Command="{Binding ClearContributionCommand}" Width="48" Margin="0,8,20,8"/>
             </StackPanel>
-            <StackPanel Margin="8,8,8,8" VerticalAlignment="Bottom" Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" Background="Beige" Orientation="Vertical">
+            <StackPanel Margin="8,8,8,8" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Background="Beige" Orientation="Vertical">
                 <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
                     <TextBlock Text="Search by.." Margin="0,8,20,0"/>
                     <RadioButton Content="Year" IsChecked="{Binding SearchByYear}" Margin="0,8,20,0"/>

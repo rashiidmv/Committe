@@ -6,8 +6,10 @@ using System.Linq;
 namespace MahalluManager.DataAccess {
     public class Repository<TEntity> : IRepository<TEntity> where TEntity : class {
         protected readonly DbContext Context;
+        internal DbSet<TEntity> dbSet;
         public Repository(DbContext context) {
             Context = context;
+            dbSet = context.Set<TEntity>();
         }
         public void Add(TEntity entity) {
             Context.Set<TEntity>().Add(entity); 
@@ -35,6 +37,11 @@ namespace MahalluManager.DataAccess {
 
         public void RemoveRange(IEnumerable<TEntity> entities) {
             Context.Set<TEntity>().RemoveRange(entities);
+        }
+
+        public void Update(TEntity entity) {
+            dbSet.Attach(entity);
+            var entry = Context.Entry(entity).State = EntityState.Modified;
         }
     }
 }

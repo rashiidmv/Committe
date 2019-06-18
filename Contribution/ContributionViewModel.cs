@@ -40,6 +40,39 @@ namespace Contribution {
         private IEnumerable<ResidenceMember> members = null;
         private decimal _amount;
 
+        public String BalanceSummary {
+            get {
+                return "Balance Summary for " + DateTime.Now.Year;
+            }
+        }
+
+        private String totalIncome;
+        public String TotalIncome {
+            get { return "125336"; }
+            set {
+                totalIncome = value;
+                OnPropertyChanged("TotalIncome");
+            }
+        }
+
+        private String totalExpense;
+        public String TotalExpense {
+            get { return "17533"; }
+            set {
+                totalExpense = value;
+                OnPropertyChanged("TotalExpense");
+            }
+        }
+
+        private String totalBalance;
+        public String TotalBalance {
+            get { return "6432"; }
+            set {
+                totalBalance = value;
+                OnPropertyChanged("TotalBalance");
+            }
+        }
+
         private bool isEnableDetail;
         public bool IsEnableDetail {
             get { return isEnableDetail && Category != null && Category.DetailsRequired; }
@@ -197,7 +230,11 @@ namespace Contribution {
                     unitOfWork.Complete();
                     ContributionDetailList.Add(contributionDetail);
                     CurrentContributionDetail = contributionDetail;
-                    TotalAmount = (Convert.ToDecimal(TotalAmount) + _amount).ToString(); ;
+                    //To update total amount
+                    CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) + _amount;
+                    TotalAmount = (Convert.ToDecimal(TotalAmount) + _amount).ToString();
+                    unitOfWork.Contributions.Update(CurrentContribution);
+                    unitOfWork.Complete();
                 }
             }
         }
@@ -249,14 +286,21 @@ namespace Contribution {
             MessageBoxResult result = MessageBox.Show("Are you sure to delete " + CurrentContributionDetail.MemberName, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if(result == MessageBoxResult.Yes) {
                 if(CurrentContributionDetail != null) {
-                    using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                        ContributionDetail contributionDetail = unitofWork.ContributionDetails.Get(CurrentContributionDetail.Id);
+                    using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                        ContributionDetail contributionDetail = unitOfWork.ContributionDetails.Get(CurrentContributionDetail.Id);
                         if(contributionDetail != null) {
-                            unitofWork.ContributionDetails.Remove(contributionDetail);
-                            unitofWork.Complete();
+                            unitOfWork.ContributionDetails.Remove(contributionDetail);
+                            unitOfWork.Complete();
 
+                            decimal amount = CurrentContributionDetail.Amount;
                             ContributionDetailList.Remove(CurrentContributionDetail);
                             CurrentContributionDetail = null;
+
+                            //To update total amount
+                            CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) - amount;
+                            TotalAmount = (Convert.ToDecimal(TotalAmount) - amount).ToString();
+                            unitOfWork.Contributions.Update(CurrentContribution);
+                            unitOfWork.Complete();
                         }
                     }
                 }
