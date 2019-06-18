@@ -1,4 +1,5 @@
 ﻿using MahalluManager.Infra;
+using Marriage;
 using Resident;
 using System.Windows.Controls;
 
@@ -27,6 +28,12 @@ namespace Administrator {
                 Content = new Settings()
             };
             tabControl1.Items.Add(settings);
+
+            TabItem marriage = new TabItem {
+                Header = "Marriage Certificate",
+                Content = new MarriageCertificateView()
+            };
+            tabControl1.Items.Add(marriage);
         }
 
         public IViewModel ViewModel {

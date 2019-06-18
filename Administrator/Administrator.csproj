@@ -116,6 +116,10 @@
       <Project>{8118725e-51f1-4c9d-bc83-8e261ca3489f}</Project>
       <Name>MahalluManager.Model</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Marriage\Marriage.csproj">
+      <Project>{8a04b069-6928-4ea7-9086-2d4750fa86e9}</Project>
+      <Name>Marriage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Resident\Resident.csproj">
       <Project>{e021fb59-33e2-4e7c-b3b7-e1bb0f2ea273}</Project>
       <Name>Resident</Name>
