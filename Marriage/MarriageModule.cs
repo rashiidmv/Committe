@@ -2,9 +2,9 @@
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
 
-namespace Administrator {
-    public class AdministratorModule : ModuleBase {
-        public AdministratorModule(IUnityContainer uc, IRegionManager rm) : base(uc, rm) {
+namespace Marriage {
+    public class MarriageModule : ModuleBase {
+        public MarriageModule(IUnityContainer uc, IRegionManager rm) : base(uc, rm) {
 
         }
         protected override void InitializeModules() {

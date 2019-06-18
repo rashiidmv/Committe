@@ -1,10 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MahalluManager.Infra;
 
 namespace Marriage {
-    public class MainViewModel {
+    public class MainViewModel : ViewModelBase, IMainViewModel {
+        private string title;
+        public string Title {
+            get { return "Marriage"; }
+            set { title = value; }
+        }
     }
 }

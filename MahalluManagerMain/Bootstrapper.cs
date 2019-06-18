@@ -1,5 +1,6 @@
 ﻿using Administrator;
 using Contribution;
+using Marriage;
 using Microsoft.Practices.Prism.Modularity;
 using Microsoft.Practices.Prism.UnityExtensions;
 using Microsoft.Practices.Unity;
@@ -31,6 +32,7 @@ namespace MahalluManagerMain {
             m.AddModule(typeof(ContributionModule));
             m.AddModule(typeof(ResidentModule)); 
             m.AddModule(typeof(AdministratorModule));
+            m.AddModule(typeof(MarriageModule));
             return m;
         }
     }

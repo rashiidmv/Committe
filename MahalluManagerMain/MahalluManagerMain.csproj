@@ -142,6 +142,10 @@
       <Project>{0dcc9302-a5e4-4b24-8286-974c843dc970}</Project>
       <Name>MahalluManager.Infra</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Marriage\Marriage.csproj">
+      <Project>{8a04b069-6928-4ea7-9086-2d4750fa86e9}</Project>
+      <Name>Marriage</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Resident\Resident.csproj">
       <Project>{e021fb59-33e2-4e7c-b3b7-e1bb0f2ea273}</Project>
       <Name>Resident</Name>
