@@ -16,7 +16,7 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="0" Margin="8,8,8,8">
-            <DockPanel LastChildFill="True" DockPanel.Dock="Top">
+            <DockPanel LastChildFill="True" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <Button Command="{Binding AddAreaCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
                 <TextBlock TextWrapping="Wrap" Text="New Area" Margin="0,8,20,8"/>
                 <TextBox Text="{Binding AreaText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
@@ -40,7 +40,7 @@
             </DataGrid>
         </DockPanel>
         <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8">
-            <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top">
+            <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <TextBlock TextWrapping="Wrap" Text="New Category" Margin="0,8,20,8"/>
                 <TextBox Width="140" Text="{Binding CategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
                 <TextBlock TextWrapping="Wrap" Text="Details Required" Margin="0,8,20,8"/>
