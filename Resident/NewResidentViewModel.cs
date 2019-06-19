@@ -97,33 +97,19 @@ namespace Resident {
             using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
                 if(ValidateResidence()) {
                     Residence residence = GetResidence();
-                    List<ResidenceMember> tempMemberList = null;
                     if(CurrentResidence != null) {
-
-                        Residence existingResidence = unitOfWork.Residences.Find((x) => x.Id == CurrentResidence.Id).FirstOrDefault();
-                        if(existingResidence != null) {
-                            tempMemberList = new List<ResidenceMember>();
-                            foreach(var item in MemberList) {
-                                tempMemberList.Add(item);
-                            }
-                            unitOfWork.Residences.Remove(existingResidence);
-                            ResidenceList.Remove(CurrentResidence);
+                        CurrentResidence.Name = residence.Name;
+                        CurrentResidence.Area = residence.Area;
+                        unitOfWork.Residences.Update(CurrentResidence);
+                    } else {
+                        if(CurrentResidence == null && IsHouserNumberExists(unitOfWork)) {
+                            return;
                         }
-
-                    }
-                    if(CurrentResidence == null && IsHouserNumberExists(unitOfWork)) {
-                        return;
-                    }
-                    unitOfWork.Residences.Add(residence);
-                    if(tempMemberList != null && tempMemberList.Count > 0) {
-                        foreach(var item in tempMemberList) {
-                            item.Residence_Id = residence.Id;
-                        }
-                        unitOfWork.ResidenceMembers.AddRange(tempMemberList);
+                        unitOfWork.Residences.Add(residence);
+                        ResidenceList.Add(residence);
+                        CurrentResidence = residence;
                     }
                     unitOfWork.Complete();
-                    ResidenceList.Add(residence);
-                    CurrentResidence = residence;
                 }
             }
         }
@@ -215,16 +201,20 @@ namespace Resident {
                 if(ValidateResidenceMember(unitOfWork)) {
                     ResidenceMember residenceMember = GetResidenceMember();
                     if(CurrentMember != null) {
-                        ResidenceMember existingMember = unitOfWork.ResidenceMembers.Find((x) => x.Id == CurrentMember.Id).FirstOrDefault();
-                        if(existingMember != null) {
-                            unitOfWork.ResidenceMembers.Remove(existingMember);
-                            MemberList.Remove(CurrentMember);
-                        }
+                        CurrentMember.Name = residenceMember.Name;
+                        CurrentMember.DOB = residenceMember.DOB;
+                        CurrentMember.Job = residenceMember.Job;
+                        CurrentMember.Mobile = residenceMember.Mobile;
+                        CurrentMember.Abroad = residenceMember.Abroad;
+                        CurrentMember.Country = residenceMember.Country;
+                        CurrentMember.IsGuardian = residenceMember.IsGuardian;
+                        unitOfWork.ResidenceMembers.Update(CurrentMember);
+                    } else {
+                        unitOfWork.ResidenceMembers.Add(residenceMember);
+                        MemberList.Add(residenceMember);
+                        CurrentMember = residenceMember;
                     }
-                    unitOfWork.ResidenceMembers.Add(residenceMember);
                     unitOfWork.Complete();
-                    MemberList.Add(residenceMember);
-                    CurrentMember = residenceMember;
                 }
             }
         }
