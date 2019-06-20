@@ -1,4 +1,5 @@
-﻿using MahalluManager.Infra;
+﻿using Expense;
+using MahalluManager.Infra;
 using Marriage;
 using Resident;
 using System.Windows.Controls;
@@ -22,6 +23,12 @@ namespace Administrator {
                 Content = new Contribution.ContributionView()
             };
             tabControl1.Items.Add(contribution);
+
+            TabItem expense = new TabItem {
+                Header = "Expense",
+                Content = new ExpenseView()
+            };
+            tabControl1.Items.Add(expense);
 
             TabItem settings = new TabItem {
                 Header = "Settings",

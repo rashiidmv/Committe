@@ -138,6 +138,10 @@
       <Project>{95a32abe-5e11-4db3-b464-a19bc6df8b4b}</Project>
       <Name>Contribution</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Expense\Expense.csproj">
+      <Project>{dfdce224-b89c-4c51-9ff4-bd2963951508}</Project>
+      <Name>Expense</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MahalluManager.Infra\MahalluManager.Infra.csproj">
       <Project>{0dcc9302-a5e4-4b24-8286-974c843dc970}</Project>
       <Name>MahalluManager.Infra</Name>
@@ -149,6 +153,10 @@
     <ProjectReference Include="..\Resident\Resident.csproj">
       <Project>{e021fb59-33e2-4e7c-b3b7-e1bb0f2ea273}</Project>
       <Name>Resident</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Summary\Summary.csproj">
+      <Project>{a2d438eb-1790-4359-86d0-2c35ee9fc95b}</Project>
+      <Name>Summary</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

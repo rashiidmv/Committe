@@ -104,6 +104,10 @@
       <Project>{95a32abe-5e11-4db3-b464-a19bc6df8b4b}</Project>
       <Name>Contribution</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Expense\Expense.csproj">
+      <Project>{dfdce224-b89c-4c51-9ff4-bd2963951508}</Project>
+      <Name>Expense</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MahalluManager.DataAccess\MahalluManager.DataAccess.csproj">
       <Project>{e4e1222d-282e-468c-9329-c2de5d877d63}</Project>
       <Name>MahalluManager.DataAccess</Name>

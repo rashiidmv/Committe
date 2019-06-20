@@ -2,9 +2,9 @@
 using Microsoft.Practices.Prism.Regions;
 using Microsoft.Practices.Unity;
 
-namespace Contribution {
-    public class ContributionModule : ModuleBase {
-        public ContributionModule(IUnityContainer uc, IRegionManager rm) : base(uc, rm) {
+namespace Expense {
+    public class ExpenseModule : ModuleBase {
+        public ExpenseModule(IUnityContainer uc, IRegionManager rm) : base(uc, rm) {
 
         }
         protected override void InitializeModules() {
