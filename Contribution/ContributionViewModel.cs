@@ -12,12 +12,10 @@ using System.Windows;
 namespace Contribution {
     public class ContributionViewModel : ViewModelBase {
         public ContributionViewModel() {
-            eventAggregator.GetEvent<PubSubEvent<Category>>().Subscribe((e) => {
-                CategoryList.Add(e);
-            });
             eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Subscribe((e) => {
                 CategoryList = e;
             });
+
             ClearContributionCommand = new DelegateCommand(ExecuteClearContribution, CanExecuteClearContribution);
             SearchContributionCommand = new DelegateCommand(ExecuteSearchContribution, CanExecuteSearchContribution);
             ClearSearchContributionCommand = new DelegateCommand(ExecuteClearSearchContribution);
@@ -32,7 +30,15 @@ namespace Contribution {
             SaveDetailCommand = new DelegateCommand(ExecuteSaveDetail, CanExecuteSaveDetail);
             IsMember = true;
             RefreshContribution();
-            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@").ToList();
+
+            eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Subscribe((e) => {
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    members = unitofWork.ResidenceMembers.GetAll().ToList();
+                }
+                SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
+            });
+
+            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
             InitializeDatePicker();
             InitializeSearchPanel();
         }
@@ -664,7 +670,9 @@ namespace Contribution {
 
         public IEnumerable<string> SearchableMembers {
             get { return searchableMembers; }
-            set { searchableMembers = value; }
+            set { searchableMembers = value;
+                OnPropertyChanged("SearchableMembers");
+            }
         }
 
         private void RefreshContribution() {

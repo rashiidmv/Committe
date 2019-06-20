@@ -12,12 +12,10 @@ using System.Windows;
 namespace Resident {
     public class NewResidentViewModel : ViewModelBase {
         public NewResidentViewModel() {
-            eventAggregator.GetEvent<PubSubEvent<Area>>().Subscribe((e) => {
-                AreaList.Add(e);
-            });
             eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Area>>>().Subscribe((e) => {
                 AreaList = e;
             });
+
             SaveResidenceCommand = new DelegateCommand(ExecuteSaveResidence, CanExecuteSaveResidence);
             ClearResidenceCommand = new DelegateCommand(ExecuteClearResidence, CanExecuteClearResidence);
             SearchCommand = new DelegateCommand(ExecuteSearch, CanExecuteSearch);
@@ -85,6 +83,7 @@ namespace Resident {
             set {
                 memberList = value;
                 OnPropertyChanged("MemberList");
+                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Publish(MemberList);
             }
         }
 
@@ -215,6 +214,7 @@ namespace Resident {
                         CurrentMember = residenceMember;
                     }
                     unitOfWork.Complete();
+                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Publish(MemberList);
                 }
             }
         }
