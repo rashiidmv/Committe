@@ -23,7 +23,6 @@ namespace Contribution {
             NewContributionCommand = new DelegateCommand(ExecuteNewContribution);
             SaveContributionCommand = new DelegateCommand(ExecuteSaveContribution, CanExecuteSaveContribution);
 
-
             ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
             DeleteDetailCommand = new DelegateCommand(ExecueDeleteDetail, CanExecueDeleteDetail);
             NewDetailCommand = new DelegateCommand(ExecuteNewDetail, CanExecuteNewDetail);
@@ -88,7 +87,6 @@ namespace Contribution {
             }
         }
 
-
         private bool isMember;
         public bool IsMember {
             get { return isMember; }
@@ -125,7 +123,6 @@ namespace Contribution {
             }
         }
 
-
         private Visibility showYearSearch;
         public Visibility ShowYearSearch {
             get {
@@ -145,7 +142,6 @@ namespace Contribution {
         }
 
         private Visibility showCategorySearch;
-
         public Visibility ShowCategorySearch {
             get { return SearchByCategory ? Visibility.Visible : Visibility.Collapsed; }
             private set { showCategorySearch = value; }
@@ -218,20 +214,9 @@ namespace Contribution {
             return CurrentContributionDetail == null && Category != null && Category.DetailsRequired;
         }
         private void ExecuteSaveDetail() {
-            //if(CurrentContribution != null) {
-            //    MessageBoxResult result = MessageBox.Show("You can't edit existing contribution detail,\nPlease click on 'New Detail' button to create new contributions detail ", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    return;
-            //}
             if(ValidateContributionDetail()) {
                 using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
                     ContributionDetail contributionDetail = GetContributionDetails();
-                    //if(CurrentContributionDetail != null) {
-                    //    ResidenceMember existingMember = unitOfWork.ResidenceMembers.Find((x) => x.Id == CurrentContributionDetail.Id).FirstOrDefault();
-                    //    if(existingMember != null) {
-                    //        unitOfWork.ResidenceMembers.Remove(existingMember);
-                    //        ContributionDetailList.Remove(C);
-                    //    }
-                    //}
                     unitOfWork.ContributionDetails.Add(contributionDetail);
                     unitOfWork.Complete();
                     ContributionDetailList.Add(contributionDetail);
@@ -325,37 +310,10 @@ namespace Contribution {
             return CurrentContribution == null;
         }
         private void ExecuteSaveContribution() {
-            //if(CurrentContribution != null) {
-            //    MessageBoxResult result = MessageBox.Show("You can't edit existing contribution,\nPlease click on 'New Contribution' button to create new contributions ", "Add", MessageBoxButton.OK, MessageBoxImage.Information);
-            //    return;
-            //}
             if(ValidateContribution()) {
                 using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
                     MahalluManager.Model.Contribution contribution = GetContribution();
-                    // List<ResidenceMember> tempMemberList = null;
-                    //if(CurrentContribution != null) {
-
-                    //    Residence existingResidence = unitOfWork.Residences.Find((x) => x.Id == CurrentResidence.Id).FirstOrDefault();
-                    //    if(existingResidence != null) {
-                    //        tempMemberList = new List<ResidenceMember>();
-                    //        foreach(var item in MemberList) {
-                    //            tempMemberList.Add(item);
-                    //        }
-                    //        unitOfWork.Residences.Remove(existingResidence);
-                    //        ResidenceList.Remove(CurrentResidence);
-                    //    }
-
-                    //}
-                    //if(CurrentContribution == null && IsHouserNumberExists(unitOfWork)) {
-                    //    return;
-                    //}
                     unitOfWork.Contributions.Add(contribution);
-                    //if(tempMemberList != null && tempMemberList.Count > 0) {
-                    //    foreach(var item in tempMemberList) {
-                    //        item.Residence_Id = residence.Id;
-                    //    }
-                    //    unitOfWork.ResidenceMembers.AddRange(tempMemberList);
-                    //}
                     unitOfWork.Complete();
                     ContributionList.Add(contribution);
                     CurrentContribution = contribution;
@@ -387,8 +345,6 @@ namespace Contribution {
             if(result == MessageBoxResult.Yes) {
                 if(CurrentContribution != null) {
                     using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                        //List<ResidenceMember> members = new List<ResidenceMember>(unitofWork.ResidenceMembers.Find((x) => x.Residence_Id == CurrentResidence.Id));
-                        //unitofWork.ResidenceMembers.RemoveRange(members);
                         MahalluManager.Model.Contribution contribution = unitofWork.Contributions.Get(CurrentContribution.Id);
                         unitofWork.Contributions.Remove(contribution);
                         unitofWork.Complete();

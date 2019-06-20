@@ -100,6 +100,8 @@ namespace Resident {
                         CurrentResidence.Name = residence.Name;
                         CurrentResidence.Area = residence.Area;
                         unitOfWork.Residences.Update(CurrentResidence);
+                        MessageBox.Show(CurrentResidence.Name + " updated successfully !", "New Residence", MessageBoxButton.OK, MessageBoxImage.Information);
+
                     } else {
                         if(CurrentResidence == null && IsHouserNumberExists(unitOfWork)) {
                             return;
@@ -107,6 +109,7 @@ namespace Resident {
                         unitOfWork.Residences.Add(residence);
                         ResidenceList.Add(residence);
                         CurrentResidence = residence;
+                        MessageBox.Show(CurrentResidence.Name + " added successfully !", "New Residence", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
                 }
@@ -208,10 +211,12 @@ namespace Resident {
                         CurrentMember.Country = residenceMember.Country;
                         CurrentMember.IsGuardian = residenceMember.IsGuardian;
                         unitOfWork.ResidenceMembers.Update(CurrentMember);
+                        MessageBox.Show(CurrentMember.Name + " updated successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
                     } else {
                         unitOfWork.ResidenceMembers.Add(residenceMember);
                         MemberList.Add(residenceMember);
                         CurrentMember = residenceMember;
+                        MessageBox.Show(CurrentMember.Name + " added successfully !","New Member",MessageBoxButton.OK,MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
                     eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Publish(MemberList);
