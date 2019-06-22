@@ -11,7 +11,6 @@ using System.Windows;
 namespace Administrator {
     public class SettingsViewModel : ViewModelBase {
         private string areaText;
-
         public string AreaText {
             get { return areaText; }
             set {

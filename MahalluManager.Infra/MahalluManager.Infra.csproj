@@ -61,6 +61,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Events.cs" />
+    <Compile Include="EventTypes\SelectedYearType.cs" />
+    <Compile Include="EventTypes\TotalIncomeType.cs" />
     <Compile Include="IView.cs" />
     <Compile Include="IViewModel.cs" />
     <Compile Include="ModuleBase.cs" />

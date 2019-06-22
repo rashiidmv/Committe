@@ -35,9 +35,9 @@
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
-                    <summary:SummaryView />
+                    <summary:SummaryView Padding="10"/>
                 </StackPanel>
-                <TextBlock  Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contributions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock  Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" Text="Expenses" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                 <TextBlock  Grid.Row="2" Text="Category" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Total Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -54,10 +54,10 @@
                 <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,12,20,9" 
                       IsEnabled="{Binding IsEnable}"/>
                 <StackPanel Grid.Row="6" Grid.Column="1"  Orientation="Horizontal">
-                    <Button   Content="Save Contribution" Command="{Binding SaveContributionCommand}" Width="100" Margin="40,8,20,8"/>
-                    <Button   Content="New Contribution" Command="{Binding NewContributionCommand}" Width="100" Margin="0,8,20,8"/>
-                    <Button  Content="Delete" Command="{Binding DeleteContributionCommand}" Width="48" Margin="0,8,20,8"/>
-                    <Button  Content="Clear" Command="{Binding ClearContributionCommand}" Width="48" Margin="0,8,20,8"/>
+                    <Button   Content="Save Expense" Command="{Binding SaveExpenseCommand}" Width="100" Margin="40,8,20,8"/>
+                    <Button   Content="New Expense" Command="{Binding NewExpenseCommand}" Width="100" Margin="0,8,20,8"/>
+                    <Button  Content="Delete" Command="{Binding DeleteExpenseCommand}" Width="48" Margin="0,8,20,8"/>
+                    <Button  Content="Clear" Command="{Binding ClearExpenseCommand}" Width="48" Margin="0,8,20,8"/>
                 </StackPanel>
                 <StackPanel Margin="8,8,8,8" VerticalAlignment="Bottom" Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Background="Beige" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
@@ -77,7 +77,7 @@
                 </StackPanel>
                 <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
                     <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}"
-                          SelectedValue="{Binding CurrentContribution}" AutoGenerateColumns="False" 
+                          SelectedValue="{Binding CurrentExpense}" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
@@ -105,19 +105,14 @@
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contribution Details" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                <CheckBox  Grid.Row="1" Content="Member Name" VerticalAlignment="Center" Margin="10,0,0,0"
-                       IsChecked="{Binding IsMember}" IsEnabled="{Binding IsEnableDetail}"/>
+                <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Expense Details" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                <TextBlock  Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="5" TextWrapping="Wrap" Text="Care of" VerticalAlignment="Center" Margin="44,13,408.4,11" Grid.ColumnSpan="2"/>
-                <toolkit:AutoCompleteBox  Grid.Row="1" Grid.Column="1" Margin="0,9,20,9" 
-                ItemsSource="{Binding SearchableMembers}"  Text="{Binding MemberName}"
-                                      SelectedItem="{Binding MemberName, Mode=TwoWay}"
-                                      Visibility="{Binding MemberNameAutoTextVisibility}" IsEnabled="{Binding IsEnableDetail}"/>
-                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MemberName}" 
-                      Margin="0,9,20,9" Visibility="{Binding MemberNameTextVisibility}" IsEnabled="{Binding IsEnableDetail}"/>
+                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding DetailName}" 
+                      Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding Date}" 
                         DisplayDateStart="{Binding StartDate}"  
@@ -126,14 +121,14 @@
                 <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
-                    <Button   Content="Save Detail" Command="{Binding SaveDetailCommand}" Width="100" Margin="0,8,20,8"/>
-                    <Button   Content="New Detail" Command="{Binding NewDetailCommand}" Width="84" Margin="0,8,20,8"/>
-                    <Button  Content="Delete" Command="{Binding DeleteDetailCommand}" Width="48" Margin="0,8,20,8"/>
-                    <Button Command="{Binding ClearDetailCommand}" Content="Clear" Width="100" Margin="0,8,20,8"/>
+                    <Button   Content="Save Detail" Command="{Binding SaveExpenseDetailCommand}" Width="100" Margin="0,8,20,8"/>
+                    <Button   Content="New Detail" Command="{Binding NewExpenseDetailCommand}" Width="84" Margin="0,8,20,8"/>
+                    <Button  Content="Delete" Command="{Binding DeleteExpenseDetailCommand}" Width="48" Margin="0,8,20,8"/>
+                    <Button Command="{Binding ClearExpenseDetailCommand}" Content="Clear" Width="100" Margin="0,8,20,8"/>
                 </StackPanel>
                 <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
-                    <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionDetailList}"
-                          SelectedValue="{Binding CurrentContributionDetail}" AutoGenerateColumns="False" 
+                    <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ExpenseDetailList}"
+                          SelectedValue="{Binding CurrentExpenseDetail}" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>

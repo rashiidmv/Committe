@@ -1,5 +1,6 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
+using MahalluManager.Infra.EventTypes;
 using MahalluManager.Model;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Events;
@@ -40,11 +41,28 @@ namespace Contribution {
             SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
             InitializeDatePicker();
             InitializeSearchPanel();
+
+            eventAggregator.GetEvent<PubSubEvent<SelectedYearType>>().Subscribe((e) => {
+                SelectedYear = ((SelectedYearType)e).SelectedYear;
+            });
         }
 
         private IEnumerable<ResidenceMember> members = null;
         private decimal _amount;
 
+        private String selectedYear;
+        public String SelectedYear {
+            get { return selectedYear; }
+            set {
+                String temp = selectedYear;
+                selectedYear = value;
+                OnPropertyChanged("SelectedYear");
+                if(temp != value) {
+                    SelectedYearType selectedYearType = new SelectedYearType() { SelectedYear = SelectedYear };
+                    eventAggregator.GetEvent<PubSubEvent<SelectedYearType>>().Publish(selectedYearType);
+                }
+            }
+        }
 
 
         private bool isEnableDetail;
@@ -193,6 +211,7 @@ namespace Contribution {
                     //To update total amount
                     CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) + _amount;
                     TotalAmount = (Convert.ToDecimal(TotalAmount) + _amount).ToString();
+                    TotalIncome = _amount;
                     unitOfWork.Contributions.Update(CurrentContribution);
                     unitOfWork.Complete();
                 }
@@ -259,6 +278,7 @@ namespace Contribution {
                             //To update total amount
                             CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) - amount;
                             TotalAmount = (Convert.ToDecimal(TotalAmount) - amount).ToString();
+                            TotalIncome = -amount;
                             unitOfWork.Contributions.Update(CurrentContribution);
                             unitOfWork.Complete();
                         }
@@ -285,6 +305,7 @@ namespace Contribution {
                     unitOfWork.Contributions.Add(contribution);
                     unitOfWork.Complete();
                     ContributionList.Add(contribution);
+                    TotalIncome = _amount;
                     CurrentContribution = contribution;
                 }
             }
@@ -318,6 +339,7 @@ namespace Contribution {
                         unitofWork.Contributions.Remove(contribution);
                         unitofWork.Complete();
 
+                        TotalIncome = -CurrentContribution.ToatalAmount;
                         ContributionList.Remove(CurrentContribution);
                         CurrentContribution = null;
                     }
@@ -487,9 +509,6 @@ namespace Contribution {
                 DeleteDetailCommand.RaiseCanExecuteChanged();
                 SaveDetailCommand.RaiseCanExecuteChanged();
                 OnPropertyChanged("CurrentContributionDetail");
-                //OnPropertyChanged("MemberNameTextVisibility");
-                //OnPropertyChanged("MemberNameAutoTextVisibility");
-                //OnPropertyChanged("EnbalbeIsGuardian");
             }
         }
 
@@ -512,9 +531,20 @@ namespace Contribution {
             set {
                 totalAmount = value;
                 OnPropertyChanged("TotalAmount");
-                eventAggregator.GetEvent<PubSubEvent<String>>().Publish(TotalAmount);
             }
         }
+
+        private decimal totalIncome;
+        public decimal TotalIncome {
+            get { return totalIncome; }
+            set {
+                totalIncome = value;
+                OnPropertyChanged("TotalIncome");
+                TotalIncomeType totalIncomeType = new TotalIncomeType() { TotalIncome = TotalIncome };
+                eventAggregator.GetEvent<PubSubEvent<TotalIncomeType>>().Publish(totalIncomeType);
+            }
+        }
+
 
         private DateTime createdOn;
         public DateTime CreatedOn {

@@ -34,7 +34,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Row="0" Grid.ColumnSpan="2">
-                <summary:SummaryView />
+                <summary:SummaryView Padding="10" />
             </StackPanel>
             <TextBlock  Grid.Row="1" Grid.ColumnSpan="2" FontWeight="Bold" Text="Contributions" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <TextBlock  Grid.Row="2" Text="Category" VerticalAlignment="Center" Margin="40,0,0,0"/>
