@@ -1,9 +1,7 @@
 ﻿using MahalluManager.Infra;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MahalluManager.Model {
-    public class Category : ViewModelBase {
+    public class ExpenseCategory : ViewModelBase {
         private int id;
         public int Id {
             get { return id; }
@@ -29,8 +27,5 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("DetailsRequired");
             }
         }
-
-        //[ForeignKey("Category_Id")]
-        //public ObservableCollection<Contribution> Contributions { get; set; }
     }
 }

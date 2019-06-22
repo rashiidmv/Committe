@@ -10,18 +10,22 @@ namespace MahalluManager.DataAccess {
             Residences = new ResidenceRepository(mahalluDBContext);
             ResidenceMembers = new Repository<ResidenceMember>(mahalluDBContext);
             Areas = new Repository<Area>(mahalluDBContext);
-            Categories = new Repository<Category>(mahalluDBContext);
+            IncomeCategories = new Repository<IncomeCategory>(mahalluDBContext);
+            ExpenseCategories = new Repository<ExpenseCategory>(mahalluDBContext);
             Contributions = new Repository<Contribution>(mahalluDBContext);
             ContributionDetails = new Repository<ContributionDetail>(mahalluDBContext);
-
+            Expenses = new Repository<Expense>(mahalluDBContext);
+            ExpenseDetails = new Repository<ExpenseDetails>(mahalluDBContext);
         }
         public IResidenceRepository Residences { get; private set; }
         public IRepository<ResidenceMember> ResidenceMembers { get; private set; }
         public IRepository<Area> Areas { get; private set; }
-        public IRepository<Category> Categories { get; private set; }
+        public IRepository<IncomeCategory> IncomeCategories { get; private set; }
+        public IRepository<ExpenseCategory> ExpenseCategories { get; private set; }
         public IRepository<Contribution> Contributions { get; private set; }
-
         public IRepository<ContributionDetail> ContributionDetails { get; private set; }
+        public IRepository<Expense> Expenses { get; private set; }
+        public IRepository<ExpenseDetails> ExpenseDetails { get; private set; }
 
         public int Complete() {
             return mahalluDBContext.SaveChanges();

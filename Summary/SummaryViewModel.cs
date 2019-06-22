@@ -1,6 +1,7 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
-using MahalluManager.Infra.EventTypes;
+using MahalluManager.Model;
+using MahalluManager.Model.EventTypes;
 using Prism.Events;
 using System;
 using System.Collections.Generic;
@@ -12,16 +13,39 @@ namespace Summary {
             eventAggregator.GetEvent<PubSubEvent<SelectedYearType>>().Subscribe((e) => {
                 Selected = ((SelectedYearType)e).SelectedYear;
             });
-            eventAggregator.GetEvent<PubSubEvent<TotalIncomeType>>().Subscribe((e) => {
-                decimal income = ((TotalIncomeType)e).TotalIncome;
-                TotalIncome = (Convert.ToDecimal(TotalIncome) + income).ToString();
+            eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Subscribe((e) => {
+                Contribution income = ((IncomeType)e).Contribution;
+                bool isPresent = false;
+                foreach(var item in ContributionList) {
+                    if(item.Id==income.Id) {
+                        item.ToatalAmount = income.ToatalAmount;
+                        isPresent = true;
+                    }
+                }
+                if(!isPresent) {
+                    ContributionList.Add(income);
+                }
+                TotalIncome = CalcuateTotalIncome();
+            });
+
+            eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Subscribe((e) => {
+                Expense expense = ((ExpenseType)e).Expense;
+                bool isPresent = false;
+                foreach(var item in ExpenseList) {
+                    if(item.Id == expense.Id) {
+                        item.ToatalAmount = expense.ToatalAmount;
+                        isPresent = true;
+                    }
+                }
+                if(!isPresent) {
+                    ExpenseList.Add(expense);
+                }
+                TotalIncome = CalcuateTotalExpense();
             });
             RefreshContribution();
             Years = new ObservableCollection<string>();
             SetYears();
         }
-
-
 
         private ObservableCollection<String> years;
         public ObservableCollection<String> Years {
@@ -31,26 +55,26 @@ namespace Summary {
                 OnPropertyChanged("Years");
             }
         }
-        private string selected;
-        public string Selected {
+        private String selected;
+        public String Selected {
             get { return selected; }
             set {
-                string temp = selected;
+                String temp = selected;
                 selected = value;
                 OnPropertyChanged("Selected");
                 if(temp != value) {
-                    SelectedYearType selectedYearType = new SelectedYearType() { SelectedYear = Selected };
+                    TotalIncome = CalcuateTotalIncome();
+                    TotalExpense = CalcuateTotalExpense();
+                    SelectedYearType selectedYearType = new SelectedYearType() { SelectedYear = Selected.ToString() };
                     eventAggregator.GetEvent<PubSubEvent<SelectedYearType>>().Publish(selectedYearType);
                 }
-
             }
         }
-
-
 
         private void RefreshContribution() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
                 ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitofWork.Contributions.GetAll());
+                ExpenseList = new ObservableCollection<MahalluManager.Model.Expense>(unitofWork.Expenses.GetAll());
             }
         }
 
@@ -59,45 +83,100 @@ namespace Summary {
             get { return contributionList; }
             set {
                 contributionList = value;
-                CalcuateTotalIncome();
+                TotalIncome = CalcuateTotalIncome();
                 OnPropertyChanged("ContributionList");
             }
         }
 
-        private String totalIncome;
-        public String TotalIncome {
+        private IList<MahalluManager.Model.Expense> expenseList;
+        public IList<MahalluManager.Model.Expense> ExpenseList {
+            get { return expenseList; }
+            set {
+                expenseList = value;
+                TotalExpense = CalcuateTotalExpense();
+                OnPropertyChanged("ExpenseList");
+            }
+        }
+
+        private Decimal totalIncome;
+        public Decimal TotalIncome {
             get { return totalIncome; }
             set {
                 totalIncome = value;
                 OnPropertyChanged("TotalIncome");
+                OnPropertyChanged("TotalBalance");
+                OnPropertyChanged("SelectedYearBalance");
+
             }
         }
 
-        private String totalExpense;
-        public String TotalExpense {
-            get { return "17533"; }
+        private Decimal totalExpense;
+        public Decimal TotalExpense {
+            get { return totalExpense; }
             set {
                 totalExpense = value;
                 OnPropertyChanged("TotalExpense");
-            }
-        }
-
-        private String totalBalance;
-        public String TotalBalance {
-            get { return "6432"; }
-            set {
-                totalBalance = value;
                 OnPropertyChanged("TotalBalance");
+                OnPropertyChanged("SelectedYearBalance");
+            }
+        }
+        public Decimal SelectedYearBalance {
+            get {
+                return (TotalIncome - TotalExpense);
             }
         }
 
+        public String TotalBalance {
+            get {
+                Decimal selectedYearBalance = (TotalIncome - TotalExpense);
+                return "Total Balance = " + PreviousYearBalance + "(Previous Balance) + " + selectedYearBalance + " = " + (PreviousYearBalance + selectedYearBalance);
+            }
+        }
 
-        public void CalcuateTotalIncome() {
+        private Decimal previousYearBalance;
+        public Decimal PreviousYearBalance {
+            get {
+                previousYearBalance = CalcuateTotalPreviousIncome() - CalcuateTotalPreviousExpense();
+                return previousYearBalance;
+            }
+        }
+        public Decimal CalcuateTotalPreviousIncome() {
             decimal totalIncome = 0;
             foreach(var item in ContributionList) {
-                totalIncome += item.ToatalAmount;
+                if(item.CreatedOn.Year < Convert.ToInt32(Selected)) {
+                    totalIncome += item.ToatalAmount;
+                }
             }
-            TotalIncome = totalIncome.ToString();
+            return totalIncome;
+        }
+        public Decimal CalcuateTotalPreviousExpense() {
+            decimal totalExpense = 0;
+            foreach(var item in ExpenseList) {
+                if(item.CreatedOn.Year < Convert.ToInt32(Selected)) {
+                    totalExpense += item.ToatalAmount;
+                }
+            }
+            return totalExpense;
+        }
+
+        public Decimal CalcuateTotalIncome() {
+            decimal totalIncome = 0;
+            foreach(var item in ContributionList) {
+                if(item.CreatedOn.Year.ToString() == Selected) {
+                    totalIncome += item.ToatalAmount;
+                }
+            }
+            return totalIncome;
+        }
+
+        public Decimal CalcuateTotalExpense() {
+            decimal totalExpense = 0;
+            foreach(var item in ExpenseList) {
+                if(item.CreatedOn.Year.ToString() == Selected) {
+                    totalExpense += item.ToatalAmount;
+                }
+            }
+            return totalExpense;
         }
 
         private void SetYears() {

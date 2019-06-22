@@ -1,7 +1,7 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
-using MahalluManager.Infra.EventTypes;
 using MahalluManager.Model;
+using MahalluManager.Model.EventTypes;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Events;
 using System;
@@ -13,16 +13,17 @@ using System.Windows;
 namespace Contribution {
     public class ContributionViewModel : ViewModelBase {
         public ContributionViewModel() {
-            eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Subscribe((e) => {
+            eventAggregator.GetEvent<PubSubEvent<ObservableCollection<IncomeCategory>>>().Subscribe((e) => {
                 CategoryList = e;
             });
 
             ClearContributionCommand = new DelegateCommand(ExecuteClearContribution, CanExecuteClearContribution);
-            SearchContributionCommand = new DelegateCommand(ExecuteSearchContribution, CanExecuteSearchContribution);
-            ClearSearchContributionCommand = new DelegateCommand(ExecuteClearSearchContribution);
             DeleteContributionCommand = new DelegateCommand(ExecuteDeleteContribution, CanExecuteDeleteContribution);
             NewContributionCommand = new DelegateCommand(ExecuteNewContribution);
             SaveContributionCommand = new DelegateCommand(ExecuteSaveContribution, CanExecuteSaveContribution);
+
+            ClearSearchContributionCommand = new DelegateCommand(ExecuteClearSearchContribution);
+            SearchContributionCommand = new DelegateCommand(ExecuteSearchContribution, CanExecuteSearchContribution);
 
             ClearDetailCommand = new DelegateCommand(ExecuteClearDetail, CanExecuteClearDetail);
             DeleteDetailCommand = new DelegateCommand(ExecueDeleteDetail, CanExecueDeleteDetail);
@@ -32,13 +33,9 @@ namespace Contribution {
             RefreshContribution();
 
             eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Subscribe((e) => {
-                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                    members = unitofWork.ResidenceMembers.GetAll().ToList();
-                }
-                SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
+                SetupSearchableMembers(null, null);
             });
 
-            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
             InitializeDatePicker();
             InitializeSearchPanel();
 
@@ -47,7 +44,6 @@ namespace Contribution {
             });
         }
 
-        private IEnumerable<ResidenceMember> members = null;
         private decimal _amount;
 
         private String selectedYear;
@@ -211,9 +207,11 @@ namespace Contribution {
                     //To update total amount
                     CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) + _amount;
                     TotalAmount = (Convert.ToDecimal(TotalAmount) + _amount).ToString();
-                    TotalIncome = _amount;
                     unitOfWork.Contributions.Update(CurrentContribution);
                     unitOfWork.Complete();
+
+                    IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution };
+                    eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Publish(incomeType);
                 }
             }
         }
@@ -278,9 +276,10 @@ namespace Contribution {
                             //To update total amount
                             CurrentContribution.ToatalAmount = Convert.ToDecimal(TotalAmount) - amount;
                             TotalAmount = (Convert.ToDecimal(TotalAmount) - amount).ToString();
-                            TotalIncome = -amount;
                             unitOfWork.Contributions.Update(CurrentContribution);
                             unitOfWork.Complete();
+                            IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution };
+                            eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Publish(incomeType);
                         }
                     }
                 }
@@ -305,8 +304,10 @@ namespace Contribution {
                     unitOfWork.Contributions.Add(contribution);
                     unitOfWork.Complete();
                     ContributionList.Add(contribution);
-                    TotalIncome = _amount;
+
                     CurrentContribution = contribution;
+                    IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution };
+                    eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Publish(incomeType);
                 }
             }
         }
@@ -339,7 +340,9 @@ namespace Contribution {
                         unitofWork.Contributions.Remove(contribution);
                         unitofWork.Complete();
 
-                        TotalIncome = -CurrentContribution.ToatalAmount;
+                        IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution };
+                        eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Publish(incomeType);
+
                         ContributionList.Remove(CurrentContribution);
                         CurrentContribution = null;
                     }
@@ -401,7 +404,6 @@ namespace Contribution {
         }
 
         private bool isEnable;
-
         public bool IsEnable {
             get { return isEnable; }
             set {
@@ -440,8 +442,8 @@ namespace Contribution {
             }
         }
 
-        private ObservableCollection<Category> categoryList;
-        public ObservableCollection<Category> CategoryList {
+        private ObservableCollection<IncomeCategory> categoryList;
+        public ObservableCollection<IncomeCategory> CategoryList {
             get { return categoryList; }
             set {
                 categoryList = value;
@@ -514,9 +516,9 @@ namespace Contribution {
 
 
 
-        private Category category;
+        private IncomeCategory category;
 
-        public Category Category {
+        public IncomeCategory Category {
             get { return category; }
             set {
                 category = value;
@@ -534,18 +536,6 @@ namespace Contribution {
             }
         }
 
-        private decimal totalIncome;
-        public decimal TotalIncome {
-            get { return totalIncome; }
-            set {
-                totalIncome = value;
-                OnPropertyChanged("TotalIncome");
-                TotalIncomeType totalIncomeType = new TotalIncomeType() { TotalIncome = TotalIncome };
-                eventAggregator.GetEvent<PubSubEvent<TotalIncomeType>>().Publish(totalIncomeType);
-            }
-        }
-
-
         private DateTime createdOn;
         public DateTime CreatedOn {
             get {
@@ -559,14 +549,24 @@ namespace Contribution {
             }
         }
 
-        private String receiptNumber;
-        public String ReceiptNumber {
-            get { return receiptNumber; }
+        private String contributionReceiptNumber;
+        public String ContributionReceiptNumber {
+            get { return contributionReceiptNumber; }
             set {
-                receiptNumber = value;
-                OnPropertyChanged("ReceiptNumber");
+                contributionReceiptNumber = value;
+                OnPropertyChanged("ContributionReceiptNumber");
             }
         }
+        private String detailReceiptNumber;
+
+        public String DetailReceiptNumber {
+            get { return detailReceiptNumber; }
+            set {
+                detailReceiptNumber = value;
+                OnPropertyChanged("DetailReceiptNumber");
+            }
+        }
+
 
         private string memberName;
         public string MemberName {
@@ -596,7 +596,6 @@ namespace Contribution {
         }
 
         private string careOf;
-
         public string CareOf {
             get { return careOf; }
             set {
@@ -632,17 +631,31 @@ namespace Contribution {
             }
         }
 
-        private void RefreshContribution() {
-            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                //auto complete text
-                members = unitofWork.ResidenceMembers.GetAll();
+        private void SetupSearchableMembers(IEnumerable<ResidenceMember> members, IUnitOfWork unitOfWork) {
+            if(members == null && unitOfWork == null) {
+                using(unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                    members = unitOfWork.ResidenceMembers.GetAll().ToList();
+                    foreach(var member in members) {
+                        Residence residence = unitOfWork.Residences.Get(member.Residence_Id);
+                        member.Job = residence.Name;
+                        member.DOB = residence.Number;
+                    }
+                }
+            } else {
                 foreach(var member in members) {
-                    Residence residence = unitofWork.Residences.Get(member.Residence_Id);
+                    Residence residence = unitOfWork.Residences.Get(member.Residence_Id);
                     member.Job = residence.Name;
                     member.DOB = residence.Number;
                 }
+            }
+            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
+        }
 
-                ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitofWork.Contributions.GetAll());
+        private void RefreshContribution() {
+            using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                SetupSearchableMembers(unitOfWork.ResidenceMembers.GetAll(), unitOfWork);
+
+                ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitOfWork.Contributions.GetAll());
                 if(ContributionList != null && ContributionList.Count > 0) {
                     CurrentContribution = ContributionList[0];
                 } else {
@@ -659,7 +672,7 @@ namespace Contribution {
                 }
                 TotalAmount = CurrentContribution.ToatalAmount.ToString();
                 CreatedOn = CurrentContribution.CreatedOn;
-                ReceiptNumber = currentContribution.ReceiptNo;
+                ContributionReceiptNumber = currentContribution.ReceiptNo;
                 using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
                     ContributionDetailList = new ObservableCollection<ContributionDetail>(unitofWork.ContributionDetails.Find((x) => x.Contribution_Id == CurrentContribution.Id));
                     if(ContributionDetailList != null && ContributionDetailList.Count > 0) {
@@ -685,7 +698,7 @@ namespace Contribution {
 
         private void ClearContribution() {
             Category = null;
-            TotalAmount = ReceiptNumber = string.Empty;
+            TotalAmount = ContributionReceiptNumber = string.Empty;
             CreatedOn = DateTime.Now;
         }
 
@@ -716,7 +729,7 @@ namespace Contribution {
             if(!Category.DetailsRequired) {
                 contribution.ToatalAmount = Convert.ToDecimal(TotalAmount?.Trim());
             }
-            contribution.ReceiptNo = ReceiptNumber?.Trim();
+            contribution.ReceiptNo = ContributionReceiptNumber?.Trim();
             contribution.CategoryName = Category.Name?.Trim();
             contribution.CreatedOn = CreatedOn;
             return contribution;
@@ -746,7 +759,7 @@ namespace Contribution {
 
             contributionDetail.Amount = _amount;
             contributionDetail.CreatedOn = CreatedOn;
-            contributionDetail.ReceiptNo = ReceiptNumber?.Trim();
+            contributionDetail.ReceiptNo = DetailReceiptNumber?.Trim();
             contributionDetail.CareOf = CareOf?.Trim();
             contributionDetail.Contribution_Id = CurrentContribution.Id;
             return contributionDetail;
@@ -762,7 +775,7 @@ namespace Contribution {
                 MemberName = CurrentContributionDetail.MemberName;
                 Amount = CurrentContributionDetail.Amount.ToString();
                 Date = CurrentContributionDetail.CreatedOn;
-                ReceiptNumber = CurrentContributionDetail.ReceiptNo;
+                DetailReceiptNumber = CurrentContributionDetail.ReceiptNo;
                 CareOf = CurrentContributionDetail.CareOf;
 
                 IsEnableDetail = false;
@@ -774,11 +787,13 @@ namespace Contribution {
         }
 
         private void ClearContributionDetails() {
-            MemberName = Amount = ReceiptNumber = CareOf = String.Empty;
+            MemberName = Amount = DetailReceiptNumber = CareOf = String.Empty;
             Date = DateTime.Now;
         }
         private void ClearContributionsDetailsList() {
-            ContributionDetailList.Clear();
+            if(ContributionDetailList != null && ContributionDetailList.Count > 0) {
+                ContributionDetailList.Clear();
+            }
             CurrentContributionDetail = null;
         }
 
@@ -817,7 +832,7 @@ namespace Contribution {
                 IsEnable = false;
             }
             if(CurrentContribution == null) {
-                ReceiptNumber = string.Empty;
+                ContributionReceiptNumber = string.Empty;
                 TotalAmount = string.Empty;
                 CreatedOn = DateTime.Now;
             }

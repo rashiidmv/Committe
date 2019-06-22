@@ -18,7 +18,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Row="0" Grid.Column="0" Background="AliceBlue" Grid.RowSpan="2">
+            <Grid Grid.Row="0" Grid.Column="0" Background="LightPink" Grid.RowSpan="2">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="140"/>
                     <RowDefinition Height="40"/>
@@ -41,17 +41,17 @@
                 <TextBlock  Grid.Row="2" Text="Category" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Total Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBlock  Grid.Row="5" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <ComboBox  Grid.Row="2" Grid.Column="1" ItemsSource="{Binding CategoryList}" 
-                       DisplayMemberPath="Name" SelectedValue="{Binding Category}" 
-                                       Margin="0,9,20,9" IsEnabled="{Binding IsEnableCategory}"/>
+                <TextBlock  Grid.Row="5" TextWrapping="Wrap" Text="Bill Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <ComboBox  Grid.Row="2" Grid.Column="1" ItemsSource="{Binding ExpenseCategoryList}" 
+                       DisplayMemberPath="Name" SelectedValue="{Binding ExpenseCategory}" 
+                                       Margin="0,9,20,9" IsEnabled="{Binding IsEnableExpenseCategory}"/>
                 <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding TotalAmount}" Margin="0,9,20,9"
                       IsEnabled="{Binding IsEnable}"/>
                 <DatePicker Grid.Row="4" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
                         IsEnabled="{Binding IsEnable}" />
-                <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,12,20,9" 
+                <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding ExpenseBillNo}" Margin="0,12,20,9" 
                       IsEnabled="{Binding IsEnable}"/>
                 <StackPanel Grid.Row="6" Grid.Column="1"  Orientation="Horizontal">
                     <Button   Content="Save Expense" Command="{Binding SaveExpenseCommand}" Width="100" Margin="40,8,20,8"/>
@@ -68,15 +68,15 @@
                         <RadioButton Content="Category" IsChecked="{Binding SearchByCategory}" Margin="0,8,20,0"/>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
-                        <TextBox MinWidth="260" Width="Auto" Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />
-                        <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding SearchableYears}" SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowYearSearch}" Margin="0,6,20,6" Height="20" />
-                        <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding CategoryList}" SelectedValuePath="Name"  SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowCategorySearch}" DisplayMemberPath="Name"  Margin="0,6,20,6" Height="20" />
-                        <Button Command="{Binding ClearSearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Clear" Height="24" Margin="0,6,20,6"/>
-                        <Button Command="{Binding SearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Search" Height="24" Margin="0,6,20,6"/>
+                        <TextBox MinWidth="260" Width="Auto" Text="{Binding SearchExpenseText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />
+                        <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding SearchableYears}" SelectedValue="{Binding SearchExpenseText}" Visibility="{Binding ShowYearSearch}" Margin="0,6,20,6" Height="20" />
+                        <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding CategoryList}" SelectedValuePath="Name"  SelectedValue="{Binding SearchExpenseText}" Visibility="{Binding ShowCategorySearch}" DisplayMemberPath="Name"  Margin="0,6,20,6" Height="20" />
+                        <Button Command="{Binding ClearSearchExpenseCommand}" DockPanel.Dock="Right" Width="60" Content="Clear" Height="24" Margin="0,6,20,6"/>
+                        <Button Command="{Binding SearchExpenseCommand}" DockPanel.Dock="Right" Width="60" Content="Search" Height="24" Margin="0,6,20,6"/>
                     </StackPanel>
                 </StackPanel>
                 <DockPanel Grid.Row="8" Grid.Column="0" Grid.ColumnSpan="2"  Background="AliceBlue">
-                    <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionList}"
+                    <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ExpenseList}"
                           SelectedValue="{Binding CurrentExpense}" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True">
                         <DataGrid.Columns>
@@ -84,7 +84,7 @@
                             <DataGridTextColumn Header="Category Name" Binding="{Binding CategoryName}" Width="*"/>
                             <DataGridTextColumn Header="Total Amount" Binding="{Binding ToatalAmount}" Width="*"/>
                             <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" Width="*"/>
-                            <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNo}" Width="*"/>
+                            <DataGridTextColumn Header="Bill Number" Binding="{Binding BillNo}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </DockPanel>
@@ -109,16 +109,16 @@
                 <TextBlock  Grid.Row="1" TextWrapping="Wrap" Text="Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Amount" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Receipt Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Bill Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="5" TextWrapping="Wrap" Text="Care of" VerticalAlignment="Center" Margin="44,13,408.4,11" Grid.ColumnSpan="2"/>
-                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding DetailName}" 
+                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Name}" 
                       Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Amount}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <DatePicker Grid.Row="3" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding Date}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="120"
                         IsEnabled="{Binding IsEnableDetail}"/>
-                <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ReceiptNumber}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
+                <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding ExpenseDetailBillNo}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <TextBox  Grid.Row="5" Grid.Column="1" Text="{Binding CareOf}" Margin="0,9,20,9" IsEnabled="{Binding IsEnableDetail}"/>
                 <StackPanel Grid.Row="7" Grid.Column="1" Orientation="Horizontal">
                     <Button   Content="Save Detail" Command="{Binding SaveExpenseDetailCommand}" Width="100" Margin="0,8,20,8"/>
@@ -132,11 +132,10 @@
                           CanUserAddRows="False" IsReadOnly="True">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
-                            <DataGridTextColumn Header="Houser Number" Binding="{Binding HouserNumber}" Width="*"/>
-                            <DataGridTextColumn Header="Member Name" Binding="{Binding MemberName}" Width="*"/>
+                            <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
                             <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="*"/>
                             <DataGridTextColumn Header="Created On" Binding="{Binding CreatedOn}" Width="*"/>
-                            <DataGridTextColumn Header="Receipt Number" Binding="{Binding ReceiptNo}" Width="*"/>
+                            <DataGridTextColumn Header="Bill Number" Binding="{Binding BillNo}" Width="*"/>
                             <DataGridTextColumn Header="Care of" Binding="{Binding CareOf}" Width="*"/>
                         </DataGrid.Columns>
                     </DataGrid>

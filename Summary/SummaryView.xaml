@@ -13,6 +13,8 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -24,9 +26,11 @@
         </StackPanel>
         <TextBlock Text="Total Income" FontSize="16" HorizontalAlignment="Right" Grid.Row="1" Grid.Column="0"/>
         <TextBlock Text="Total Expense" FontSize="16" HorizontalAlignment="Right" Grid.Row="2" Grid.Column="0"/>
-        <TextBlock Text="Total Balance" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
+        <TextBlock Text="Balance" FontSize="16" FontWeight="Bold" HorizontalAlignment="Right" Grid.Row="3" Grid.Column="0"/>
         <TextBlock Text="{Binding TotalIncome}" FontSize="16" Foreground="Green" Margin="12,0,8,0" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="1" Grid.Column="1"/>
         <TextBlock Text="{Binding TotalExpense}" FontSize="16" Foreground="Red" Margin="12,0,8,0" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="2" Grid.Column="1"/>
-        <TextBlock Text="" Grid.Row="4" Grid.Column="1" />
+        <TextBlock Text="{Binding SelectedYearBalance}" FontSize="16" Margin="12,0,8,0" HorizontalAlignment="Left" FontWeight="Bold" Grid.Row="3" Grid.Column="1"/>
+        <TextBlock Text="{Binding TotalBalance}" FontSize="16" Foreground="White" Margin="12,0,8,0" HorizontalAlignment="Center" FontWeight="Bold" Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2"/>
+        <TextBlock Text="" Grid.Row="5" Grid.Column="1" />
     </Grid>
 </UserControl>

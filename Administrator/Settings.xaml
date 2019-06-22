@@ -15,7 +15,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="0" Margin="8,8,8,8">
+        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="0" Margin="8,8,8,8" Background="DarkGoldenrod">
             <DockPanel LastChildFill="True" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <Button Command="{Binding AddAreaCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
                 <TextBlock TextWrapping="Wrap" Text="New Area" Margin="0,8,20,8"/>
@@ -39,15 +39,15 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8">
+        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8" Background="DarkCyan">
             <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,0,8,0">
-                <TextBlock TextWrapping="Wrap" Text="New Category" Margin="0,8,20,8"/>
-                <TextBox Width="140" Text="{Binding CategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
+                <TextBlock TextWrapping="Wrap" Text="Contribution Category" Margin="0,8,20,8"/>
+                <TextBox Width="140" Text="{Binding ContributionCategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
                 <TextBlock TextWrapping="Wrap" Text="Details Required" Margin="0,8,20,8"/>
-                <CheckBox IsChecked="{Binding DetailsRequired}" Margin="0,8,20,8"/>
-                <Button Command="{Binding AddCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
+                <CheckBox IsChecked="{Binding ContributionDetailsRequired}" Margin="0,8,20,8"/>
+                <Button Command="{Binding AddContributionCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
             </StackPanel>
-            <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding CategoryList}"
+            <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ContributionCategoryList}"
                           SelectedValuePath="Id" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True">
                 <DataGrid.Columns>
@@ -58,7 +58,34 @@
                         <DataGridTemplateColumn.CellTemplate>
                             <DataTemplate>
                                 <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
-                        Command="{Binding DataContext.DeleteCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                        Command="{Binding DataContext.DeleteContributionCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
+                        CommandParameter="{Binding}"/>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Grid.Row="1" Grid.Column="0" Margin="8,8,8,8" Background="DarkKhaki">
+            <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,0,8,0">
+                <TextBlock TextWrapping="Wrap" Text="Expense Category" Margin="0,8,20,8"/>
+                <TextBox Width="140" Text="{Binding ExpenseCategoryText, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
+                <TextBlock TextWrapping="Wrap" Text="Details Required" Margin="0,8,20,8"/>
+                <CheckBox IsChecked="{Binding ExpenseDetailsRequired}" Margin="0,8,20,8"/>
+                <Button Command="{Binding AddExpenseCategoryCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
+            </StackPanel>
+            <DataGrid Background="BurlyWood" Margin="8,8,8,8" ItemsSource="{Binding ExpenseCategoryList}"
+                          SelectedValuePath="Id" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="4*"/>
+                    <DataGridCheckBoxColumn Header="Details Required" Binding="{Binding DetailsRequired}" Width="Auto"  CanUserResize="False"/>
+                    <DataGridTemplateColumn Header="Delete" CanUserResize="False">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Button Width="16" Margin="0,0,4,0" Content="X" DockPanel.Dock="Right" FontWeight="Bold" Foreground="Red"
+                        Command="{Binding DataContext.DeleteExpenseCategoryCommand,RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type UserControl}}}"
                         CommandParameter="{Binding}"/>
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>

@@ -6,10 +6,12 @@ namespace MahalluManager.DataAccess {
         IResidenceRepository Residences { get; }
         IRepository<ResidenceMember> ResidenceMembers { get; }
         IRepository<Area> Areas { get; }
-        IRepository<Category> Categories { get; }
+        IRepository<IncomeCategory> IncomeCategories { get; }
+        IRepository<ExpenseCategory> ExpenseCategories { get; }
         IRepository<Contribution> Contributions { get; }
         IRepository<ContributionDetail> ContributionDetails { get; }
-
+        IRepository<Expense> Expenses { get; }
+        IRepository<ExpenseDetails> ExpenseDetails { get; }
         int Complete();
     }
 }

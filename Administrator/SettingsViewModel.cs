@@ -30,48 +30,78 @@ namespace Administrator {
             }
         }
 
-        private string categoryText;
-        public string CategoryText {
-            get { return categoryText; }
+        private string contributionCategoryText;
+        public string ContributionCategoryText {
+            get { return contributionCategoryText; }
             set {
-                categoryText = value;
-                AddCategoryCommand.RaiseCanExecuteChanged();
-                OnPropertyChanged("CategoryText");
+                contributionCategoryText = value;
+                AddContributionCategoryCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged("ContributionCategoryText");
             }
         }
-        private bool detailsRequired;
-
-        public bool DetailsRequired {
-            get { return detailsRequired; }
+        private bool contributionDetailsRequired;
+        public bool ContributionDetailsRequired {
+            get { return contributionDetailsRequired; }
             set {
-                detailsRequired = value;
-                OnPropertyChanged("DetailsRequired");
-            }
-        }
-
-
-        private ObservableCollection<Category> categoryList;
-        public ObservableCollection<Category> CategoryList {
-            get { return categoryList; }
-            set {
-                categoryList = value;
-                OnPropertyChanged("CategoryList");
-                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
+                contributionDetailsRequired = value;
+                OnPropertyChanged("ContributionDetailsRequired");
             }
         }
 
+        private ObservableCollection<IncomeCategory> contributionCategoryList;
+        public ObservableCollection<IncomeCategory> ContributionCategoryList {
+            get { return contributionCategoryList; }
+            set {
+                contributionCategoryList = value;
+                OnPropertyChanged("ContributionCategoryList");
+                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<IncomeCategory>>>().Publish(ContributionCategoryList);
+            }
+        }
+
+        private string expenseCategoryText;
+        public string ExpenseCategoryText {
+            get { return expenseCategoryText; }
+            set {
+                expenseCategoryText = value;
+                AddExpenseCategoryCommand.RaiseCanExecuteChanged();
+                OnPropertyChanged("ExpenseCategoryText");
+            }
+        }
+
+        private bool expenseDetailsRequired;
+        public bool ExpenseDetailsRequired {
+            get { return expenseDetailsRequired; }
+            set {
+                expenseDetailsRequired = value;
+                OnPropertyChanged("ExpenseDetailsRequired");
+            }
+        }
+
+        private ObservableCollection<ExpenseCategory> expenseCategoryList;
+        public ObservableCollection<ExpenseCategory> ExpenseCategoryList {
+            get { return expenseCategoryList; }
+            set {
+                expenseCategoryList = value;
+                OnPropertyChanged("ExpenseCategoryList");
+                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ExpenseCategory>>>().Publish(ExpenseCategoryList);
+            }
+        }
         public SettingsViewModel() {
             AddAreaCommand = new DelegateCommand(ExecuteAddArea, CanExecuteAddArea);
             DeleteCommand = new DelegateCommand<Area>(ExecuteDelete);
-            AddCategoryCommand = new DelegateCommand(ExecuteAddCategory, CanExecuteAddCategory);
-            DeleteCategoryCommand = new DelegateCommand<Category>(ExecuteCategoryDelete);
+
+            AddContributionCategoryCommand = new DelegateCommand(ExecuteAddContributionCategory, CanExecuteAddContributionCategory);
+            DeleteContributionCategoryCommand = new DelegateCommand<IncomeCategory>(ExecuteContributionCategoryDelete);
+
+            AddExpenseCategoryCommand = new DelegateCommand(ExecuteAddExpenseCategory, CanExecuteAddExpenseCategory);
+            DeleteExpenseCategoryCommand = new DelegateCommand<ExpenseCategory>(ExecuteExpenseCategoryDelete);
 
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                CategoryList = new ObservableCollection<Category>(unitofWork.Categories.GetAll());
                 AreaList = new ObservableCollection<Area>(unitofWork.Areas.GetAll());
+                ContributionCategoryList = new ObservableCollection<IncomeCategory>(unitofWork.IncomeCategories.GetAll());
+                ExpenseCategoryList = new ObservableCollection<ExpenseCategory>(unitofWork.ExpenseCategories.GetAll());
             }
         }
-
 
         private DelegateCommand addAreaCommand;
         public DelegateCommand AddAreaCommand {
@@ -112,45 +142,85 @@ namespace Administrator {
             }
         }
 
-        private DelegateCommand addCategoryCommand;
-        public DelegateCommand AddCategoryCommand {
-            get { return addCategoryCommand; }
-            set { addCategoryCommand = value; }
+        private DelegateCommand addContributionCategoryCommand;
+        public DelegateCommand AddContributionCategoryCommand {
+            get { return addContributionCategoryCommand; }
+            set { addContributionCategoryCommand = value; }
         }
 
-        private void ExecuteAddCategory() {
+        private void ExecuteAddContributionCategory() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                var category = new Category() { Name = CategoryText, DetailsRequired = DetailsRequired };
-                unitofWork.Categories.Add(category);
-                CategoryList.Add(category);
-                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
-                CategoryText = String.Empty;
-                DetailsRequired = default(bool);
+                var category = new IncomeCategory() { Name = ContributionCategoryText, DetailsRequired = ContributionDetailsRequired };
+                unitofWork.IncomeCategories.Add(category);
+                ContributionCategoryList.Add(category);
+                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<IncomeCategory>>>().Publish(ContributionCategoryList);
+                ContributionCategoryText = String.Empty;
+                ContributionDetailsRequired = default(bool);
                 unitofWork.Complete();
             }
         }
-        private bool CanExecuteAddCategory() {
-            return CategoryText != null && CategoryText != String.Empty;
+        private bool CanExecuteAddContributionCategory() {
+            return ContributionCategoryText != null && ContributionCategoryText != String.Empty;
         }
 
-        private DelegateCommand<Category> deleteCategoryCommand;
-        public DelegateCommand<Category> DeleteCategoryCommand {
-            get { return deleteCategoryCommand; }
-            set { deleteCategoryCommand = value; }
+        private DelegateCommand<IncomeCategory> deleteContributionCategoryCommand;
+        public DelegateCommand<IncomeCategory> DeleteContributionCategoryCommand {
+            get { return deleteContributionCategoryCommand; }
+            set { deleteContributionCategoryCommand = value; }
         }
 
-        private void ExecuteCategoryDelete(Category category) {
+        private void ExecuteContributionCategoryDelete(IncomeCategory category) {
             MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if(messageBoxResult == MessageBoxResult.Yes) {
                 using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                    CategoryList.Remove(category);
-                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<Category>>>().Publish(CategoryList);
-                    var result = unitofWork.Categories.Find((x) => x.Id == category.Id).FirstOrDefault();
-                    unitofWork.Categories.Remove(result);
+                    ContributionCategoryList.Remove(category);
+                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<IncomeCategory>>>().Publish(ContributionCategoryList);
+                    var result = unitofWork.IncomeCategories.Find((x) => x.Id == category.Id).FirstOrDefault();
+                    unitofWork.IncomeCategories.Remove(result);
                     unitofWork.Complete();
                 }
             }
         }
 
+        private DelegateCommand addExpenseCategoryCommand;
+        public DelegateCommand AddExpenseCategoryCommand {
+            get { return addExpenseCategoryCommand; }
+            set { addExpenseCategoryCommand = value; }
+        }
+
+        private void ExecuteAddExpenseCategory() {
+            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                var expense = new ExpenseCategory() { Name = ExpenseCategoryText, DetailsRequired = ExpenseDetailsRequired };
+                unitofWork.ExpenseCategories.Add(expense);
+                ExpenseCategoryList.Add(expense);
+                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ExpenseCategory>>>().Publish(ExpenseCategoryList);
+                ExpenseCategoryText = String.Empty;
+                ExpenseDetailsRequired = default(bool);
+                unitofWork.Complete();
+            }
+        }
+
+        private bool CanExecuteAddExpenseCategory() {
+            return ExpenseCategoryText != null && ExpenseCategoryText != String.Empty;
+        }
+
+        private DelegateCommand<ExpenseCategory> deleteExpenseCategoryCommand;
+        public DelegateCommand<ExpenseCategory> DeleteExpenseCategoryCommand {
+            get { return deleteExpenseCategoryCommand; }
+            set { deleteExpenseCategoryCommand = value; }
+        }
+
+        private void ExecuteExpenseCategoryDelete(ExpenseCategory expenseCategory) {
+            MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            if(messageBoxResult == MessageBoxResult.Yes) {
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    ExpenseCategoryList.Remove(expenseCategory);
+                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ExpenseCategory>>>().Publish(ExpenseCategoryList);
+                    var result = unitofWork.ExpenseCategories.Find((x) => x.Id == expenseCategory.Id).FirstOrDefault();
+                    unitofWork.ExpenseCategories.Remove(result);
+                    unitofWork.Complete();
+                }
+            }
+        }
     }
 }

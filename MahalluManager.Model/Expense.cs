@@ -4,7 +4,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MahalluManager.Model {
-    public class Contribution : ViewModelBase {
+    public class Expense : ViewModelBase {
 
         private int id;
         public int Id {
@@ -16,6 +16,7 @@ namespace MahalluManager.Model {
         }
 
         private String categoryName;
+
         public String CategoryName {
             get { return categoryName; }
             set {
@@ -44,15 +45,16 @@ namespace MahalluManager.Model {
             }
         }
 
-        private string receiptNo;
-        public string ReceiptNo {
-            get { return receiptNo; }
-            set { receiptNo = value;
-                OnPropertyChanged("ReceiptNo");
+        private string billNo;
+        public string BillNo {
+            get { return billNo; }
+            set {
+                billNo = value;
+                OnPropertyChanged("BillNo");
             }
         }
 
-        [ForeignKey("Contribution_Id")]
-        public ObservableCollection<ContributionDetail> ContributionDetails { get; set; }
+        [ForeignKey("Expense_Id")]
+        public ObservableCollection<ExpenseDetails> ExpenseDetails { get; set; }
     }
 }
