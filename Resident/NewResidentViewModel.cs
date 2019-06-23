@@ -1,6 +1,7 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
 using MahalluManager.Model;
+using MahalluManager.Model.EventTypes;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Events;
 using System;
@@ -83,7 +84,6 @@ namespace Resident {
             set {
                 memberList = value;
                 OnPropertyChanged("MemberList");
-                eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Publish(MemberList);
             }
         }
 
@@ -112,6 +112,8 @@ namespace Resident {
                         MessageBox.Show(CurrentResidence.Name + " added successfully !", "New Residence", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
+                    ResidenceType residenceType = new ResidenceType { Residence = CurrentResidence, Operation = MahalluManager.Model.Common.Operation.Add };
+                    eventAggregator.GetEvent<PubSubEvent<ResidenceType>>().Publish(residenceType);
                 }
             }
         }
@@ -216,10 +218,15 @@ namespace Resident {
                         unitOfWork.ResidenceMembers.Add(residenceMember);
                         MemberList.Add(residenceMember);
                         CurrentMember = residenceMember;
-                        MessageBox.Show(CurrentMember.Name + " added successfully !","New Member",MessageBoxButton.OK,MessageBoxImage.Information);
+                        MessageBox.Show(CurrentMember.Name + " added successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
-                    eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Publish(MemberList);
+
+                    ResidenceMemberType residenceMemberType = new ResidenceMemberType {
+                        ResidenceMember = CurrentMember,
+                        Operation = MahalluManager.Model.Common.Operation.Add
+                    };
+                    eventAggregator.GetEvent<PubSubEvent<ResidenceMemberType>>().Publish(residenceMemberType);
                 }
             }
         }
@@ -251,6 +258,12 @@ namespace Resident {
                         if(member != null) {
                             unitofWork.ResidenceMembers.Remove(member);
                             unitofWork.Complete();
+
+                            ResidenceMemberType residenceMemberType = new ResidenceMemberType {
+                                ResidenceMember = CurrentMember,
+                                Operation = MahalluManager.Model.Common.Operation.Delete
+                            };
+                            eventAggregator.GetEvent<PubSubEvent<ResidenceMemberType>>().Publish(residenceMemberType);
 
                             MemberList.Remove(CurrentMember);
                             CurrentMember = null;
@@ -286,6 +299,12 @@ namespace Resident {
                         Residence residence = unitofWork.Residences.Get(CurrentResidence.Id);
                         unitofWork.Residences.Remove(residence);
                         unitofWork.Complete();
+
+                        ResidenceType residenceType = new ResidenceType {
+                            Residence = CurrentResidence,
+                            Operation = MahalluManager.Model.Common.Operation.Delete
+                        };
+                        eventAggregator.GetEvent<PubSubEvent<ResidenceType>>().Publish(residenceType);
 
                         ResidenceList.Remove(CurrentResidence);
                         CurrentResidence = null;

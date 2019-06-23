@@ -63,12 +63,16 @@
                     <TextBlock Text="Search by.." Margin="0,8,20,0"/>
                     <RadioButton Content="Year" IsChecked="{Binding SearchByYear}" Margin="0,8,20,0"/>
                     <RadioButton Content="House Number" IsChecked="{Binding SearchByHouseNumber}"  Margin="0,8,20,0" />
+                    <RadioButton Content="House Name" IsChecked="{Binding SearchByHouseName}"  Margin="0,8,20,0" />
                     <RadioButton Content="Member Name" IsChecked="{Binding SearchByMemberName}" Margin="0,8,20,0" />
                     <RadioButton Content="Category" IsChecked="{Binding SearchByCategory}" Margin="0,8,20,0"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" Margin="40,0,0,0">
-                    <TextBox MinWidth="260" Width="Auto" Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />
-                    <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding SearchableYears}" SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowYearSearch}" Margin="0,6,20,6" Height="20" />
+                    <toolkit:AutoCompleteBox FilterMode="Contains" IsTextCompletionEnabled="False" TextSearch.Text="{Binding SearchContributionText,UpdateSourceTrigger=PropertyChanged}"
+                        ItemsSource="{Binding SearchableIndexes}" SelectedItem="{Binding SearchContributionText, Mode=TwoWay}"
+                        MinWidth="260" Width="Auto" Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />
+                        <!--<TextBox MinWidth="260" Width="Auto" Text="{Binding SearchContributionText, UpdateSourceTrigger=PropertyChanged}" Visibility="{Binding ShowOtherSearch}" Margin="0,6,20,6" Height="20" />-->
+                        <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding SearchableYears}" SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowYearSearch}" Margin="0,6,20,6" Height="20" />
                     <ComboBox MinWidth="260" Width="Auto" ItemsSource="{Binding CategoryList}" SelectedValuePath="Name"  SelectedValue="{Binding SearchContributionText}" Visibility="{Binding ShowCategorySearch}" DisplayMemberPath="Name"  Margin="0,6,20,6" Height="20" />
                     <Button Command="{Binding ClearSearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Clear" Height="24" Margin="0,6,20,6"/>
                     <Button Command="{Binding SearchContributionCommand}" DockPanel.Dock="Right" Width="60" Content="Search" Height="24" Margin="0,6,20,6"/>

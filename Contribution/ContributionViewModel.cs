@@ -32,8 +32,66 @@ namespace Contribution {
             IsMember = true;
             RefreshContribution();
 
-            eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ResidenceMember>>>().Subscribe((e) => {
-                SetupSearchableMembers(null, null);
+            SetupSearchableIndexes();
+
+            eventAggregator.GetEvent<PubSubEvent<ResidenceType>>().Subscribe((e) => {
+                Residence residence = ((ResidenceType)e).Residence;
+                bool isPresent = false;
+                foreach(var item in SearchableResidenceNumbers) {
+                    if(item == residence.Number) {
+                        isPresent = true;
+                        break;
+                    }
+                }
+                if(!isPresent) {
+                    SearchableResidenceNumbers.Add(residence.Number);
+                } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                    SearchableResidenceNumbers.Remove(residence.Number);
+                }
+
+                isPresent = false;
+                foreach(var item in SearchableResidenceNames) {
+                    if(item.Equals(residence.Name)) {
+                        isPresent = true;
+                    }
+                }
+                if(!isPresent) {
+                    SearchableResidenceNames.Add(residence.Name);
+                } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                    SearchableResidenceNames.Remove(residence.Name);
+                }
+            });
+
+            eventAggregator.GetEvent<PubSubEvent<ResidenceMemberType>>().Subscribe((e) => {
+                ResidenceMember residenceMember = ((ResidenceMemberType)e).ResidenceMember;
+                bool isPresent = false;
+                foreach(var item in SearchableMemberNames) {
+                    if(item.Equals(residenceMember.Name)) {
+                        isPresent = true;
+                    }
+                }
+                if(!isPresent) {
+                    SearchableMemberNames.Add(residenceMember.Name);
+                } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                    SearchableMemberNames.Remove(residenceMember.Name);
+                }
+
+                isPresent = false;
+                foreach(var item in members) {
+                    if(item.Id == residenceMember.Id) {
+                        isPresent = true;
+                    }
+                }
+                Residence residence = GetResidence(residenceMember);
+                residenceMember.Job = residence.Name;
+                residenceMember.DOB = residence.Number;
+                if(!isPresent) {
+                    members.Add(residenceMember);
+                    SearchableMembers.Add(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.DOB + "@");
+                } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                    members.Remove(residenceMember);
+                    SearchableMembers.Remove(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.DOB + "@");
+                }
             });
 
             InitializeDatePicker();
@@ -44,7 +102,15 @@ namespace Contribution {
             });
         }
 
+        private static Residence GetResidence(ResidenceMember residenceMember) {
+            using(UnitOfWork unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                return unitOfWork.Residences.Get(residenceMember.Residence_Id);
+            }
+        }
+
         private decimal _amount;
+        private List<MahalluManager.Model.Contribution> searchSource = null;
+
 
         private String selectedYear;
         public String SelectedYear {
@@ -117,7 +183,7 @@ namespace Contribution {
         private Visibility showOtherSearch;
         public Visibility ShowOtherSearch {
             get {
-                return (SearchByHouseNumber || SearchByMemberName) ? Visibility.Visible : Visibility.Collapsed;
+                return (SearchByHouseNumber || SearchByHouseName || SearchByMemberName) ? Visibility.Visible : Visibility.Collapsed;
             }
             private set {
                 showOtherSearch = value;
@@ -136,7 +202,7 @@ namespace Contribution {
             set {
                 searchByYear = value;
                 if(searchByYear) {
-                    SearchByHouseNumber = SearchByMemberName = SearchByCategory = false;
+                    SearchByHouseNumber = SearchByMemberName = SearchByCategory = SearchByHouseName = false;
                     SearchContributionText = String.Empty;
                 }
                 OnPropertyChanged("SearchByYear");
@@ -151,8 +217,9 @@ namespace Contribution {
             set {
                 searchByHouseNumber = value;
                 if(searchByHouseNumber) {
-                    SearchByYear = SearchByMemberName = SearchByCategory = false;
+                    SearchByYear = SearchByMemberName = SearchByCategory = SearchByHouseName = false;
                     SearchContributionText = String.Empty;
+                    SearchableIndexes = SearchableResidenceNumbers;
                 }
                 OnPropertyChanged("SearchByHouseNumber");
                 OnPropertyChanged("ShowOtherSearch");
@@ -160,14 +227,31 @@ namespace Contribution {
             }
         }
 
+        private bool searchByHouseName;
+        public bool SearchByHouseName {
+            get { return searchByHouseName; }
+            set {
+                searchByHouseName = value;
+                if(SearchByHouseName) {
+                    SearchByYear = SearchByMemberName = SearchByCategory = SearchByHouseNumber = false;
+                    SearchContributionText = String.Empty;
+                    SearchableIndexes = SearchableResidenceNames;
+                }
+                OnPropertyChanged("SearchByHouseName");
+                OnPropertyChanged("ShowOtherSearch");
+            }
+        }
+
+
         private bool searchByMemberName;
         public bool SearchByMemberName {
             get { return searchByMemberName; }
             set {
                 searchByMemberName = value;
                 if(searchByMemberName) {
-                    SearchByYear = SearchByHouseNumber = SearchByCategory = false;
+                    SearchByYear = SearchByHouseNumber = SearchByCategory = SearchByHouseName = false;
                     SearchContributionText = String.Empty;
+                    SearchableIndexes = SearchableMemberNames;
                 }
                 OnPropertyChanged("SearchByMemberName");
                 OnPropertyChanged("ShowOtherSearch");
@@ -361,8 +445,73 @@ namespace Contribution {
         }
 
         private void ExecuteSearchContribution() {
-            //throw new NotImplementedException();
+            RefreshContribution();
+            searchSource = ContributionList.ToList(); ;
+            if(SearchByYear) {
+                ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(searchSource.FindAll((x) => x.CreatedOn.Year == Convert.ToInt32(SearchContributionText)));
+                if(ContributionList != null && ContributionList.Count == 0) {
+                    MessageBox.Show("No Contribution Found in " + SearchContributionText);
+                }
+            } else if(SearchByHouseNumber) {
+                int houseNumber;
+                if(Int32.TryParse(SearchContributionText.Trim(), out houseNumber)) {
+                    using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                        List<ContributionDetail> tempContributionDetails = unitofWork.ContributionDetails.Find((x) => x.HouserNumber == houseNumber).ToList();
+                        if(tempContributionDetails != null && tempContributionDetails.Count == 0) {
+                            MessageBox.Show("No Contribution Found with House number " + SearchContributionText);
+                        } else {
+                            ContributionList.Clear();
+                            foreach(var item in tempContributionDetails) {
+                                MahalluManager.Model.Contribution contribution = searchSource.Find((x) => x.Id == item.Contribution_Id);
+                                if(contribution != null && !ContributionList.Contains(contribution)) {
+                                    ContributionList.Add(contribution);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    MessageBox.Show("Please enter house number");
+                }
+            } else if(SearchByHouseName) {
+                string houseName = SearchContributionText.Trim();
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    List<ContributionDetail> tempContributionDetails = unitofWork.ContributionDetails.Find((x) => x.HouserName.Contains(houseName)).ToList();
+                    if(tempContributionDetails != null && tempContributionDetails.Count == 0) {
+                        MessageBox.Show("No Contribution Found with House name " + SearchContributionText);
+                    } else {
+                        ContributionList.Clear();
+                        foreach(var item in tempContributionDetails) {
+                            MahalluManager.Model.Contribution contribution = searchSource.Find((x) => x.Id == item.Contribution_Id);
+                            if(contribution != null && !ContributionList.Contains(contribution)) {
+                                ContributionList.Add(contribution);
+                            }
+                        }
+                    }
+                }
+            } else if(SearchByMemberName) {
+                string memberName = SearchContributionText.Trim();
+                using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                    List<ContributionDetail> tempContributionDetails = unitofWork.ContributionDetails.Find((x) => x.MemberName.Contains(memberName)).ToList();
+                    if(tempContributionDetails != null && tempContributionDetails.Count == 0) {
+                        MessageBox.Show("No Contribution Found with Member name " + SearchContributionText);
+                    } else {
+                        ContributionList.Clear();
+                        foreach(var item in tempContributionDetails) {
+                            MahalluManager.Model.Contribution contribution = searchSource.Find((x) => x.Id == item.Contribution_Id);
+                            if(contribution != null && !ContributionList.Contains(contribution)) {
+                                ContributionList.Add(contribution);
+                            }
+                        }
+                    }
+                }
+            } else if(SearchByCategory) {
+                ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(searchSource.FindAll((x) => x.CategoryName == SearchContributionText));
+                if(ContributionList != null && ContributionList.Count == 0) {
+                    MessageBox.Show("No Contribution Found with " + SearchContributionText);
+                }
+            }
         }
+
 
         private DelegateCommand clearSearchContributionCommand;
         public DelegateCommand ClearSearchContributionCommand {
@@ -386,7 +535,9 @@ namespace Contribution {
         private void InitializeSearchPanel() {
             SearchByYear = true;
             SearchByHouseNumber = false;
+            SearchByHouseName = false;
             SearchByMemberName = false;
+            SearchByCategory = false;
             SearchableYears = new List<string>();
             for(int i = -10; i <= 10; i++) {
                 SearchableYears.Add(DateTime.Now.AddYears(i).Year.ToString());
@@ -621,9 +772,8 @@ namespace Contribution {
             return CurrentContribution != null;
         }
 
-        private IEnumerable<string> searchableMembers;
-
-        public IEnumerable<string> SearchableMembers {
+        private ObservableCollection<string> searchableMembers;
+        public ObservableCollection<string> SearchableMembers {
             get { return searchableMembers; }
             set {
                 searchableMembers = value;
@@ -631,30 +781,64 @@ namespace Contribution {
             }
         }
 
-        private void SetupSearchableMembers(IEnumerable<ResidenceMember> members, IUnitOfWork unitOfWork) {
-            if(members == null && unitOfWork == null) {
-                using(unitOfWork = new UnitOfWork(new MahalluDBContext())) {
-                    members = unitOfWork.ResidenceMembers.GetAll().ToList();
-                    foreach(var member in members) {
-                        Residence residence = unitOfWork.Residences.Get(member.Residence_Id);
-                        member.Job = residence.Name;
-                        member.DOB = residence.Number;
-                    }
-                }
-            } else {
+        private List<ResidenceMember> members;
+
+        private ObservableCollection<string> searchableIndexes;
+        public ObservableCollection<string> SearchableIndexes {
+            get { return searchableIndexes; }
+            set {
+                searchableIndexes = value;
+                OnPropertyChanged("SearchableIndexes");
+            }
+        }
+
+        private ObservableCollection<string> searchableMemberNames;
+        public ObservableCollection<string> SearchableMemberNames {
+            get { return searchableMemberNames; }
+            set {
+                searchableMemberNames = value;
+                OnPropertyChanged("SearchableMemberNames");
+            }
+        }
+
+        private ObservableCollection<string> searchableResidenceNames;
+        public ObservableCollection<string> SearchableResidenceNames {
+            get { return searchableResidenceNames; }
+            set {
+                searchableResidenceNames = value;
+                OnPropertyChanged("SearchableResidenceNames");
+            }
+        }
+
+        private ObservableCollection<string> searchableResidenceNumbers;
+        public ObservableCollection<string> SearchableResidenceNumbers {
+            get { return searchableResidenceNumbers; }
+            set {
+                searchableResidenceNumbers = value;
+                OnPropertyChanged("SearchableResidenceNumbers");
+            }
+        }
+
+        private void SetupSearchableIndexes() {
+            using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
+                members = unitOfWork.ResidenceMembers.GetAll().ToList();
                 foreach(var member in members) {
                     Residence residence = unitOfWork.Residences.Get(member.Residence_Id);
                     member.Job = residence.Name;
                     member.DOB = residence.Number;
                 }
+
+                SearchableMemberNames = new ObservableCollection<String>(members.Select(x => x.Name));
+                var residences = unitOfWork.Residences.GetAll();
+                SearchableResidenceNames = new ObservableCollection<String>(residences.Select(x => x.Name));
+                SearchableResidenceNumbers = new ObservableCollection<String>(residences.Select(x => x.Number));
+
+                SearchableMembers = new ObservableCollection<string>(members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@"));
             }
-            SearchableMembers = members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@");
         }
 
         private void RefreshContribution() {
             using(var unitOfWork = new UnitOfWork(new MahalluDBContext())) {
-                SetupSearchableMembers(unitOfWork.ResidenceMembers.GetAll(), unitOfWork);
-
                 ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitOfWork.Contributions.GetAll());
                 if(ContributionList != null && ContributionList.Count > 0) {
                     CurrentContribution = ContributionList[0];

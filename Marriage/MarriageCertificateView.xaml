@@ -5,8 +5,73 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Marriage"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="650" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="asdfas"/>
+        <Grid Background="BlanchedAlmond">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.Column="0" Background="LightPink" Grid.RowSpan="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="50"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="" />
+                <TextBlock  Grid.Row="0" Text="Marriage Details" FontWeight="Bold" VerticalAlignment="Center" Margin="40,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                <TextBlock  Grid.Row="1" Text="Groom Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="2" Text="Groom Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="3" Text="Groom Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="4" Text="Groom House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="7" Text="Bride Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="8" Text="Bride Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="9" Text="Bride Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="10" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="11" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="12" Text="Marriage Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomPincode}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" />
+                <TextBox Grid.Row="11" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" />
+
+                <DatePicker Grid.Row="12" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
+                        DisplayDateStart="{Binding StartDate}"  
+                        DisplayDateEnd="{Binding EndDate}"  Margin="0,8,20,8" Width="130"
+                        IsEnabled="{Binding IsEnable}" />
+                <StackPanel Grid.Row="13" Grid.Column="0"  Orientation="Horizontal" Grid.ColumnSpan="2">
+                    <Button   Content="Save Expense" Command="{Binding SaveExpenseCommand}" Width="100" Margin="40,8,20,8"/>
+                    <Button   Content="New Expense" Command="{Binding NewExpenseCommand}" Width="100" Margin="0,8,20,8"/>
+                    <Button  Content="Delete" Command="{Binding DeleteExpenseCommand}" Width="48" Margin="0,8,20,8"/>
+                    <Button  Content="Clear" Command="{Binding ClearExpenseCommand}" Width="48" Margin="0,8,20,8"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
     </Grid>
 </UserControl>

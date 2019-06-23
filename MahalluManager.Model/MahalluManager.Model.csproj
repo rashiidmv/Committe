@@ -49,8 +49,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Area.cs" />
+    <Compile Include="Common\Operation.cs" />
     <Compile Include="EventTypes\IncomeType.cs" />
     <Compile Include="EventTypes\ExpenseType.cs" />
+    <Compile Include="EventTypes\ResidenceMemberType.cs" />
+    <Compile Include="EventTypes\ResidenceType.cs" />
     <Compile Include="EventTypes\SelectedYearType.cs" />
     <Compile Include="Expense.cs" />
     <Compile Include="ExpenseDetails.cs" />

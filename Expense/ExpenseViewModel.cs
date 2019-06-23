@@ -281,7 +281,6 @@ namespace Expense {
                         ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense };
                         eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Publish(totatExpenseType);
 
-                        //TotalExpense = -CurrentExpense.ToatalAmount;
                         ExpenseList.Remove(CurrentExpense);
                         CurrentExpense = null;
 
@@ -319,7 +318,6 @@ namespace Expense {
                     unitOfWork.Expenses.Add(expense);
                     unitOfWork.Complete();
                     ExpenseList.Add(expense);
-                    //TotalExpense = _amount;
                     CurrentExpense = expense;
                     ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense };
                     eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Publish(totatExpenseType);
