@@ -134,6 +134,10 @@
       <Project>{d900d22d-c502-445d-b899-c9d773942c87}</Project>
       <Name>Administrator</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{15907f67-fc0d-4658-b3c9-629b2b96a678}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contribution\Contribution.csproj">
       <Project>{95a32abe-5e11-4db3-b464-a19bc6df8b4b}</Project>
       <Name>Contribution</Name>
