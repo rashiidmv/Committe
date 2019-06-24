@@ -7,7 +7,7 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <DockPanel LastChildFill="True">
-        <Button Content="Browse" DockPanel.Dock="Right" Margin="8,0,0,0"/>
-        <TextBox  />
+        <Button Content="Browse" DockPanel.Dock="Right" Click="BrowseFileOpen_Click" Margin="8,0,0,0" Name="BrowseFileOpen"/>
+        <TextBox  Name="FileName" IsEnabled="False" />
     </DockPanel>
 </UserControl>

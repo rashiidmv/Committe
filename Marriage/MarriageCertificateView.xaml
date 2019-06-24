@@ -84,7 +84,7 @@
                     <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" />
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" />
+                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhoto}"/>
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" />
