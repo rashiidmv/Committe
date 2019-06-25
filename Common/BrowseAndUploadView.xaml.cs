@@ -14,14 +14,6 @@ namespace Common {
             InitializeComponent();
         }
 
-        //public static readonly DependencyProperty SetTextProperty =
-        // DependencyProperty.Register("FilePathProperty", typeof(string), typeof(BrowseAndUploadView), new
-        //    PropertyMetadata("", new PropertyChangedCallback(OnSetTextChanged)));
-
-        //public string FilePath {
-        //    get { return (string)GetValue(FilePathProperty); }
-        //    set { SetValue(FilePathProperty, value); }
-        //}
         public static readonly DependencyProperty FilePathProperty =
                 DependencyProperty.Register("FilePath", typeof(string), typeof(UserControl),
                     new PropertyMetadata(string.Empty, OnCaptionPropertyChanged));
@@ -34,9 +26,9 @@ namespace Common {
                        DependencyPropertyChangedEventArgs e) {
             BrowseAndUploadView myUserControl = dependencyObject as BrowseAndUploadView;
             myUserControl.OnPropertyChanged("FilePath");
-            myUserControl.OnCaptionPropertyChanged(e);
+            myUserControl.OnFilePathPropertyChanged(e);
         }
-        private void OnCaptionPropertyChanged(DependencyPropertyChangedEventArgs e) {
+        private void OnFilePathPropertyChanged(DependencyPropertyChangedEventArgs e) {
             FileName.Text = (String)e.NewValue;
         }
         public event PropertyChangedEventHandler PropertyChanged;
@@ -45,8 +37,6 @@ namespace Common {
                 PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
-
 
         public byte[] FileContent { get; private set; }
         private void BrowseFileOpen_Click(object sender, System.Windows.RoutedEventArgs e) {
@@ -62,7 +52,6 @@ namespace Common {
                 FilePath = FileName.Text;
                 FileContent = File.ReadAllBytes(FileName.Text);
             }
-
         }
     }
 }

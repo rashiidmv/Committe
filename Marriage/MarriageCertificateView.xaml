@@ -105,14 +105,15 @@
                         DisplayDateEnd="{Binding EndDate}"  Margin="8,8,20,8" Width="130"
                         IsEnabled="{Binding IsEnable}" />
                 </StackPanel>
-                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Right">
-                    <Button   Content="Save Marriage" Command="{Binding SaveMarriageCommand}" Width="100" Margin="40,8,20,8"/>
-                    <Button   Content="New Marriage" Command="{Binding NewMarriageCommand}" Width="100" Margin="0,8,20,8"/>
-                    <Button  Content="Delete" Command="{Binding DeleteMarriageCommand}" Width="48" Margin="0,8,20,8"/>
-                    <Button  Content="Clear" Command="{Binding ClearMarriageCommand}" Width="48" Margin="0,8,20,8"/>
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
+                    <Button   Content="Save Marriage" Command="{Binding SaveMarriageCommand}" Width="100" Margin="40,8,10,8"/>
+                    <Button   Content="New Marriage" Command="{Binding NewMarriageCommand}" Width="100" Margin="0,8,10,8"/>
+                    <Button  Content="Delete" Command="{Binding DeleteMarriageCommand}" Width="48" Margin="0,8,10,8"/>
+                    <Button  Content="Clear" Command="{Binding ClearMarriageCommand}" Width="48" Margin="0,8,10,8"/>
+                    <Button  Content="Generate Certificate" Command="{Binding GenerateCertificateCommand}"  Width="120" Margin="0,8,10,8"/>
                 </StackPanel>
             </Grid>
-
+            <common:PdfViewer Grid.Column="1" Grid.RowSpan="2" PdfFilePath="{Binding CertificatePath, Mode=TwoWay}"/>
         </Grid>
     </Grid>
 </UserControl>
