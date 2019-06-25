@@ -10,7 +10,7 @@
     <Grid>
         <Grid Background="BlanchedAlmond">
             <Grid.RowDefinitions>
-                <RowDefinition Height="400"/>
+                <RowDefinition Height="440"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -29,7 +29,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="100"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -44,7 +44,10 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="" />
-                    <TextBlock  Grid.Row="0" Text="Groom Details" FontWeight="Bold" VerticalAlignment="Center" Margin="40,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                    <DockPanel Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" LastChildFill="True">
+                        <Image Margin="8,0,0,0" DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding GroomPhoto}"/>
+                        <TextBlock  Text="Groom Details" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </DockPanel>
                     <TextBlock  Grid.Row="1" Text="Groom Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Groom Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="3" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -52,7 +55,8 @@
                     <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}" Margin="0,9,20,9" />
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" />
+                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" 
+                                                FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" />
@@ -60,7 +64,7 @@
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="60"/>
+                        <RowDefinition Height="100"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -75,8 +79,10 @@
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="" />
-                    <TextBlock  Grid.Row="0" Text="Bride Details" FontWeight="Bold" VerticalAlignment="Center" Margin="40,0,0,0" Grid.ColumnSpan="2" HorizontalAlignment="Center"/>
+                    <DockPanel Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" LastChildFill="True">
+                        <Image Margin="8,0,0,0" DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding BridePhoto}"/>
+                        <TextBlock  Text="Bride Details" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    </DockPanel>
                     <TextBlock  Grid.Row="1" Text="Bride Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Bride Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="3" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -84,7 +90,7 @@
                     <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" />
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhoto}"/>
+                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" />

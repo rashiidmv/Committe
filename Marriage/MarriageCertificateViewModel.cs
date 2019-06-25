@@ -1,6 +1,7 @@
 ﻿using MahalluManager.Infra;
 using Microsoft.Practices.Prism.Commands;
 using System;
+using System.Windows.Media.Imaging;
 
 namespace Marriage {
     public class MarriageCertificateViewModel : ViewModelBase {
@@ -9,7 +10,7 @@ namespace Marriage {
             SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriageCommand);
         }
 
-        
+
 
         private DateTime startDate;
         public DateTime StartDate {
@@ -27,15 +28,49 @@ namespace Marriage {
                 OnPropertyChanged("endtDate");
             }
         }
-        private string bridePhoto;
 
-        public string BridePhoto {
-            get { return bridePhoto; }
+        private BitmapImage bridePhoto;
+        public BitmapImage BridePhoto {
+            get {
+                if(!String.IsNullOrEmpty(bridePhotoPath)) {
+                    var uriSource = new Uri(bridePhotoPath);
+                    bridePhoto = new BitmapImage(uriSource);
+                }
+                return bridePhoto;
+            }
+        }
+
+        private BitmapImage groomPhoto;
+        public BitmapImage GroomPhoto {
+            get {
+                if(!String.IsNullOrEmpty(groomPhotoPath)) {
+                    var uriSource = new Uri(groomPhotoPath);
+                    groomPhoto = new BitmapImage(uriSource);
+                }
+                return groomPhoto;
+            }
+        }
+
+        private string bridePhotoPath;
+        public string BridePhotoPath {
+            get { return bridePhotoPath; }
             set {
-                bridePhoto = value;
+                bridePhotoPath = value;
+                OnPropertyChanged("BridePhotoPath");
                 OnPropertyChanged("BridePhoto");
             }
         }
+
+        private string groomPhotoPath;
+        public string GroomPhotoPath {
+            get { return groomPhotoPath; }
+            set {
+                groomPhotoPath = value;
+                OnPropertyChanged("GroomPhotoPath");
+                OnPropertyChanged("GroomPhoto");
+            }
+        }
+
         private DelegateCommand saveMarriageCommand;
 
         public DelegateCommand SaveMarriageCommand {
@@ -43,7 +78,6 @@ namespace Marriage {
             set { saveMarriageCommand = value; }
         }
         private void ExecuteSaveMarriageCommand() {
-            String s = BridePhoto;
         }
 
         private void InitializeDatePicker() {

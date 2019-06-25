@@ -37,7 +37,7 @@ namespace Common {
             myUserControl.OnCaptionPropertyChanged(e);
         }
         private void OnCaptionPropertyChanged(DependencyPropertyChangedEventArgs e) {
-            FileName.Text = FilePath;
+            FileName.Text = (String)e.NewValue;
         }
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged(string propertyName) {
