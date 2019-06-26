@@ -75,7 +75,6 @@ namespace Marriage {
         }
 
         private String certificatePath;
-
         public String CertificatePath {
             get { return certificatePath; }
             set {
@@ -85,7 +84,6 @@ namespace Marriage {
         }
 
         private string groomName;
-
         public string GroomName {
             get { return groomName; }
             set {
@@ -93,9 +91,39 @@ namespace Marriage {
                 OnPropertyChanged("GroomName");
             }
         }
+        private string groomFatherName;
+        public string GroomFatherName {
+            get { return groomFatherName; }
+            set {
+                groomFatherName = value;
+                OnPropertyChanged("GroomFatherName");
+            }
+        }
+        private string groomHouseName;
+        public string GroomHouseName {
+            get { return groomHouseName; }
+            set { groomHouseName = value;
+                OnPropertyChanged("GroomHouseName");
+            }
+        }
+
+        private string groomArea;
+        public string GroomArea {
+            get { return groomArea; }
+            set { groomArea = value;
+                OnPropertyChanged("GroomArea");
+            }
+        }
+
+        private int groomPincode;
+        public int GroomPincode {
+            get { return groomPincode; }
+            set { groomPincode = value;
+                OnPropertyChanged("GroomPincode");
+            }
+        }
 
         private string brideName;
-
         public string BrideName {
             get { return brideName; }
             set {
@@ -104,6 +132,38 @@ namespace Marriage {
             }
         }
 
+        private string brideFatherName;
+        public string BrideFatherName {
+            get { return brideFatherName; }
+            set { brideFatherName = value;
+                OnPropertyChanged("BrideFatherName");
+            }
+        }
+
+        private string brideHouseName;
+        public string BrideHouseName {
+            get { return brideHouseName; }
+            set { brideHouseName = value;
+                OnPropertyChanged("BrideHouseName");
+            }
+        }
+
+        private string brideArea;
+
+        public string BrideArea {
+            get { return brideArea; }
+            set { brideArea = value;
+                OnPropertyChanged("BrideArea");
+            }
+        }
+        private int bridePincode;
+
+        public int BridePinCode {
+            get { return bridePincode; }
+            set { bridePincode = value;
+                OnPropertyChanged("BridePinCode");
+            }
+        }
 
 
 
@@ -143,11 +203,12 @@ namespace Marriage {
 
             Phrase phrase = new Phrase("This is from Phrase.");
             document.Add(phrase);
-            //Image i = Image.GetInstance("Test.jpg");
-            //i.Alignment = Image.UNDERLYING;
-            //i.ScaleToFit(300f, 400f);
-            //document.Add(i);
 
+            Image i = Image.GetInstance(BridePhotoPath);
+            i.Alignment = Image.UNDERLYING;
+            i.ScaleToFit(300f, 400f);
+            //document.Add(i);
+            i.SetAbsolutePosition(200, 200);
 
             Paragraph para = new Paragraph("This is from paragraph.");
             document.Add(para);
@@ -163,7 +224,9 @@ namespace Marriage {
 
             // the pdf content
             PdfContentByte cb = writer.DirectContent;
-
+            PdfImportedPage page = writer.GetImportedPage(reader, 1);
+            cb.AddTemplate(page, 0, 0);
+            cb.AddImage(i);
             // select the font properties
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
@@ -171,34 +234,37 @@ namespace Marriage {
 
             // write the text in the pdf content
             cb.BeginText();
-            string text = "Some random blablablabla...";
-            // put the alignment and coordinates here
-            cb.ShowTextAligned(1, text, 520, 640, 0);
+            cb.ShowTextAligned(1, GroomName, 520, 640, 0);
             cb.EndText();
             cb.BeginText();
-            text = "Other random blabla...";
-            // put the alignment and coordinates here
-            cb.ShowTextAligned(2, text, 100, 200, 0);
-            cb.EndText();
-
-            // create the new page and add it to the pdf
-            PdfImportedPage page = writer.GetImportedPage(reader, 1);
-            cb.AddTemplate(page, 0, 0);
-
-
-            // write the text in the pdf content
-            cb.BeginText();
-            text = "rassssssssssss..";
-            // put the alignment and coordinates here
-            cb.ShowTextAligned(1, text, 230, 230, 0);
+            cb.ShowTextAligned(2, GroomFatherName, 100, 200, 0);
             cb.EndText();
             cb.BeginText();
-            text = "srrrrrrrrrrrsdf.";
-            // put the alignment and coordinates here
-            cb.ShowTextAligned(2, text, 150, 230, 0);
+            cb.ShowTextAligned(1, GroomHouseName, 230, 230, 0);
             cb.EndText();
-            cb.AddTemplate(page, 0, 0);
-
+            cb.BeginText();
+            cb.ShowTextAligned(2, GroomArea, 150, 230, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(1, BrideName, 520, 640, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(2, BrideFatherName, 100, 200, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(1, BrideHouseName, 230, 230, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(2, BrideArea, 150, 230, 0);
+            cb.EndText();
+            cb.BeginText();
+            cb.ShowTextAligned(2, BridePinCode.ToString(), 150, 230, 0);
+            cb.EndText();
+            //cb.AddTemplate(page, 0, 0);   
+            // page.Add(cb);
 
             document.Close();
             fs.Close();

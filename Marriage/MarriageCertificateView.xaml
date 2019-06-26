@@ -94,7 +94,7 @@
                     <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" />
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomPincode}" Margin="0,9,20,9" />
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding BridePinCode}" Margin="0,9,20,9" />
 
 
                 </Grid>
