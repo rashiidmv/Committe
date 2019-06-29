@@ -40,9 +40,9 @@ namespace Summary {
                 if(!isPresent) {
                     ExpenseList.Add(expense);
                 }
-                TotalIncome = CalcuateTotalExpense();
+                TotalExpense = CalcuateTotalExpense();
             });
-            RefreshContribution();
+            Refresh();
             Years = new ObservableCollection<string>();
             SetYears();
         }
@@ -71,7 +71,7 @@ namespace Summary {
             }
         }
 
-        private void RefreshContribution() {
+        private void Refresh() {
             using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
                 ContributionList = new ObservableCollection<MahalluManager.Model.Contribution>(unitofWork.Contributions.GetAll());
                 ExpenseList = new ObservableCollection<MahalluManager.Model.Expense>(unitofWork.Expenses.GetAll());
@@ -120,6 +120,7 @@ namespace Summary {
                 OnPropertyChanged("SelectedYearBalance");
             }
         }
+
         public Decimal SelectedYearBalance {
             get {
                 return (TotalIncome - TotalExpense);
