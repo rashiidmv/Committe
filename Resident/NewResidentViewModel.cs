@@ -30,6 +30,31 @@ namespace Resident {
             DeleteMemberCommand = new DelegateCommand(ExecuteDeleteMember, CanExecuteDeleteMember);
             RefreshResidence();
             SearchByHouseName = true;
+            InitializeDatePicker();
+        }
+
+        public List<String> MarriageStatuses {
+            get {
+                return new List<String>() { "Married", "Batchelor", "Spinster", "Widower", "Widow", "Divorcee" };
+            }
+        }
+
+        private DateTime startDate;
+        public DateTime StartDate {
+            get { return startDate; }
+            set {
+                startDate = value;
+                OnPropertyChanged("StartDate");
+            }
+        }
+
+        private DateTime endDate;
+        public DateTime EndDate {
+            get { return endDate; }
+            set {
+                endDate = value;
+                OnPropertyChanged("EndtDate");
+            }
         }
 
         private List<Residence> searchSource = null;
@@ -212,6 +237,9 @@ namespace Resident {
                         CurrentMember.Abroad = residenceMember.Abroad;
                         CurrentMember.Country = residenceMember.Country;
                         CurrentMember.IsGuardian = residenceMember.IsGuardian;
+                        CurrentMember.MarriageStatus = residenceMember.MarriageStatus;
+                        CurrentMember.Qualification = residenceMember.Qualification;
+                        CurrentMember.Gender = residenceMember.Gender;
                         unitOfWork.ResidenceMembers.Update(CurrentMember);
                         MessageBox.Show(CurrentMember.Name + " updated successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
                     } else {
@@ -417,12 +445,17 @@ namespace Resident {
             }
         }
 
-        private string dob;
-        public string DOB {
-            get { return dob; }
+        private DateTime dob;
+        public DateTime DOB {
+            get {
+                if(dob == DateTime.MinValue)
+                    return DateTime.Now;
+                return dob;
+            }
             set {
                 dob = value;
                 OnPropertyChanged("DOB");
+                OnPropertyChanged("Age");
             }
         }
 
@@ -470,6 +503,80 @@ namespace Resident {
                 OnPropertyChanged("IsGuardian");
             }
         }
+
+        private bool male;
+        public bool Male {
+            get { return male; }
+            set {
+                male = value;
+                if(male == true) {
+                    Female = Other = false;
+                }
+                OnPropertyChanged("Male");
+            }
+        }
+
+        private bool female;
+        public bool Female {
+            get { return female; }
+            set {
+                female = value;
+                if(female == true) {
+                    Male = Other = false;
+                }
+                OnPropertyChanged("Female");
+            }
+        }
+
+        private bool other;
+
+        public bool Other {
+            get { return other; }
+            set {
+                other = value;
+                if(Other == true) {
+                    Male = Female = false;
+                }
+                OnPropertyChanged("Other");
+            }
+        }
+
+        private String age;
+        public String Age {
+            get {
+                int year = DateTime.Now.Year - DOB.Year;
+                if(year > 0) {
+                    return year.ToString();
+                } else {
+                    return (DateTime.Now.Month - DOB.Month).ToString() + " Months";
+                }
+            }
+            set {
+                age = value;
+                OnPropertyChanged("Age");
+            }
+        }
+
+        private string marriageStatus;
+        public string MarriageStatus {
+            get { return marriageStatus; }
+            set {
+                marriageStatus = value;
+                OnPropertyChanged("MarriageStatus");
+            }
+        }
+
+        private String qualification;
+        public String Qualification {
+            get { return qualification; }
+            set {
+                qualification = value;
+                OnPropertyChanged("Qualification");
+            }
+        }
+
+
+
         private bool enbalbeIsGuardian;
         public bool EnbalbeIsGuardian {
             get {
@@ -562,6 +669,14 @@ namespace Resident {
                 IsAbroad = CurrentMember.Abroad;
                 Country = CurrentMember.Country;
                 IsGuardian = CurrentMember.IsGuardian;
+                if(CurrentMember.Gender.Equals("Male"))
+                    Male = true;
+                else if(CurrentMember.Gender.Equals("Female"))
+                    Female = true;
+                else
+                    Other = true;
+                MarriageStatus = CurrentMember.MarriageStatus;
+                Qualification = CurrentMember.Qualification;
                 SetGuardian();
             } else {
                 ClearMemberDetails();
@@ -570,12 +685,13 @@ namespace Resident {
 
         private void ClearMemberDetails() {
             MemberName = String.Empty;
-            DOB = String.Empty;
+            DOB = DateTime.Now;
             Job = String.Empty;
             Mobile = String.Empty;
             IsAbroad = false;
             IsGuardian = false;
-            Country = String.Empty;
+            Country = MarriageStatus = qualification = String.Empty;
+
         }
 
         private Residence GetResidence() {
@@ -588,7 +704,7 @@ namespace Resident {
         private ResidenceMember GetResidenceMember() {
             var residenceMember = new ResidenceMember();
             residenceMember.Name = MemberName.Trim();
-            residenceMember.DOB = DOB?.Trim();
+            residenceMember.DOB = DOB;
             residenceMember.Job = Job?.Trim();
             residenceMember.Mobile = Mobile?.Trim();
             residenceMember.Abroad = IsAbroad;
@@ -596,6 +712,17 @@ namespace Resident {
                 residenceMember.Country = Country?.Trim();
             }
             residenceMember.IsGuardian = IsGuardian;
+            String gender = String.Empty;
+            if(Male) {
+                gender = "Male";
+            } else if(Female) {
+                gender = "Female";
+            } else {
+                gender = "Other";
+            }
+            residenceMember.Gender = gender;
+            residenceMember.MarriageStatus = MarriageStatus;
+            residenceMember.Qualification = Qualification;
             residenceMember.Residence_Id = CurrentResidence.Id;
             return residenceMember;
         }
@@ -606,7 +733,6 @@ namespace Resident {
                 MessageBox.Show("Please enter house number and name");
                 return false;
             }
-
             return true;
         }
 
@@ -627,6 +753,14 @@ namespace Resident {
                 MessageBox.Show("Please enter member name");
                 return false;
             }
+            if(!Male && !Female && !Other) {
+                MessageBox.Show("Please enter gender");
+                return false;
+            }
+            if(String.IsNullOrEmpty(MarriageStatus)) {
+                MessageBox.Show("Please marriage status");
+                return false;
+            }
             if(CurrentMember == null) {
                 ResidenceMember residenceMember = unitOfWork.ResidenceMembers.Find((x) => x.Name == MemberName
                                                     && x.Residence_Id == CurrentResidence.Id).FirstOrDefault();
@@ -637,5 +771,10 @@ namespace Resident {
             }
             return true;
         }
+        private void InitializeDatePicker() {
+            StartDate = DateTime.Now.AddYears(-110);
+            EndDate = DateTime.Now;
+        }
+
     }
 }

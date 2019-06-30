@@ -135,7 +135,7 @@ namespace Expense {
             get { return startDate; }
             set {
                 startDate = value;
-                OnPropertyChanged("startDate");
+                OnPropertyChanged("StartDate");
             }
         }
 
@@ -144,7 +144,7 @@ namespace Expense {
             get { return endDate; }
             set {
                 endDate = value;
-                OnPropertyChanged("endtDate");
+                OnPropertyChanged("EndtDate");
             }
         }
 

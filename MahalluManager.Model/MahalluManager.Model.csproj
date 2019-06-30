@@ -61,6 +61,7 @@
     <Compile Include="Contribution.cs" />
     <Compile Include="ContributionDetails.cs" />
     <Compile Include="ExpenseCategory.cs" />
+    <Compile Include="MarriageCertificate.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Residence.cs" />
     <Compile Include="ResidenceMember.cs" />

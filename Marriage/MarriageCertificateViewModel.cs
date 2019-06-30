@@ -4,6 +4,7 @@ using MahalluManager.Infra;
 using Microsoft.Practices.Prism.Commands;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
@@ -13,6 +14,12 @@ namespace Marriage {
             InitializeDatePicker();
             SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriageCommand);
             GenerateCertificateCommand = new DelegateCommand(ExecuteGenerateCertificateCommand);
+            SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriage);
+        }
+
+        private void ExecuteSaveMarriage() {
+            String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
+            CertificatePath = Path.Combine(currentFolder, "Certificate.pdf");
         }
 
         private DateTime startDate;
@@ -20,7 +27,7 @@ namespace Marriage {
             get { return startDate; }
             set {
                 startDate = value;
-                OnPropertyChanged("startDate");
+                OnPropertyChanged("StartDate");
             }
         }
         private DateTime endDate;
@@ -28,7 +35,7 @@ namespace Marriage {
             get { return endDate; }
             set {
                 endDate = value;
-                OnPropertyChanged("endtDate");
+                OnPropertyChanged("EndDate");
             }
         }
 
@@ -204,11 +211,11 @@ namespace Marriage {
             Phrase phrase = new Phrase("This is from Phrase.");
             document.Add(phrase);
 
-            Image i = Image.GetInstance(BridePhotoPath);
-            i.Alignment = Image.UNDERLYING;
-            i.ScaleToFit(300f, 400f);
-            //document.Add(i);
-            i.SetAbsolutePosition(200, 200);
+            //Image i = Image.GetInstance(BridePhotoPath);
+            //i.Alignment = Image.UNDERLYING;
+            //i.ScaleToFit(300f, 400f);
+            ////document.Add(i);
+            //i.SetAbsolutePosition(200, 200);
 
             Paragraph para = new Paragraph("This is from paragraph.");
             document.Add(para);
@@ -226,55 +233,50 @@ namespace Marriage {
             PdfContentByte cb = writer.DirectContent;
             PdfImportedPage page = writer.GetImportedPage(reader, 1);
             cb.AddTemplate(page, 0, 0);
-            cb.AddImage(i);
+            //cb.AddImage(i);
             // select the font properties
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
             cb.SetFontAndSize(bf, 8);
 
             // write the text in the pdf content
-            cb.BeginText();
-            cb.ShowTextAligned(1, GroomName, 520, 640, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, GroomFatherName, 100, 200, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(1, GroomHouseName, 230, 230, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, GroomArea, 150, 230, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(1, BrideName, 520, 640, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, BrideFatherName, 100, 200, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(1, BrideHouseName, 230, 230, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, BrideArea, 150, 230, 0);
-            cb.EndText();
-            cb.BeginText();
-            cb.ShowTextAligned(2, BridePinCode.ToString(), 150, 230, 0);
-            cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, GroomName, 520, 640, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomFatherName, 100, 200, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, GroomHouseName, 230, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomArea, 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, BrideName, 520, 640, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BrideFatherName, 100, 200, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, BrideHouseName, 230, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BrideArea, 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BridePinCode.ToString(), 150, 230, 0);
+            //cb.EndText();
             //cb.AddTemplate(page, 0, 0);   
-            // page.Add(cb);
+            //page.Add(cb);
 
             document.Close();
             fs.Close();
             writer.Close();
             reader.Close();
-
-            String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
-            CertificatePath = Path.Combine(currentFolder, certificateName);
-
         }
-
     }
 }

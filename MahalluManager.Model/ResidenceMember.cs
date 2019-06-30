@@ -1,4 +1,5 @@
 ﻿using MahalluManager.Infra;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -23,13 +24,12 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("Name");
             }
         }
-        private string dob;
+        private DateTime dob;
 
-        public string DOB {
+        public DateTime DOB {
             get { return dob; }
             set {
                 dob = value;
-                OnPropertyChanged("DOB");
             }
         }
 
@@ -81,5 +81,8 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("Guardian");
             }
         }
+        public String Gender { get; set; }
+        public String MarriageStatus { get; set; }
+        public String Qualification { get; set; }
     }
 }

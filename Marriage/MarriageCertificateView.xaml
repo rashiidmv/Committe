@@ -6,12 +6,12 @@
              xmlns:local="clr-namespace:Marriage"
              xmlns:common="clr-namespace:Common;assembly=Common"
              mc:Ignorable="d" 
-             d:DesignHeight="650" d:DesignWidth="800">
+             d:DesignHeight="850" d:DesignWidth="800">
     <Grid>
         <Grid Background="BlanchedAlmond">
             <Grid.RowDefinitions>
-                <RowDefinition Height="440"/>
-                <RowDefinition Height="*"/>
+                <RowDefinition Height="9*"/>
+                <RowDefinition Height="2*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -37,30 +37,39 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="" />
                     <DockPanel Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" LastChildFill="True">
                         <Image Margin="8,0,0,0" DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding GroomPhoto}"/>
                         <TextBlock  Text="Groom Details" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     </DockPanel>
                     <TextBlock  Grid.Row="1" Text="Groom Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Groom Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="3" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="4" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}" Margin="0,9,20,9" />
+                    <TextBlock  Grid.Row="3" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="4" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="5" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="6" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="7" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="8" Text="Post Office" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="9" Text="District" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}"  Margin="0,9,20,9" TabIndex="0"/>
                     <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" 
                                                 FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomPincode}" Margin="0,9,20,9" />
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GroomDOB}" Margin="0,9,20,9" TabIndex="1"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" TabIndex="2"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" TabIndex="3"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" TabIndex="4"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding GroomPincode}" Margin="0,9,20,9" TabIndex="5"/>
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding GroomPostOffice}" Margin="0,9,20,9" TabIndex="6"/>
+                    <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding GroomDistrict}" Margin="0,9,20,9" TabIndex="7"/>
+                    <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding GroomState}" Margin="0,9,20,9" TabIndex="8"/>
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
@@ -72,8 +81,9 @@
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
-                        <RowDefinition Height="50"/>
-                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
+                        <RowDefinition Height="40"/>
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="150"/>
@@ -85,18 +95,24 @@
                     </DockPanel>
                     <TextBlock  Grid.Row="1" Text="Bride Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Bride Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="3" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="4" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="5" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBlock  Grid.Row="6" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" />
+                    <TextBlock  Grid.Row="3" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="4" Text="Father Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="5" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="6" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="7" Text="Pincode" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="8" Text="Post Office" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="9" Text="District" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                    <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" TabIndex="0"/>
                     <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" />
-                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding BridePinCode}" Margin="0,9,20,9" />
-
-
+                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideDOB}" Margin="0,9,20,9" TabIndex="1"/>
+                    <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" TabIndex="2"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" TabIndex="3"/>
+                    <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" TabIndex="4"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding BridePinCode}" Margin="0,9,20,9" TabIndex="5"/>
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding BridePostOffice}" Margin="0,9,20,9" TabIndex="6"/>
+                    <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding BrideDistrict}" Margin="0,9,20,9" TabIndex="7"/>
+                    <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding BrideState}" Margin="0,9,20,9" TabIndex="8"/>
                 </Grid>
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock   Text="Marriage Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -113,7 +129,7 @@
                     <Button  Content="Generate Certificate" Command="{Binding GenerateCertificateCommand}"  Width="120" Margin="0,8,10,8"/>
                 </StackPanel>
             </Grid>
-            <common:PdfViewer Grid.Column="1" Grid.RowSpan="2" PdfFilePath="{Binding CertificatePath, Mode=TwoWay}"/>
+            <common:PdfViewer Grid.Column="1" Grid.RowSpan="2" PdfFilePath="{Binding  CertificatePath, Mode=TwoWay}"/>
         </Grid>
     </Grid>
 </UserControl>

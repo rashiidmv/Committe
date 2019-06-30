@@ -84,13 +84,13 @@ namespace Contribution {
                 }
                 Residence residence = GetResidence(residenceMember);
                 residenceMember.Job = residence.Name;
-                residenceMember.DOB = residence.Number;
+                residenceMember.Qualification = residence.Number;
                 if(!isPresent) {
                     members.Add(residenceMember);
-                    SearchableMembers.Add(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.DOB + "@");
+                    SearchableMembers.Add(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
                 } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
                     members.Remove(residenceMember);
-                    SearchableMembers.Remove(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.DOB + "@");
+                    SearchableMembers.Remove(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
                 }
             });
 
@@ -825,7 +825,7 @@ namespace Contribution {
                 foreach(var member in members) {
                     Residence residence = unitOfWork.Residences.Get(member.Residence_Id);
                     member.Job = residence.Name;
-                    member.DOB = residence.Number;
+                    member.Qualification = residence.Number;
                 }
 
                 SearchableMemberNames = new ObservableCollection<String>(members.Select(x => x.Name));
@@ -833,7 +833,7 @@ namespace Contribution {
                 SearchableResidenceNames = new ObservableCollection<String>(residences.Select(x => x.Name));
                 SearchableResidenceNumbers = new ObservableCollection<String>(residences.Select(x => x.Number));
 
-                SearchableMembers = new ObservableCollection<string>(members.Select(x => x.Name + " \t@" + x.Job + "_" + x.DOB + "@"));
+                SearchableMembers = new ObservableCollection<string>(members.Select(x => x.Name + " \t@" + x.Job + "_" + x.Qualification + "@"));
             }
         }
 
