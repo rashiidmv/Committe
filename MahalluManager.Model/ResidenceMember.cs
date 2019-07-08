@@ -1,7 +1,5 @@
 ﻿using MahalluManager.Infra;
 using System;
-using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations.Schema;
 
 namespace MahalluManager.Model {
     public class ResidenceMember : ViewModelBase {
@@ -15,13 +13,12 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("Id");
             }
         }
-        private string name;
+        private string memberName;
 
-        public string Name {
-            get { return name; }
+        public string MemberName {
+            get { return memberName; }
             set {
-                name = value;
-                OnPropertyChanged("Name");
+                memberName = value;
             }
         }
         private DateTime dob;

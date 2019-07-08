@@ -178,7 +178,7 @@ namespace Resident {
                 }
             } else if(SearchByMemberName) {
                 using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                    List<ResidenceMember> tempResidenceMembers = unitofWork.ResidenceMembers.Find((x) => x.Name.ToLower().Contains(SearchText.Trim().ToLower())).ToList();
+                    List<ResidenceMember> tempResidenceMembers = unitofWork.ResidenceMembers.Find((x) => x.MemberName.ToLower().Contains(SearchText.Trim().ToLower())).ToList();
                     if(tempResidenceMembers != null && tempResidenceMembers.Count == 0) {
                         MessageBox.Show("No Residence Found with Member Name " + SearchText);
                     } else {
@@ -230,7 +230,7 @@ namespace Resident {
                 if(ValidateResidenceMember(unitOfWork)) {
                     ResidenceMember residenceMember = GetResidenceMember();
                     if(CurrentMember != null) {
-                        CurrentMember.Name = residenceMember.Name;
+                        CurrentMember.MemberName = residenceMember.MemberName;
                         CurrentMember.DOB = residenceMember.DOB;
                         CurrentMember.Job = residenceMember.Job;
                         CurrentMember.Mobile = residenceMember.Mobile;
@@ -241,12 +241,12 @@ namespace Resident {
                         CurrentMember.Qualification = residenceMember.Qualification;
                         CurrentMember.Gender = residenceMember.Gender;
                         unitOfWork.ResidenceMembers.Update(CurrentMember);
-                        MessageBox.Show(CurrentMember.Name + " updated successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(CurrentMember.MemberName + " updated successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
                     } else {
                         unitOfWork.ResidenceMembers.Add(residenceMember);
                         MemberList.Add(residenceMember);
                         CurrentMember = residenceMember;
-                        MessageBox.Show(CurrentMember.Name + " added successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
+                        MessageBox.Show(CurrentMember.MemberName + " added successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
 
@@ -278,7 +278,7 @@ namespace Resident {
             set { deleteMemberCommand = value; }
         }
         private void ExecuteDeleteMember() {
-            MessageBoxResult result = MessageBox.Show("Are you sure to delete " + currentMember.Name, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+            MessageBoxResult result = MessageBox.Show("Are you sure to delete " + currentMember.MemberName, "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
             if(result == MessageBoxResult.Yes) {
                 if(currentMember != null) {
                     using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
@@ -645,7 +645,7 @@ namespace Resident {
             if(MemberList != null && MemberList.Count > 0) {
                 foreach(var member in MemberList) {
                     if(member.IsGuardian) {
-                        Guardian = member.Name;
+                        Guardian = member.MemberName;
                         return;
                     }
                 }
@@ -662,7 +662,7 @@ namespace Resident {
         }
         private void CurrentMemberChanged() {
             if(CurrentMember != null) {
-                MemberName = CurrentMember.Name;
+                MemberName = CurrentMember.MemberName;
                 DOB = CurrentMember.DOB;
                 Job = CurrentMember.Job;
                 Mobile = currentMember.Mobile;
@@ -703,7 +703,7 @@ namespace Resident {
         }
         private ResidenceMember GetResidenceMember() {
             var residenceMember = new ResidenceMember();
-            residenceMember.Name = MemberName.Trim();
+            residenceMember.MemberName = MemberName.Trim();
             residenceMember.DOB = DOB;
             residenceMember.Job = Job?.Trim();
             residenceMember.Mobile = Mobile?.Trim();
@@ -758,11 +758,11 @@ namespace Resident {
                 return false;
             }
             if(String.IsNullOrEmpty(MarriageStatus)) {
-                MessageBox.Show("Please marriage status");
+                MessageBox.Show("Please enter marriage status");
                 return false;
             }
             if(CurrentMember == null) {
-                ResidenceMember residenceMember = unitOfWork.ResidenceMembers.Find((x) => x.Name == MemberName
+                ResidenceMember residenceMember = unitOfWork.ResidenceMembers.Find((x) => x.MemberName == MemberName
                                                     && x.Residence_Id == CurrentResidence.Id).FirstOrDefault();
                 if(residenceMember != null) {
                     MessageBox.Show("Member already exists");

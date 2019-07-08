@@ -51,6 +51,9 @@
     <Compile Include="BrowseAndUploadView.xaml.cs">
       <DependentUpon>BrowseAndUploadView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="InputOuputColumns.xaml.cs">
+      <DependentUpon>InputOuputColumns.xaml</DependentUpon>
+    </Compile>
     <Compile Include="PdfViewer.xaml.cs">
       <DependentUpon>PdfViewer.xaml</DependentUpon>
     </Compile>
@@ -58,6 +61,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="BrowseAndUploadView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="InputOuputColumns.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

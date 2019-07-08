@@ -14,20 +14,20 @@ namespace Common {
             InitializeComponent();
         }
 
-        public static readonly DependencyProperty FilePathProperty =
-                DependencyProperty.Register("FilePath", typeof(string), typeof(UserControl),
-                    new PropertyMetadata(string.Empty, OnCaptionPropertyChanged));
+            public static readonly DependencyProperty FilePathProperty =
+                    DependencyProperty.Register("FilePath", typeof(string), typeof(UserControl),
+                        new PropertyMetadata(string.Empty, OnCaptionPropertyChanged));
 
-        public string FilePath {
-            get { return (string)GetValue(FilePathProperty); }
-            set { SetValue(FilePathProperty, value); }
-        }
-        private static void OnCaptionPropertyChanged(DependencyObject dependencyObject,
-                       DependencyPropertyChangedEventArgs e) {
-            BrowseAndUploadView myUserControl = dependencyObject as BrowseAndUploadView;
-            myUserControl.OnPropertyChanged("FilePath");
-            myUserControl.OnFilePathPropertyChanged(e);
-        }
+            public string FilePath {
+                get { return (string)GetValue(FilePathProperty); }
+                set { SetValue(FilePathProperty, value); }
+            }
+            private static void OnCaptionPropertyChanged(DependencyObject dependencyObject,
+                           DependencyPropertyChangedEventArgs e) {
+                BrowseAndUploadView myUserControl = dependencyObject as BrowseAndUploadView;
+                myUserControl.OnPropertyChanged("FilePath");
+                myUserControl.OnFilePathPropertyChanged(e);
+            }
         private void OnFilePathPropertyChanged(DependencyPropertyChangedEventArgs e) {
             FileName.Text = (String)e.NewValue;
         }

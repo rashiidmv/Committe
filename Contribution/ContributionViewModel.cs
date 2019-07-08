@@ -66,14 +66,14 @@ namespace Contribution {
                 ResidenceMember residenceMember = ((ResidenceMemberType)e).ResidenceMember;
                 bool isPresent = false;
                 foreach(var item in SearchableMemberNames) {
-                    if(item.Equals(residenceMember.Name)) {
+                    if(item.Equals(residenceMember.MemberName)) {
                         isPresent = true;
                     }
                 }
                 if(!isPresent) {
-                    SearchableMemberNames.Add(residenceMember.Name);
+                    SearchableMemberNames.Add(residenceMember.MemberName);
                 } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
-                    SearchableMemberNames.Remove(residenceMember.Name);
+                    SearchableMemberNames.Remove(residenceMember.MemberName);
                 }
 
                 isPresent = false;
@@ -87,10 +87,10 @@ namespace Contribution {
                 residenceMember.Qualification = residence.Number;
                 if(!isPresent) {
                     members.Add(residenceMember);
-                    SearchableMembers.Add(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
+                    SearchableMembers.Add(residenceMember.MemberName + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
                 } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
                     members.Remove(residenceMember);
-                    SearchableMembers.Remove(residenceMember.Name + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
+                    SearchableMembers.Remove(residenceMember.MemberName + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
                 }
             });
 
@@ -828,12 +828,12 @@ namespace Contribution {
                     member.Qualification = residence.Number;
                 }
 
-                SearchableMemberNames = new ObservableCollection<String>(members.Select(x => x.Name));
+                SearchableMemberNames = new ObservableCollection<String>(members.Select(x => x.MemberName));
                 var residences = unitOfWork.Residences.GetAll();
                 SearchableResidenceNames = new ObservableCollection<String>(residences.Select(x => x.Name));
                 SearchableResidenceNumbers = new ObservableCollection<String>(residences.Select(x => x.Number));
 
-                SearchableMembers = new ObservableCollection<string>(members.Select(x => x.Name + " \t@" + x.Job + "_" + x.Qualification + "@"));
+                SearchableMembers = new ObservableCollection<string>(members.Select(x => x.MemberName + " \t@" + x.Job + "_" + x.Qualification + "@"));
             }
         }
 

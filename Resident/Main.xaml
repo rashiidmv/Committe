@@ -4,9 +4,27 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Resident"
+             xmlns:common="clr-namespace:Common;assembly=Common"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <TextBlock Text="{Binding Title}"/>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True">
+            <DockPanel DockPanel.Dock="Top" LastChildFill="True" Margin="8,8,8,8">
+                <CheckBox Content="Show Header"  IsChecked="{Binding ShowHeader}" />
+                <TextBox Text="{Binding HeaderText}" Margin="8,0,0,0" DockPanel.Dock="Top" />
+            </DockPanel>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8,8,8,8">
+                <Button Content="Show Report" Command="{Binding ShowReportCommand}"/>
+                <Button Content="Print Report" Margin="8,0,0,0" Command="{Binding PrintReportCommand}"/>
+            </StackPanel>
+            <common:InputOuputColumns Margin="20" InputList="{Binding ResidenceColumns, Mode=TwoWay}"
+                                      OutputList="{Binding SelectedResidenceColumns, Mode=TwoWay}" />
+        </DockPanel>
+        <FlowDocumentScrollViewer Background="Green" Grid.Column="1" 
+                            Document="{Binding Result}" />
     </Grid>
 </UserControl>
