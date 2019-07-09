@@ -4,7 +4,6 @@ using MahalluManager.Infra;
 using Microsoft.Practices.Prism.Commands;
 using System;
 using System.IO;
-using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
@@ -12,8 +11,7 @@ namespace Marriage {
     public class MarriageCertificateViewModel : ViewModelBase {
         public MarriageCertificateViewModel() {
             InitializeDatePicker();
-            SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriageCommand);
-            GenerateCertificateCommand = new DelegateCommand(ExecuteGenerateCertificateCommand);
+            GenerateCertificateCommand = new DelegateCommand(ExecuteGenerateCertificate);
             SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriage);
         }
 
@@ -38,6 +36,26 @@ namespace Marriage {
                 OnPropertyChanged("EndDate");
             }
         }
+
+        private DateTime marriageDate;
+        public DateTime MarriageDate {
+            get { return marriageDate; }
+            set {
+                marriageDate = value;
+                OnPropertyChanged("MarriageDate");
+            }
+        }
+
+        private string placeOfMarriage;
+
+        public string PlaceOfMarriage {
+            get { return placeOfMarriage +"Moorad"; }
+            set {
+                placeOfMarriage = value;
+                OnPropertyChanged("PlaceOfMarriage");
+            }
+        }
+
 
         private BitmapImage bridePhoto;
         public BitmapImage BridePhoto {
@@ -109,7 +127,8 @@ namespace Marriage {
         private string groomHouseName;
         public string GroomHouseName {
             get { return groomHouseName; }
-            set { groomHouseName = value;
+            set {
+                groomHouseName = value;
                 OnPropertyChanged("GroomHouseName");
             }
         }
@@ -117,7 +136,8 @@ namespace Marriage {
         private string groomArea;
         public string GroomArea {
             get { return groomArea; }
-            set { groomArea = value;
+            set {
+                groomArea = value;
                 OnPropertyChanged("GroomArea");
             }
         }
@@ -125,7 +145,8 @@ namespace Marriage {
         private int groomPincode;
         public int GroomPincode {
             get { return groomPincode; }
-            set { groomPincode = value;
+            set {
+                groomPincode = value;
                 OnPropertyChanged("GroomPincode");
             }
         }
@@ -142,7 +163,8 @@ namespace Marriage {
         private string brideFatherName;
         public string BrideFatherName {
             get { return brideFatherName; }
-            set { brideFatherName = value;
+            set {
+                brideFatherName = value;
                 OnPropertyChanged("BrideFatherName");
             }
         }
@@ -150,7 +172,8 @@ namespace Marriage {
         private string brideHouseName;
         public string BrideHouseName {
             get { return brideHouseName; }
-            set { brideHouseName = value;
+            set {
+                brideHouseName = value;
                 OnPropertyChanged("BrideHouseName");
             }
         }
@@ -159,7 +182,8 @@ namespace Marriage {
 
         public string BrideArea {
             get { return brideArea; }
-            set { brideArea = value;
+            set {
+                brideArea = value;
                 OnPropertyChanged("BrideArea");
             }
         }
@@ -167,7 +191,8 @@ namespace Marriage {
 
         public int BridePinCode {
             get { return bridePincode; }
-            set { bridePincode = value;
+            set {
+                bridePincode = value;
                 OnPropertyChanged("BridePinCode");
             }
         }
@@ -195,51 +220,68 @@ namespace Marriage {
             get { return generateCertificateCommand; }
             set { generateCertificateCommand = value; }
         }
-        private void ExecuteGenerateCertificateCommand() {
+        private void ExecuteGenerateCertificate() {
             string certificateName = "Certificate.pdf";
-            PdfReader reader = new PdfReader("Template.pdf");
-            Rectangle size = reader.GetPageSizeWithRotation(1);
-            Document document = new Document(size);
+            Document document = new Document();
             FileStream fs = new FileStream(certificateName, FileMode.Create, FileAccess.Write);
             PdfWriter writer = PdfWriter.GetInstance(document, fs);
             document.Open();
 
 
-            Chunk chunk = new Chunk("This is from chunk. ");
-            document.Add(chunk);
+            Chunk dateOfMarriage = new Chunk(MarriageDate.ToShortDateString());
+            dateOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f,BaseColor.BLACK);
+            
+
+            Chunk placeOfMarriage = new Chunk(PlaceOfMarriage);
+            placeOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.BLACK);
 
             Phrase phrase = new Phrase("This is from Phrase.");
             document.Add(phrase);
 
-            //Image i = Image.GetInstance(BridePhotoPath);
-            //i.Alignment = Image.UNDERLYING;
-            //i.ScaleToFit(300f, 400f);
-            ////document.Add(i);
-            //i.SetAbsolutePosition(200, 200);
+            Image i = Image.GetInstance(GroomPhotoPath);
+            i.Alignment = Image.UNDERLYING;
+            i.ScaleToFit(100f, 160f);
+            i.SetAbsolutePosition(100, 360);
+            document.Add(i);
+
+            i = Image.GetInstance(BridePhotoPath);
+            i.Alignment = Image.UNDERLYING;
+            i.ScaleToFit(100f, 160f);
+            i.SetAbsolutePosition(100, 240);
+            document.Add(i);
 
             Paragraph para = new Paragraph("This is from paragraph.");
             document.Add(para);
 
-            string text1 = @"you are successfully created PDF file.";
-            Paragraph paragraph = new Paragraph();
-            paragraph.SpacingBefore = 10;
-            paragraph.SpacingAfter = 10;
-            paragraph.Alignment = Element.ALIGN_LEFT;
-            paragraph.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.GREEN);
-            paragraph.Add(text1);
-            document.Add(paragraph);
+            Paragraph title = new Paragraph();
+            title.Alignment = Element.ALIGN_CENTER;
+            title.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.GREEN);
+            title.Add("MARRIAGE CERTIFICATE");
+            document.Add(title);
+
+            Paragraph content = new Paragraph();
+            content.SpacingBefore = 10;
+            content.SpacingAfter = 10;
+            content.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.GREEN);
+            string contentText1 = "Certify that the Marriage between the above mentioned person was solemnised by Mahallu Khazi of Muhiyidheen Masjid, Iringal Moorad in the presence of their friends and relative ";
+            string contentText2 = " at ";
+            string contentText3 = " according to the Islamic Shareeath Law";
+            content.Add(contentText1);
+            content.Add(dateOfMarriage);
+            content.Add(contentText2);
+            content.Add(placeOfMarriage);
+            content.Add(contentText3);
+            document.Add(content);
 
             // the pdf content
             PdfContentByte cb = writer.DirectContent;
-            PdfImportedPage page = writer.GetImportedPage(reader, 1);
-            cb.AddTemplate(page, 0, 0);
             //cb.AddImage(i);
             // select the font properties
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
             cb.SetColorFill(BaseColor.DARK_GRAY);
             cb.SetFontAndSize(bf, 8);
 
-            // write the text in the pdf content
+            //// write the text in the pdf content
             //cb.BeginText();
             //cb.ShowTextAligned(1, GroomName, 520, 640, 0);
             //cb.EndText();
@@ -253,7 +295,7 @@ namespace Marriage {
             //cb.ShowTextAligned(2, GroomArea, 150, 230, 0);
             //cb.EndText();
             //cb.BeginText();
-            //cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
+            // cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
             //cb.EndText();
             //cb.BeginText();
             //cb.ShowTextAligned(1, BrideName, 520, 640, 0);
@@ -276,7 +318,10 @@ namespace Marriage {
             document.Close();
             fs.Close();
             writer.Close();
-            reader.Close();
+
+            String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
+            CertificatePath = Path.Combine(currentFolder, "Certificate.pdf");
+
         }
     }
 }

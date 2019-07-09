@@ -116,7 +116,7 @@
                 </Grid>
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Orientation="Horizontal" HorizontalAlignment="Center">
                     <TextBlock   Text="Marriage Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                    <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding CreatedOn}" 
+                    <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding MarriageDate}" 
                         DisplayDateStart="{Binding StartDate}"  
                         DisplayDateEnd="{Binding EndDate}"  Margin="8,8,20,8" Width="130"
                         IsEnabled="{Binding IsEnable}" />

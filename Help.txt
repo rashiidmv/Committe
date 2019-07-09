@@ -14,3 +14,87 @@ Qualification
 Monthly expense and balan
 mistake while adding expense
 
+
+
+string certificateName = "Certificate.pdf";
+            PdfReader reader = new PdfReader("Template.pdf");
+            Rectangle size = reader.GetPageSizeWithRotation(1);
+            Document document = new Document(size);
+            FileStream fs = new FileStream(certificateName, FileMode.Create, FileAccess.Write);
+            PdfWriter writer = PdfWriter.GetInstance(document, fs);
+            document.Open();
+
+
+            Chunk chunk = new Chunk("This is from chunk. ");
+            document.Add(chunk);
+
+            Phrase phrase = new Phrase("This is from Phrase.");
+            document.Add(phrase);
+
+            Image i = Image.GetInstance(BridePhotoPath);
+            i.Alignment = Image.UNDERLYING;
+            i.ScaleToFit(300f, 400f);
+            document.Add(i);
+            i.SetAbsolutePosition(200, 200);
+
+            Paragraph para = new Paragraph("This is from paragraph.");
+            document.Add(para);
+
+            string text1 = @"you are successfully created PDF file.";
+            Paragraph paragraph = new Paragraph();
+            paragraph.SpacingBefore = 10;
+            paragraph.SpacingAfter = 10;
+            paragraph.Alignment = Element.ALIGN_LEFT;
+            paragraph.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.GREEN);
+            paragraph.Add(text1);
+            document.Add(paragraph);
+
+            // the pdf content
+            PdfContentByte cb = writer.DirectContent;
+            PdfImportedPage page = writer.GetImportedPage(reader, 1);
+            cb.AddTemplate(page, 0, 0);
+            //cb.AddImage(i);
+            // select the font properties
+            BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
+            cb.SetColorFill(BaseColor.DARK_GRAY);
+            cb.SetFontAndSize(bf, 8);
+
+            // write the text in the pdf content
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, GroomName, 520, 640, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomFatherName, 100, 200, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, GroomHouseName, 230, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomArea, 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, BrideName, 520, 640, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BrideFatherName, 100, 200, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(1, BrideHouseName, 230, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BrideArea, 150, 230, 0);
+            //cb.EndText();
+            //cb.BeginText();
+            //cb.ShowTextAligned(2, BridePinCode.ToString(), 150, 230, 0);
+            //cb.EndText();
+            //cb.AddTemplate(page, 0, 0);   
+            //page.Add(cb);
+
+            document.Close();
+            fs.Close();
+            writer.Close();
+            reader.Close();
+
