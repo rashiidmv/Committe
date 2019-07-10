@@ -4,6 +4,7 @@ using MahalluManager.Infra;
 using Microsoft.Practices.Prism.Commands;
 using System;
 using System.IO;
+using System.Threading;
 using System.Windows.Forms;
 using System.Windows.Media.Imaging;
 
@@ -18,6 +19,15 @@ namespace Marriage {
         private void ExecuteSaveMarriage() {
             String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
             CertificatePath = Path.Combine(currentFolder, "Certificate.pdf");
+        }
+
+        private DateTime dobEndDate;
+        public DateTime DOBEndDate {
+            get { return dobEndDate; }
+            set {
+                dobEndDate = value;
+                OnPropertyChanged("DOBEndDate");
+            }
         }
 
         private DateTime startDate;
@@ -53,6 +63,25 @@ namespace Marriage {
             set {
                 placeOfMarriage = value;
                 OnPropertyChanged("PlaceOfMarriage");
+            }
+        }
+
+        private DateTime groomDOB;
+        public DateTime GroomDOB {
+            get { return groomDOB; }
+            set {
+                groomDOB = value;
+                OnPropertyChanged("GroomDOB");
+            }
+        }
+
+        private DateTime brideDOB;
+
+        public DateTime BrideDOB {
+            get { return brideDOB; }
+            set {
+                brideDOB = value;
+                OnPropertyChanged("BrideDOB");
             }
         }
 
@@ -150,6 +179,32 @@ namespace Marriage {
                 OnPropertyChanged("GroomPincode");
             }
         }
+        private String groomPostOffice;
+        public String GroomPostOffice {
+            get { return groomPostOffice; }
+            set {
+                groomPostOffice = value;
+                OnPropertyChanged("GroomPostOffice");
+            }
+        }
+
+        private string groomDistrict;
+        public string GroomDistrict {
+            get { return groomDistrict; }
+            set {
+                groomDistrict = value;
+                OnPropertyChanged("GroomDistrict");
+            }
+        }
+
+        private string groomState;
+        public string GroomState {
+            get { return groomState; }
+            set {
+                groomState = value;
+                OnPropertyChanged("GroomState");
+            }
+        }
 
         private string brideName;
         public string BrideName {
@@ -188,14 +243,41 @@ namespace Marriage {
             }
         }
         private int bridePincode;
-
-        public int BridePinCode {
+        public int BridePincode {
             get { return bridePincode; }
             set {
                 bridePincode = value;
-                OnPropertyChanged("BridePinCode");
+                OnPropertyChanged("BridePincode");
             }
         }
+
+        private string bridePostOffice;
+        public string BridePostOffice {
+            get { return bridePostOffice; }
+            set {
+                bridePostOffice = value;
+                OnPropertyChanged("BridePostOffice");
+            }
+        }
+
+        private string brideDistrict;
+        public string BrideDistrict {
+            get { return brideDistrict; }
+            set {
+                brideDistrict = value;
+                OnPropertyChanged("BrideDistrict");
+            }
+        }
+
+        private string brideState;
+        public string BrideState {
+            get { return brideState; }
+            set {
+                brideState = value;
+                OnPropertyChanged("BrideState");
+            }
+        }
+
 
 
 
@@ -208,12 +290,6 @@ namespace Marriage {
         private void ExecuteSaveMarriageCommand() {
         }
 
-        private void InitializeDatePicker() {
-            StartDate = DateTime.Now.AddMonths(-2);
-            EndDate = DateTime.Now;
-        }
-
-
         private DelegateCommand generateCertificateCommand;
 
         public DelegateCommand GenerateCertificateCommand {
@@ -221,9 +297,12 @@ namespace Marriage {
             set { generateCertificateCommand = value; }
         }
         private void ExecuteGenerateCertificate() {
+            CertificatePath = String.Empty;
+            Thread.Sleep(400);
             string certificateName = "Certificate.pdf";
             Document document = new Document();
-            FileStream fs = new FileStream(certificateName, FileMode.Create, FileAccess.Write);
+            //FileStream fs = new FileStream(certificateName, FileMode.Create, FileAccess.Write);
+            FileStream fs = new FileStream(certificateName, FileMode.Create, FileAccess.Write, FileShare.Delete);
             PdfWriter writer = PdfWriter.GetInstance(document, fs);
             document.Open();
 
@@ -241,50 +320,111 @@ namespace Marriage {
             pdfContentByte.SetColorFill(BaseColor.DARK_GRAY);
             pdfContentByte.SetFontAndSize(bf, 14);
 
+            int column1LeftMargin = 160;
+            int column2LeftMargin = 350;
+
             if(!String.IsNullOrEmpty(GroomPhotoPath) && !String.IsNullOrEmpty(GroomPhotoPath)) {
                 Image i = Image.GetInstance(GroomPhotoPath);
-                i.Alignment = Image.UNDERLYING;
+                i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(100f, 160f);
-                i.SetAbsolutePosition(200, 360);
+                i.SetAbsolutePosition(column1LeftMargin, 360);
                 pdfContentByte.AddImage(i);
                 i = Image.GetInstance(BridePhotoPath);
-                i.Alignment = Image.UNDERLYING;
+                i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(100f, 160f);
-                i.SetAbsolutePosition(310, 360);
+                i.SetAbsolutePosition(column2LeftMargin, 360);
                 pdfContentByte.AddImage(i);
             }
 
+            GroomName = "Rashid MV";
+            GroomFatherName = "Khader KM";
+            GroomHouseName = "Rashid Manzil";
+            GroomArea = "Kottakunnummal";
+            GroomPincode = 673521;
+            GroomPostOffice = "Iringal";
+            GroomDistrict = "Kozhikkode";
+            GroomState = "Kerala";
+
+           BrideName = "Hiba Fahisa AV";
+           BrideFatherName = "Asharaf AV";
+           BrideHouseName = "Kulangarath Kuniyil";
+           BrideArea = "Arakkilad";
+           BridePincode = 675302;
+           BridePostOffice = "Nadakkuthazhe";
+           BrideDistrict = "Kozhikkode";
+           BrideState = "Kerala";
+
+
             pdfContentByte.BeginText();
-            pdfContentByte.ShowTextAligned(1, GroomName, 520, 640, 0);
+            pdfContentByte.ShowTextAligned(0, GroomName, column1LeftMargin, 340, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideName, column2LeftMargin, 340, 0);
             pdfContentByte.EndText();
 
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(2, GroomFatherName, 100, 200, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(1, GroomHouseName, 230, 230, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(2, GroomArea, 150, 230, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            // pdfContentByte.ShowTextAligned(2, GroomPincode.ToString(), 150, 230, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(1, BrideName, 520, 640, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(2, BrideFatherName, 100, 200, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(1, BrideHouseName, 230, 230, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(2, BrideArea, 150, 230, 0);
-            //pdfContentByte.EndText();
-            //pdfContentByte.BeginText();
-            //pdfContentByte.ShowTextAligned(2, BridePinCode.ToString(), 150, 230, 0);
-            //pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, "S/o " + GroomFatherName, column1LeftMargin, 322, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, "D/o " + BrideFatherName, column2LeftMargin, 322, 0);
+            pdfContentByte.EndText();
+
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, "Date of Birth :", 70, 300, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomDOB.ToShortDateString(), column1LeftMargin, 304, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideDOB.ToShortDateString(), column2LeftMargin, 304, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, "Address :", 70, 286, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomHouseName, column1LeftMargin, 286, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideHouseName, column2LeftMargin, 286, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomArea, column1LeftMargin, 268, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideArea, column2LeftMargin, 268, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomPostOffice, column1LeftMargin, 250, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BridePostOffice, column2LeftMargin, 250, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomPincode.ToString(), column1LeftMargin, 232, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BridePincode.ToString(), column2LeftMargin, 232, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomDistrict, column1LeftMargin, 214, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideDistrict, column2LeftMargin, 214, 0);
+            pdfContentByte.EndText();
+
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, GroomState, column1LeftMargin, 198, 0);
+            pdfContentByte.EndText();
+            pdfContentByte.BeginText();
+            pdfContentByte.ShowTextAligned(0, BrideState, column2LeftMargin, 198, 0);
+            pdfContentByte.EndText();
 
             Chunk dateOfMarriage = new Chunk(MarriageDate.ToShortDateString());
             dateOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
@@ -304,7 +444,7 @@ namespace Marriage {
             content.Add(contentText3);
             content.Alignment = Element.ALIGN_JUSTIFIED;
             ColumnText ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(30, 240, 560, 50));
+            ct.SetSimpleColumn(new Rectangle(30, 200, 560, 50));
             ct.AddElement(content);
             ct.Go();
 
@@ -313,7 +453,7 @@ namespace Marriage {
             secretary.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 14f, BaseColor.BLACK);
 
             ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(30, 140, 540, 30));
+            ct.SetSimpleColumn(new Rectangle(30, 120, 540, 30));
             ct.AddElement(secretary);
             ct.Go();
 
@@ -323,6 +463,12 @@ namespace Marriage {
 
             String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
             CertificatePath = Path.Combine(currentFolder, "Certificate.pdf");
+        }
+
+        private void InitializeDatePicker() {
+            DOBEndDate = DateTime.Now.AddYears(-18);
+            MarriageDate = EndDate = DateTime.Now;
+            GroomDOB = BrideDOB = DOBEndDate;
         }
     }
 }

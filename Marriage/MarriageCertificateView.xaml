@@ -62,7 +62,7 @@
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}"  Margin="0,9,20,9" TabIndex="0"/>
                     <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" 
                                                 FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding GroomDOB}" Margin="0,9,20,9" TabIndex="1"/>
+                    <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding GroomDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" TabIndex="3"/>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" TabIndex="4"/>
@@ -105,11 +105,11 @@
                     <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" TabIndex="0"/>
                     <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
-                    <TextBox Grid.Row="3" Grid.Column="1" Text="{Binding BrideDOB}" Margin="0,9,20,9" TabIndex="1"/>
+                    <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding BrideDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" TabIndex="3"/>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" TabIndex="4"/>
-                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding BridePinCode}" Margin="0,9,20,9" TabIndex="5"/>
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding BridePincode}" Margin="0,9,20,9" TabIndex="5"/>
                     <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding BridePostOffice}" Margin="0,9,20,9" TabIndex="6"/>
                     <TextBox Grid.Row="9" Grid.Column="1" Text="{Binding BrideDistrict}" Margin="0,9,20,9" TabIndex="7"/>
                     <TextBox Grid.Row="10" Grid.Column="1" Text="{Binding BrideState}" Margin="0,9,20,9" TabIndex="8"/>

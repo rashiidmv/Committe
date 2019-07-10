@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -28,8 +29,13 @@ namespace Common {
         }
         private void OnPdfFilePathPropertyChanged(DependencyPropertyChangedEventArgs e) {
             if(!String.IsNullOrEmpty((String)e.NewValue)) {
-
                 pdfWebViewer.Navigate(new Uri((String)e.NewValue));
+            } else {
+                Process[] myProcesses;
+                myProcesses = Process.GetProcessesByName("AcroRd32");
+                foreach(Process myProcess in myProcesses) {
+                    myProcess.Kill();
+                }
             }
         }
         public event PropertyChangedEventHandler PropertyChanged;
