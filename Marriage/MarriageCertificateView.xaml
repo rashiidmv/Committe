@@ -59,7 +59,7 @@
                     <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="11" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}"  Margin="0,9,20,9" TabIndex="0"/>
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" 
+                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" ToolTip="{Binding GroomPhotoPath}"
                                                 FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
                     <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding GroomDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" TabIndex="2"/>
@@ -106,7 +106,7 @@
                     <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="11" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" TabIndex="0"/>
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
+                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" ToolTip="{Binding GroomPhotoPath}" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
                     <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding BrideDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" TabIndex="3"/>
