@@ -20,6 +20,24 @@ namespace Marriage {
             String currentFolder = Path.GetDirectoryName(Application.ExecutablePath);
             CertificatePath = Path.Combine(currentFolder, "Certificate.pdf");
         }
+        private string masjidName;
+
+        public string MasjidName {
+            get { return masjidName + "Muhiyidheen Masjid, Iringal Moorad"; }
+            set {
+                masjidName = value;
+                OnPropertyChanged("MasjidName");
+            }
+        }
+
+        private String place;
+        public String Place {
+            get { return place + "Iringal, Moorad"; }
+            set {
+                place = value;
+                OnPropertyChanged("Place");
+            }
+        }
 
         private DateTime dobEndDate;
         public DateTime DOBEndDate {
@@ -57,7 +75,6 @@ namespace Marriage {
         }
 
         private string marriagePlace;
-
         public string MarriagePlace {
             get { return marriagePlace; }
             set {
@@ -76,7 +93,6 @@ namespace Marriage {
         }
 
         private DateTime brideDOB;
-
         public DateTime BrideDOB {
             get { return brideDOB; }
             set {
@@ -205,8 +221,8 @@ namespace Marriage {
                 OnPropertyChanged("GroomState");
             }
         }
-        private string groomCountry;
 
+        private string groomCountry;
         public string GroomCountry {
             get { return groomCountry; }
             set {
@@ -214,7 +230,6 @@ namespace Marriage {
                 OnPropertyChanged("GroomCountry");
             }
         }
-
 
         private string brideName;
         public string BrideName {
@@ -244,7 +259,6 @@ namespace Marriage {
         }
 
         private string brideArea;
-
         public string BrideArea {
             get { return brideArea; }
             set {
@@ -289,7 +303,6 @@ namespace Marriage {
         }
 
         private String brideCountry;
-
         public String BrideCountry {
             get { return brideCountry; }
             set {
@@ -298,11 +311,7 @@ namespace Marriage {
             }
         }
 
-
-
-
         private DelegateCommand saveMarriageCommand;
-
         public DelegateCommand SaveMarriageCommand {
             get { return saveMarriageCommand; }
             set { saveMarriageCommand = value; }
@@ -311,7 +320,6 @@ namespace Marriage {
         }
 
         private DelegateCommand generateCertificateCommand;
-
         public DelegateCommand GenerateCertificateCommand {
             get { return generateCertificateCommand; }
             set { generateCertificateCommand = value; }
@@ -326,6 +334,10 @@ namespace Marriage {
             document.Open();
 
             PdfContentByte pdfContentByte = writer.DirectContent;
+            int textDown = 0;
+            if(String.IsNullOrEmpty(GroomPhotoPath) && String.IsNullOrEmpty(GroomPhotoPath)) {
+                textDown = 70;
+            }
 
             Paragraph title = new Paragraph();
             title.Alignment = Element.ALIGN_CENTER;
@@ -333,26 +345,23 @@ namespace Marriage {
             title.Add("MARRIAGE CERTIFICATE");
             ColumnText ct = new ColumnText(pdfContentByte);
             ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(30, 520, 560, 30));
+            ct.SetSimpleColumn(new Rectangle(30, 520 - textDown, 560, 30));
             ct.AddElement(title);
             ct.Go();
 
             BaseFont bf = BaseFont.CreateFont(BaseFont.HELVETICA, BaseFont.CP1252, BaseFont.NOT_EMBEDDED);
-            pdfContentByte.SetColorFill(BaseColor.DARK_GRAY);
-            pdfContentByte.SetFontAndSize(bf, 12);
 
             int column1LeftMargin = 120;
             int column2LeftMargin = 370;
-
             if(!String.IsNullOrEmpty(GroomPhotoPath) && !String.IsNullOrEmpty(GroomPhotoPath)) {
                 Image i = Image.GetInstance(GroomPhotoPath);
                 i.Alignment = Image.LEFT_ALIGN;
-                i.ScaleToFit(100f, 160f);
+                i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(200, 360);
                 pdfContentByte.AddImage(i);
                 i = Image.GetInstance(BridePhotoPath);
                 i.Alignment = Image.LEFT_ALIGN;
-                i.ScaleToFit(100f, 160f);
+                i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(310, 360);
                 pdfContentByte.AddImage(i);
             }
@@ -378,12 +387,21 @@ namespace Marriage {
             BrideCountry = "India";
             MarriagePlace = "Moorad";
 
-            pdfContentByte.BeginText();
-            pdfContentByte.ShowTextAligned(0, GroomName, column1LeftMargin, 340, 0);
-            pdfContentByte.EndText();
-            pdfContentByte.BeginText();
-            pdfContentByte.ShowTextAligned(0, BrideName, column2LeftMargin, 340, 0);
-            pdfContentByte.EndText();
+            Paragraph groomName = new Paragraph(GroomName);
+            groomName.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
+            ct = new ColumnText(writer.DirectContent);
+            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 356, 540, 30));
+            ct.AddElement(groomName);
+            ct.Go();
+            Paragraph brideName = new Paragraph(BrideName);
+            brideName.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
+            ct = new ColumnText(writer.DirectContent);
+            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 356, 540, 30));
+            ct.AddElement(brideName);
+            ct.Go();
+
+            pdfContentByte.SetColorFill(BaseColor.DARK_GRAY);
+            pdfContentByte.SetFontAndSize(bf, 12);
 
             pdfContentByte.BeginText();
             pdfContentByte.ShowTextAligned(0, "S/o. " + GroomFatherName, column1LeftMargin, 324, 0);
@@ -435,23 +453,28 @@ namespace Marriage {
             pdfContentByte.ShowTextAligned(0, BrideState + ", " + BrideCountry, column2LeftMargin, 228, 0);
             pdfContentByte.EndText();
 
-
             Chunk dateOfMarriage = new Chunk("'" + MarriageDate.ToShortDateString() + "'");
             dateOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
             Chunk placeOfMarriage = new Chunk("'" + MarriagePlace + "'");
             placeOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
+            Chunk masjidName = new Chunk("'" + MasjidName + "'");
+            masjidName.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLDOBLIQUE, 12f, BaseColor.BLACK);
+
             Paragraph content = new Paragraph();
             content.SpacingBefore = 10;
             content.SpacingAfter = 10;
             content.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.BLACK);
-            string contentText1 = "        Certify that the Marriage between the above mentioned persons was solemnised by Mahallu Khazi of Muhiyidheen Masjid, Iringal Moorad in the presence of their friends and relatives on ";
-            string contentText2 = " at ";
-            string contentText3 = " according to the Islamic Shareeath Law.";
+            string contentText1 = "             Certify that the Marriage between the above mentioned persons was solemnised by Mahallu Khazi of ";
+            string contentText2 = " in the presence of their friends and relatives on ";
+            string contentText3 = " at ";
+            string contentText4 = " according to the Islamic Shareeath Law.";
             content.Add(contentText1);
-            content.Add(dateOfMarriage);
+            content.Add(masjidName);
             content.Add(contentText2);
-            content.Add(placeOfMarriage);
+            content.Add(dateOfMarriage);
             content.Add(contentText3);
+            content.Add(placeOfMarriage);
+            content.Add(contentText4);
             content.Alignment = Element.ALIGN_JUSTIFIED;
             ct.SetSimpleColumn(new Rectangle(30, 200, 560, 50));
             ct.AddElement(content);
@@ -460,10 +483,17 @@ namespace Marriage {
             Paragraph secretary = new Paragraph("SECRETARY");
             secretary.Alignment = Element.ALIGN_RIGHT;
             secretary.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
-
             ct = new ColumnText(writer.DirectContent);
             ct.SetSimpleColumn(new Rectangle(30, 120, 540, 30));
             ct.AddElement(secretary);
+            ct.Go();
+
+            Paragraph place = new Paragraph("Place : " + Place + "\nDate : " + DateTime.Now.ToShortDateString());
+            place.Alignment = Element.ALIGN_LEFT;
+            place.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
+            ct = new ColumnText(writer.DirectContent);
+            ct.SetSimpleColumn(new Rectangle(40, 120, 540, 30));
+            ct.AddElement(place);
             ct.Go();
 
             document.Close();
