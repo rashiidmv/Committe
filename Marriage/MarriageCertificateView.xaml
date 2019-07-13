@@ -17,8 +17,9 @@
             </Grid.ColumnDefinitions>
             <Grid Background="LightPink">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="480" />
+                    <RowDefinition Height="80" />
                     <RowDefinition Height="*" />
-                    <RowDefinition Height="120" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -26,7 +27,7 @@
                 </Grid.ColumnDefinitions>
                 <Grid Grid.Row="0" Grid.Column="0" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="140"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -43,10 +44,7 @@
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <DockPanel Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" LastChildFill="True">
-                        <Image Margin="8,0,0,0" DockPanel.Dock="Right" Width="100" Height="120" Source="{Binding GroomPhoto}"/>
-                        <TextBlock  Text="Groom Details" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
-                    </DockPanel>
+                    <TextBlock Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" Text="Groom Details" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center" />
                     <TextBlock  Grid.Row="1" Text="Groom Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Groom Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="3" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -59,9 +57,12 @@
                     <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="11" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding GroomName}"  Margin="0,9,20,9" TabIndex="0"/>
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" ToolTip="{Binding GroomPhotoPath}"
+                    <DockPanel Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,20,0">
+                        <Image DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding GroomPhoto}"/>
+                        <common:BrowseAndUploadView DockPanel.Dock="Top" Margin="0,9,9,9" MinWidth="100" ToolTip="{Binding GroomPhotoPath}" HorizontalAlignment="Left"
                                                 FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding GroomDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
+                        <DatePicker DockPanel.Dock="Top" SelectedDate="{Binding GroomDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,9,9" TabIndex="1" HorizontalAlignment="Left"/>
+                    </DockPanel>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" TabIndex="3"/>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding GroomArea}" Margin="0,9,20,9" TabIndex="4"/>
@@ -73,7 +74,7 @@
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="1" Grid.RowSpan="2">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="140"/>
+                        <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
                         <RowDefinition Height="40"/>
@@ -90,10 +91,7 @@
                         <ColumnDefinition Width="150"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <DockPanel Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" LastChildFill="True">
-                        <Image Margin="8,0,0,0" DockPanel.Dock="Right" Width="100" Height="120" Source="{Binding BridePhoto}"/>
-                        <TextBlock  Text="Bride Details" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-                    </DockPanel>
+                    <TextBlock  Margin="0,8,0,8" Grid.Row="0" Grid.ColumnSpan="2" Text="Bride Details" FontWeight="Bold" VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     <TextBlock  Grid.Row="1" Text="Bride Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="2" Text="Bride Photo" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="3" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
@@ -106,8 +104,12 @@
                     <TextBlock  Grid.Row="10" Text="State" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBlock  Grid.Row="11" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
                     <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding BrideName}" Margin="0,9,20,9" TabIndex="0"/>
-                    <common:BrowseAndUploadView Grid.Row="2" Grid.Column="1" Margin="0,9,20,9" ToolTip="{Binding GroomPhotoPath}" FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
-                    <DatePicker Grid.Row="3" Grid.Column="1" SelectedDate="{Binding BrideDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,20,9" TabIndex="1"/>
+                    <DockPanel Grid.Row="2" Grid.Column="1" Grid.RowSpan="2" Margin="0,0,20,0">
+                        <Image DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding BridePhoto}"/>
+                        <common:BrowseAndUploadView DockPanel.Dock="Top" Margin="0,9,9,9" MinWidth="100" ToolTip="{Binding BridePhotoPath}" HorizontalAlignment="Left"
+                                                FilePath = "{Binding BridePhotoPath,Mode=TwoWay}"/>
+                        <DatePicker DockPanel.Dock="Top" SelectedDate="{Binding BrideDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,9,9" TabIndex="1" HorizontalAlignment="Left"/>
+                    </DockPanel>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding BrideFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding BrideHouseName}" Margin="0,9,20,9" TabIndex="3"/>
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding BrideArea}" Margin="0,9,20,9" TabIndex="4"/>
@@ -119,24 +121,32 @@
                 </Grid>
                 <StackPanel Grid.Row="1" Grid.ColumnSpan="2"  Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock   Text="Place of Marriage" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                        <TextBlock   Text="Place of Marriage" FontWeight="Bold" VerticalAlignment="Center" Margin="40,0,0,0"/>
                         <TextBox HorizontalAlignment="Left" Text="{Binding MarriagePlace}" Margin="8,8,20,8" Width="160"/>
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <TextBlock   Text="Marriage Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                        <TextBlock   Text="Marriage Date" FontWeight="Bold" VerticalAlignment="Center" Margin="40,0,0,0"/>
                         <DatePicker HorizontalAlignment="Left" SelectedDate="{Binding MarriageDate}" 
                         DisplayDateStart="{Binding StartDate}"  
-                        DisplayDateEnd="{Binding EndDate}"  Margin="8,8,20,8" Width="130"
-                        IsEnabled="{Binding IsEnable}" />
+                        DisplayDateEnd="{Binding EndDate}"  Margin="8,8,20,8" Width="94" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                        <Button   Content="Save Marriage" Command="{Binding SaveMarriageCommand}" Width="100" Margin="40,8,10,8"/>
-                        <Button   Content="New Marriage" Command="{Binding NewMarriageCommand}" Width="100" Margin="0,8,10,8"/>
-                        <Button  Content="Delete" Command="{Binding DeleteMarriageCommand}" Width="48" Margin="0,8,10,8"/>
-                        <Button  Content="Clear" Command="{Binding ClearMarriageCommand}" Width="48" Margin="0,8,10,8"/>
-                        <Button  Content="Generate Certificate" Command="{Binding GenerateCertificateCommand}"  Width="120" Margin="0,8,10,8"/>
+                        <Button Content="Save Marriage" Command="{Binding SaveMarriageCommand}" Width="100" Margin="40,8,10,8"/>
+                        <Button Content="New Marriage" Command="{Binding NewMarriageCommand}" Width="100" Margin="0,8,10,8"/>
+                        <Button Content="Delete" Command="{Binding DeleteMarriageCommand}" Width="48" Margin="0,8,10,8"/>
+                        <Button Content="Clear" Command="{Binding ClearMarriageCommand}" Width="48" Margin="0,8,10,8"/>
+                        <Button Content="Generate Certificate" Command="{Binding GenerateCertificateCommand}"  Width="120" Margin="0,8,10,8"/>
                     </StackPanel>
                 </StackPanel>
+                <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood">
+                    <DataGrid Background="AliceBlue" Margin="8,8,8,8" ItemsSource="{Binding MarriageList}"
+                          SelectedValue="{Binding CurrentMarriage}" AutoGenerateColumns="False" 
+                          CanUserAddRows="False" IsReadOnly="True" >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Id" Binding="{Binding Id}" Width="*"/>
+                            <DataGridTextColumn Header="Groom Name" Binding="{Binding GroomName}" Width="*"/>
+                            <DataGridTextColumn Header="Bride Name" Binding="{Binding BrideName}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
             </Grid>
             <common:PdfViewer Grid.Column="1" Grid.RowSpan="2" PdfFilePath="{Binding  CertificatePath, Mode=TwoWay}"/>
         </Grid>

@@ -283,8 +283,6 @@ namespace Expense {
 
                         ExpenseList.Remove(CurrentExpense);
                         CurrentExpense = null;
-
-
                     }
                 }
             }
