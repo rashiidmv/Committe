@@ -140,22 +140,44 @@ namespace Marriage {
         private BitmapImage bridePhoto;
         public BitmapImage BridePhoto {
             get {
-                if(!String.IsNullOrEmpty(bridePhotoPath)) {
-                    var uriSource = new Uri(bridePhotoPath);
-                    bridePhoto = new BitmapImage(uriSource);
-                }
                 return bridePhoto;
+            }
+            set {
+                bridePhoto = value;
+                OnPropertyChanged("BridePhoto");
             }
         }
 
         private BitmapImage groomPhoto;
         public BitmapImage GroomPhoto {
             get {
-                if(!String.IsNullOrEmpty(groomPhotoPath)) {
-                    var uriSource = new Uri(groomPhotoPath);
-                    groomPhoto = new BitmapImage(uriSource);
-                }
                 return groomPhoto;
+            }
+            set {
+                groomPhoto = value;
+                OnPropertyChanged("GroomPhoto");
+            }
+        }
+
+        private BitmapImage bridePhoto1;
+        public BitmapImage BridePhoto1 {
+            get {
+                return bridePhoto1;
+            }
+            set {
+                bridePhoto1 = value;
+                OnPropertyChanged("BridePhoto1");
+            }
+        }
+
+        private BitmapImage groomPhoto1;
+        public BitmapImage GroomPhoto1 {
+            get {
+                return groomPhoto1;
+            }
+            set {
+                groomPhoto1 = value;
+                OnPropertyChanged("GroomPhoto1");
             }
         }
 
@@ -164,8 +186,12 @@ namespace Marriage {
             get { return bridePhotoPath; }
             set {
                 bridePhotoPath = value;
+                if(!String.IsNullOrEmpty(bridePhotoPath)) {
+                    var uriSource = new Uri(bridePhotoPath, UriKind.Absolute);
+                    BridePhoto = new BitmapImage(uriSource);
+                    BridePhoto1 = new BitmapImage(new Uri(bridePhotoPath, UriKind.Relative));
+                }
                 OnPropertyChanged("BridePhotoPath");
-                OnPropertyChanged("BridePhoto");
             }
         }
 
@@ -174,8 +200,12 @@ namespace Marriage {
             get { return groomPhotoPath; }
             set {
                 groomPhotoPath = value;
+                if(!String.IsNullOrEmpty(groomPhotoPath)) {
+                    var uriSource = new Uri(groomPhotoPath, UriKind.Absolute);
+                    GroomPhoto = new BitmapImage(uriSource);
+                    GroomPhoto1 = new BitmapImage(new Uri(groomPhotoPath, UriKind.Relative));
+                }
                 OnPropertyChanged("GroomPhotoPath");
-                OnPropertyChanged("GroomPhoto");
             }
         }
 
@@ -366,6 +396,7 @@ namespace Marriage {
                         CurrentMarriage.GroomDistrict = marriageCertificate.GroomDistrict;
                         CurrentMarriage.GroomState = marriageCertificate.GroomState;
                         CurrentMarriage.GroomCountry = marriageCertificate.GroomCountry;
+                        CurrentMarriage.GroomPhoto = marriageCertificate.GroomPhoto;
 
                         CurrentMarriage.BrideName = marriageCertificate.BrideName;
                         CurrentMarriage.BrideDOB = marriageCertificate.BrideDOB;
@@ -377,6 +408,7 @@ namespace Marriage {
                         CurrentMarriage.BrideDistrict = marriageCertificate.BrideDistrict;
                         CurrentMarriage.BrideState = marriageCertificate.BrideState;
                         CurrentMarriage.BrideCountry = marriageCertificate.BrideCountry;
+                        CurrentMarriage.BridePhoto = marriageCertificate.BridePhoto;
 
                         CurrentMarriage.MarriageDate = marriageCertificate.MarriageDate;
                         CurrentMarriage.MarriagePlace = marriageCertificate.MarriagePlace;
@@ -903,6 +935,7 @@ namespace Marriage {
             marriageDetails.GroomDistrict = GroomDistrict.Trim();
             marriageDetails.GroomState = GroomState.Trim();
             marriageDetails.GroomCountry = GroomCountry.Trim();
+            marriageDetails.GroomPhoto = BufferFromImage(GroomPhoto1);
 
             marriageDetails.BrideName = BrideName.Trim();
             marriageDetails.BrideDOB = BrideDOB;
@@ -914,6 +947,7 @@ namespace Marriage {
             marriageDetails.BrideDistrict = BrideDistrict.Trim();
             marriageDetails.BrideState = BrideState.Trim();
             marriageDetails.BrideCountry = BrideCountry.Trim();
+            marriageDetails.BridePhoto = BufferFromImage(BridePhoto1);
 
             marriageDetails.MarriageDate = MarriageDate;
             marriageDetails.MarriagePlace = MarriagePlace.Trim();
@@ -932,7 +966,11 @@ namespace Marriage {
                 GroomDistrict = CurrentMarriage.GroomDistrict;
                 GroomState = CurrentMarriage.GroomState;
                 GroomCountry = CurrentMarriage.GroomCountry;
-
+                if(CurrentMarriage.GroomPhoto != null) {
+                    GroomPhoto = ImageFromBuffer(CurrentMarriage.GroomPhoto);
+                } else {
+                    GroomPhoto = null;
+                }
                 BrideName = CurrentMarriage.BrideName;
                 BrideDOB = CurrentMarriage.BrideDOB;
                 BrideFatherName = CurrentMarriage.BrideFatherName;
@@ -943,7 +981,11 @@ namespace Marriage {
                 BrideDistrict = CurrentMarriage.BrideDistrict;
                 BrideState = CurrentMarriage.BrideState;
                 BrideCountry = CurrentMarriage.BrideCountry;
-
+                if(CurrentMarriage.BridePhoto != null) {
+                    BridePhoto = ImageFromBuffer(CurrentMarriage.BridePhoto);
+                } else {
+                    BridePhoto = null;
+                }
                 MarriageDate = CurrentMarriage.MarriageDate;
                 MarriagePlace = CurrentMarriage.MarriagePlace;
                 //IsEnable = false;
@@ -955,13 +997,14 @@ namespace Marriage {
 
         private void ClearMarriage() {
             GroomName = GroomFatherName = GroomHouseName = GroomArea = String.Empty;
-            GroomPincode = GroomPostOffice = GroomDistrict = GroomState = GroomCountry = String.Empty;
+            GroomPincode = GroomPostOffice = GroomDistrict = GroomState = GroomCountry = GroomPhotoPath = String.Empty;
             GroomDOB = BrideDOB = DOBEndDate;
-
             BrideName = BrideFatherName = BrideHouseName = BrideArea = String.Empty;
-            BridePincode = BridePostOffice = BrideDistrict = BrideState = BrideCountry = String.Empty;
+            BridePincode = BridePostOffice = BrideDistrict = BrideState = BrideCountry = BridePhotoPath = String.Empty;
             MarriageDate = DateTime.Now;
             MarriagePlace = String.Empty;
+            GroomPhoto = null;
+            BridePhoto = null;
         }
 
         private void RefreshMarriages() {
@@ -971,6 +1014,27 @@ namespace Marriage {
                     CurrentMarriage = MarriageList[0];
                 }
             }
+        }
+
+        public BitmapImage ImageFromBuffer(Byte[] bytes) {
+            MemoryStream stream = new MemoryStream(bytes);
+            BitmapImage image = new BitmapImage();
+            image.BeginInit();
+            image.StreamSource = stream;
+            image.EndInit();
+            return image;
+        }
+
+        public Byte[] BufferFromImage(BitmapImage imageSource) {
+            Uri uri = imageSource.UriSource;
+            Stream stream = Application.GetRemoteStream(uri).Stream;
+            Byte[] buffer = null;
+            if(stream != null && stream.Length > 0) {
+                using(BinaryReader br = new BinaryReader(stream)) {
+                    buffer = br.ReadBytes((Int32)stream.Length);
+                }
+            }
+            return buffer;
         }
     }
 }

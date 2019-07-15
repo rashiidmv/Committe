@@ -61,7 +61,7 @@
                         <Image DockPanel.Dock="Right" Width="60" Height="80" Source="{Binding GroomPhoto}"/>
                         <common:BrowseAndUploadView DockPanel.Dock="Top" Margin="0,9,9,9" MinWidth="100" ToolTip="{Binding GroomPhotoPath}" HorizontalAlignment="Left"
                                                 FilePath = "{Binding GroomPhotoPath,Mode=TwoWay}"/>
-                        <DatePicker DockPanel.Dock="Top" SelectedDate="{Binding GroomDOB}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,9,9" TabIndex="1" HorizontalAlignment="Left"/>
+                        <DatePicker DockPanel.Dock="Top" SelectedDate="{Binding GroomDOB,Mode=TwoWay}" DisplayDateEnd="{Binding DOBEndDate}" Margin="0,9,9,9" TabIndex="1" HorizontalAlignment="Left"/>
                     </DockPanel>
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding GroomFatherName}" Margin="0,9,20,9" TabIndex="2"/>
                     <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding GroomHouseName}" Margin="0,9,20,9" TabIndex="3"/>
