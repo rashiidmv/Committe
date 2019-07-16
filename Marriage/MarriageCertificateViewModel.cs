@@ -441,7 +441,6 @@ namespace Marriage {
                     }
                     unitOfWork.Complete();
                     BridePhotoPath = GroomPhotoPath = string.Empty;
-                    //ClearMarriage();
                     //ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense };
                     //eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Publish(totatExpenseType);
                 }
@@ -482,13 +481,13 @@ namespace Marriage {
 
             int column1LeftMargin = 120;
             int column2LeftMargin = 370;
-            if(!String.IsNullOrEmpty(GroomPhotoPath) && !String.IsNullOrEmpty(GroomPhotoPath)) {
-                Image i = Image.GetInstance(GroomPhotoPath);
+            if(CurrentMarriage.GroomPhoto != null && CurrentMarriage.BridePhoto != null) {
+                Image i = Image.GetInstance(CurrentMarriage.GroomPhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(200, 360);
                 pdfContentByte.AddImage(i);
-                i = Image.GetInstance(BridePhotoPath);
+                i = Image.GetInstance(CurrentMarriage.BridePhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(310, 360);
@@ -647,7 +646,7 @@ namespace Marriage {
 
             PdfContentByte pdfContentByte = writer.DirectContent;
             int textDown = 0;
-            if(String.IsNullOrEmpty(GroomPhotoPath) && String.IsNullOrEmpty(GroomPhotoPath)) {
+            if(CurrentMarriage.GroomPhoto == null && CurrentMarriage.BridePhoto == null) {
                 textDown = 100;
             }
 
@@ -665,13 +664,13 @@ namespace Marriage {
 
             int column1LeftMargin = 120;
             int column2LeftMargin = 260;
-            if(!String.IsNullOrEmpty(GroomPhotoPath) && !String.IsNullOrEmpty(GroomPhotoPath)) {
-                Image i = Image.GetInstance(GroomPhotoPath);
+            if(CurrentMarriage.GroomPhoto != null && CurrentMarriage.BridePhoto != null) {
+                Image i = Image.GetInstance(CurrentMarriage.GroomPhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(200, 370);
                 pdfContentByte.AddImage(i);
-                i = Image.GetInstance(BridePhotoPath);
+                i = Image.GetInstance(CurrentMarriage.BridePhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
                 i.SetAbsolutePosition(310, 370);
