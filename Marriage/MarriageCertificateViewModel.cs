@@ -411,7 +411,9 @@ namespace Marriage {
                         CurrentMarriage.GroomDistrict = marriageCertificate.GroomDistrict;
                         CurrentMarriage.GroomState = marriageCertificate.GroomState;
                         CurrentMarriage.GroomCountry = marriageCertificate.GroomCountry;
-                        CurrentMarriage.GroomPhoto = marriageCertificate.GroomPhoto;
+                        if(marriageCertificate.GroomPhoto != null) {
+                            CurrentMarriage.GroomPhoto = marriageCertificate.GroomPhoto;
+                        }
 
                         CurrentMarriage.BrideName = marriageCertificate.BrideName;
                         CurrentMarriage.BrideDOB = marriageCertificate.BrideDOB;
@@ -423,8 +425,9 @@ namespace Marriage {
                         CurrentMarriage.BrideDistrict = marriageCertificate.BrideDistrict;
                         CurrentMarriage.BrideState = marriageCertificate.BrideState;
                         CurrentMarriage.BrideCountry = marriageCertificate.BrideCountry;
-                        CurrentMarriage.BridePhoto = marriageCertificate.BridePhoto;
-
+                        if(marriageCertificate.BridePhoto != null) {
+                            CurrentMarriage.BridePhoto = marriageCertificate.BridePhoto;
+                        }
                         CurrentMarriage.MarriageDate = marriageCertificate.MarriageDate;
                         CurrentMarriage.MarriagePlace = marriageCertificate.MarriagePlace;
 
@@ -437,6 +440,8 @@ namespace Marriage {
                         MessageBox.Show("Marriage details added successfully !", "New Marriage", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     unitOfWork.Complete();
+                    BridePhotoPath = GroomPhotoPath = string.Empty;
+                    //ClearMarriage();
                     //ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense };
                     //eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Publish(totatExpenseType);
                 }
@@ -881,10 +886,10 @@ namespace Marriage {
         private void ExecuteSearch() {
             RefreshMarriages();
             searchSource = MarriageList.ToList(); ;
-            MarriageList = new ObservableCollection<MarriageCertificate>(searchSource.FindAll((x) => x.BrideName.Contains(SearchText.Trim()) 
+            MarriageList = new ObservableCollection<MarriageCertificate>(searchSource.FindAll((x) => x.BrideName.Contains(SearchText.Trim())
                                                                             || x.BrideFatherName.Contains(SearchText.Trim())
                                                                             || x.GroomFatherName.Contains(SearchText.Trim())
-                                                                            || x.Id.ToString() ==(SearchText.Trim())
+                                                                            || x.Id.ToString() == (SearchText.Trim())
                                                                             || x.GroomName.Contains(SearchText.Trim())));
             if(MarriageList != null && MarriageList.Count == 0) {
 
@@ -986,7 +991,7 @@ namespace Marriage {
             marriageDetails.GroomDistrict = GroomDistrict.Trim();
             marriageDetails.GroomState = GroomState.Trim();
             marriageDetails.GroomCountry = GroomCountry.Trim();
-            if(GroomPhoto1 != null) {
+            if(GroomPhoto1 != null && !String.IsNullOrEmpty(GroomPhotoPath)) {
                 marriageDetails.GroomPhoto = BufferFromImage(GroomPhoto1);
             }
 
@@ -1000,7 +1005,7 @@ namespace Marriage {
             marriageDetails.BrideDistrict = BrideDistrict.Trim();
             marriageDetails.BrideState = BrideState.Trim();
             marriageDetails.BrideCountry = BrideCountry.Trim();
-            if(BridePhoto1 != null) {
+            if(BridePhoto1 != null && !String.IsNullOrEmpty(BridePhotoPath)) {
                 marriageDetails.BridePhoto = BufferFromImage(BridePhoto1);
             }
             marriageDetails.MarriageDate = MarriageDate;
@@ -1022,6 +1027,7 @@ namespace Marriage {
                 GroomCountry = CurrentMarriage.GroomCountry;
                 if(CurrentMarriage.GroomPhoto != null) {
                     GroomPhoto = ImageFromBuffer(CurrentMarriage.GroomPhoto);
+                    GroomPhoto1 = ImageFromBuffer(CurrentMarriage.GroomPhoto);
                 } else {
                     GroomPhoto = null;
                 }
@@ -1037,6 +1043,7 @@ namespace Marriage {
                 BrideCountry = CurrentMarriage.BrideCountry;
                 if(CurrentMarriage.BridePhoto != null) {
                     BridePhoto = ImageFromBuffer(CurrentMarriage.BridePhoto);
+                    BridePhoto1 = ImageFromBuffer(CurrentMarriage.BridePhoto);
                 } else {
                     BridePhoto = null;
                 }
