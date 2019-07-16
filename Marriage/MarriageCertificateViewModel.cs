@@ -5,8 +5,10 @@ using MahalluManager.Infra;
 using MahalluManager.Model;
 using Microsoft.Practices.Prism.Commands;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Media.Imaging;
@@ -20,6 +22,8 @@ namespace Marriage {
             NewMarriageCommand = new DelegateCommand(ExecuteNewMarriage);
             DeleteMarriageCommand = new DelegateCommand(ExecuteDeleteMarriage, CanExecuteDeleteMarriage);
             ClearMarriageCommand = new DelegateCommand(ExecuteClearMarriage, CanExecuteClearMarriage);
+            ClearSearchCommand = new DelegateCommand(ExecuteClearSearch);
+            SearchCommand = new DelegateCommand(ExecuteSearch, CanExecuteSearch);
             RefreshMarriages();
         }
 
@@ -46,6 +50,7 @@ namespace Marriage {
                 OnPropertyChanged("MarriageList");
             }
         }
+        private List<MarriageCertificate> searchSource = null;
 
         private string regNo;
         public string RegNo {
@@ -373,6 +378,16 @@ namespace Marriage {
             set {
                 brideCountry = value;
                 OnPropertyChanged("BrideCountry");
+            }
+        }
+
+        private string searchText;
+        public string SearchText {
+            get { return searchText; }
+            set {
+                searchText = value;
+                OnPropertyChanged("SearchText");
+                SearchCommand.RaiseCanExecuteChanged();
             }
         }
 
@@ -845,6 +860,42 @@ namespace Marriage {
             CurrentMarriage = null;
         }
 
+        private DelegateCommand clearSearchCommand;
+        public DelegateCommand ClearSearchCommand {
+            get { return clearSearchCommand; }
+            set { clearSearchCommand = value; }
+        }
+        private void ExecuteClearSearch() {
+            if(MarriageList != null) {
+                MarriageList.Clear();
+                SearchText = String.Empty;
+            }
+            RefreshMarriages();
+        }
+
+        private DelegateCommand searchCommand;
+        public DelegateCommand SearchCommand {
+            get { return searchCommand; }
+            set { searchCommand = value; }
+        }
+        private void ExecuteSearch() {
+            RefreshMarriages();
+            searchSource = MarriageList.ToList(); ;
+            MarriageList = new ObservableCollection<MarriageCertificate>(searchSource.FindAll((x) => x.BrideName.Contains(SearchText.Trim()) 
+                                                                            || x.BrideFatherName.Contains(SearchText.Trim())
+                                                                            || x.GroomFatherName.Contains(SearchText.Trim())
+                                                                            || x.Id.ToString() ==(SearchText.Trim())
+                                                                            || x.GroomName.Contains(SearchText.Trim())));
+            if(MarriageList != null && MarriageList.Count == 0) {
+
+                MessageBox.Show("No Marriage details found with " + SearchText);
+            }
+        }
+        private bool CanExecuteSearch() {
+            return MarriageList != null && !String.IsNullOrEmpty(SearchText);
+        }
+
+
         private void InitializeDatePicker() {
             DOBEndDate = DateTime.Now.AddYears(-18);
             MarriageDate = EndDate = DateTime.Now;
@@ -935,7 +986,9 @@ namespace Marriage {
             marriageDetails.GroomDistrict = GroomDistrict.Trim();
             marriageDetails.GroomState = GroomState.Trim();
             marriageDetails.GroomCountry = GroomCountry.Trim();
-            marriageDetails.GroomPhoto = BufferFromImage(GroomPhoto1);
+            if(GroomPhoto1 != null) {
+                marriageDetails.GroomPhoto = BufferFromImage(GroomPhoto1);
+            }
 
             marriageDetails.BrideName = BrideName.Trim();
             marriageDetails.BrideDOB = BrideDOB;
@@ -947,8 +1000,9 @@ namespace Marriage {
             marriageDetails.BrideDistrict = BrideDistrict.Trim();
             marriageDetails.BrideState = BrideState.Trim();
             marriageDetails.BrideCountry = BrideCountry.Trim();
-            marriageDetails.BridePhoto = BufferFromImage(BridePhoto1);
-
+            if(BridePhoto1 != null) {
+                marriageDetails.BridePhoto = BufferFromImage(BridePhoto1);
+            }
             marriageDetails.MarriageDate = MarriageDate;
             marriageDetails.MarriagePlace = MarriagePlace.Trim();
             return marriageDetails;
@@ -1004,7 +1058,9 @@ namespace Marriage {
             MarriageDate = DateTime.Now;
             MarriagePlace = String.Empty;
             GroomPhoto = null;
+            GroomPhoto1 = null;
             BridePhoto = null;
+            BridePhoto1 = null;
         }
 
         private void RefreshMarriages() {

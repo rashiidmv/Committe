@@ -166,14 +166,14 @@ namespace Resident {
             RefreshResidence();
             searchSource = ResidenceList.ToList(); ;
             if(SearchByHouseNumber) {
-                ResidenceList = new ObservableCollection<Residence>(searchSource.FindAll((x) => x.Number == SearchText.Trim()));//.ToList());
-                if(ResidenceList != null && residenceList.Count == 0) {
+                ResidenceList = new ObservableCollection<Residence>(searchSource.FindAll((x) => x.Number == SearchText.Trim()));
+                if(ResidenceList != null && ResidenceList.Count == 0) {
 
                     MessageBox.Show("No Residence Found with House Number " + SearchText);
                 }
             } else if(SearchByHouseName) {
-                ResidenceList = new ObservableCollection<Residence>(searchSource.FindAll((x) => x.Name.ToLower().Contains(SearchText.Trim().ToLower())));//.ToList());
-                if(ResidenceList != null && residenceList.Count == 0) {
+                ResidenceList = new ObservableCollection<Residence>(searchSource.FindAll((x) => x.Name.ToLower().Contains(SearchText.Trim().ToLower())));
+                if(ResidenceList != null && ResidenceList.Count == 0) {
                     MessageBox.Show("No Residence Found with House Name " + SearchText);
                 }
             } else if(SearchByMemberName) {

@@ -136,7 +136,12 @@
                         <Button Content="Generate Certificate" Command="{Binding GenerateCertificateCommand}"  Width="120" Margin="0,8,10,8"/>
                     </StackPanel>
                 </StackPanel>
-                <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood">
+                <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Background="BurlyWood" LastChildFill="True">
+                    <StackPanel DockPanel.Dock="Right" VerticalAlignment="Center">
+                        <Button Command="{Binding SearchCommand}" DockPanel.Dock="Right" Width="60" Content="Search" Height="24" Margin="0,6,20,6"/>
+                        <TextBox Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"  Margin="0,6,20,6" Height="20" MinWidth="100"/>
+                        <Button Command="{Binding ClearSearchCommand}" DockPanel.Dock="Right" Width="60" Content="Clear" Height="24" Margin="0,6,20,6"/>
+                    </StackPanel>
                     <DataGrid Background="AliceBlue" Margin="8,8,8,8" ItemsSource="{Binding MarriageList}"
                           SelectedValue="{Binding CurrentMarriage}" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True" >
