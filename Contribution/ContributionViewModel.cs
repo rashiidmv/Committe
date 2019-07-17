@@ -520,11 +520,14 @@ namespace Contribution {
         }
 
         private void ExecuteClearSearchContribution() {
-            if(ContributionList != null) {
-                ContributionList.Clear();
-                SearchContributionText = String.Empty;
+            if(searchSource != null && searchSource.Count != ContributionList.Count) {
+                if(ContributionList != null) {
+                    ContributionList.Clear();
+                }
+                searchSource = null;
+                RefreshContribution();
             }
-            RefreshContribution();
+            SearchContributionText = String.Empty;
         }
 
         private void InitializeDatePicker() {

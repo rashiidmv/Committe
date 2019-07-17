@@ -870,11 +870,14 @@ namespace Marriage {
             set { clearSearchCommand = value; }
         }
         private void ExecuteClearSearch() {
-            if(MarriageList != null) {
-                MarriageList.Clear();
-                SearchText = String.Empty;
+            if(searchSource != null && searchSource.Count != MarriageList.Count) {
+                if(MarriageList != null) {
+                    MarriageList.Clear();
+                }
+                searchSource = null;
+                RefreshMarriages();
             }
-            RefreshMarriages();
+            SearchText = String.Empty;
         }
 
         private DelegateCommand searchCommand;

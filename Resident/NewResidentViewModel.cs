@@ -203,11 +203,14 @@ namespace Resident {
             set { clearSearchCommand = value; }
         }
         private void ExecuteClearSearch() {
-            if(ResidenceList != null) {
-                ResidenceList.Clear();
-                SearchText = String.Empty;
+            if(searchSource != null && searchSource.Count != ResidenceList.Count) {
+                if(ResidenceList != null) {
+                    ResidenceList.Clear();
+                }
+                searchSource = null;
+                RefreshResidence();
             }
-            RefreshResidence();
+            SearchText = String.Empty;
         }
 
         private void RefreshResidence() {
