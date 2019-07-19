@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Administrator"
-             mc:Ignorable="d" 
+             mc:Ignorable="d"
              Height="Auto" Width="Auto">
     <Grid>
         <Grid.RowDefinitions>
@@ -15,7 +15,25 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="0" Margin="8,8,8,8" Background="DarkGoldenrod">
+        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="0" Margin="4,4,2,2" Background="DarkCyan">
+            <TextBlock Text="Common Details" HorizontalAlignment="Center" DockPanel.Dock="Top" Margin="0,4,0,4" FontSize="14" FontWeight="Bold"/>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock  Grid.Row="0" Text="Masjid Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="1" Text="Registration #" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MasjidName}"  Margin="0,9,20,9" TabIndex="0"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Registration}" Margin="0,9,20,9" TabIndex="2"/>
+            </Grid>
+        </DockPanel>
+        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="2,4,4,2" Background="DarkGoldenrod">
+            <TextBlock Text="Area Details" HorizontalAlignment="Center" DockPanel.Dock="Top"  Margin="0,4,0,4" FontSize="14" FontWeight="Bold"/>
             <DockPanel LastChildFill="True" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <Button Command="{Binding AddAreaCommand}" Content="Save" Width="100" DockPanel.Dock="Right" Margin="0,8,0,8"/>
                 <TextBlock TextWrapping="Wrap" Text="New Area" Margin="0,8,20,8"/>
@@ -39,7 +57,8 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="8,8,8,8" Background="DarkCyan">
+        <DockPanel LastChildFill="True" Grid.Row="1" Grid.Column="0" Margin="4,2,2,4" Background="LightGreen">
+            <TextBlock Text="Contribution Details" HorizontalAlignment="Center" DockPanel.Dock="Top"  Margin="0,4,0,4" FontSize="14" FontWeight="Bold"/>
             <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <TextBlock TextWrapping="Wrap" Text="Contribution Category" Margin="0,8,20,8"/>
                 <TextBox Width="140" Text="{Binding ContributionCategoryText,UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
@@ -66,7 +85,8 @@
                 </DataGrid.Columns>
             </DataGrid>
         </DockPanel>
-        <DockPanel LastChildFill="True" Grid.Row="1" Grid.Column="0" Margin="8,8,8,8" Background="DarkKhaki">
+        <DockPanel LastChildFill="True" Grid.Row="1" Grid.Column="1" Margin="2,2,4,4" Background="LightPink" >
+            <TextBlock Text="Expense Details" HorizontalAlignment="Center" DockPanel.Dock="Top"  Margin="0,4,0,4" FontSize="14" FontWeight="Bold"/>
             <StackPanel  Orientation="Horizontal" DockPanel.Dock="Top" Margin="8,0,8,0">
                 <TextBlock TextWrapping="Wrap" Text="Expense Category" Margin="0,8,20,8"/>
                 <TextBox Width="140" Text="{Binding ExpenseCategoryText, UpdateSourceTrigger=PropertyChanged}" Margin="0,8,20,8"/>
