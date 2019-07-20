@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="Area.cs" />
     <Compile Include="Common\Operation.cs" />
+    <Compile Include="EventTypes\CommonDetailsType.cs" />
     <Compile Include="EventTypes\IncomeType.cs" />
     <Compile Include="EventTypes\ExpenseType.cs" />
     <Compile Include="EventTypes\ResidenceMemberType.cs" />

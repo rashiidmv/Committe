@@ -1,15 +1,60 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
 using MahalluManager.Model;
+using MahalluManager.Model.EventTypes;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Events;
 using System;
 using System.Collections.ObjectModel;
+using System.Configuration;
 using System.Linq;
 using System.Windows;
 
 namespace Administrator {
     public class SettingsViewModel : ViewModelBase {
+        public SettingsViewModel() {
+            CommonDetails = new CommonDetailsType();
+            AddAreaCommand = new DelegateCommand(ExecuteAddArea, CanExecuteAddArea);
+            DeleteCommand = new DelegateCommand<Area>(ExecuteDelete);
+
+            AddContributionCategoryCommand = new DelegateCommand(ExecuteAddContributionCategory, CanExecuteAddContributionCategory);
+            DeleteContributionCategoryCommand = new DelegateCommand<IncomeCategory>(ExecuteContributionCategoryDelete);
+
+            AddExpenseCategoryCommand = new DelegateCommand(ExecuteAddExpenseCategory, CanExecuteAddExpenseCategory);
+            DeleteExpenseCategoryCommand = new DelegateCommand<ExpenseCategory>(ExecuteExpenseCategoryDelete);
+
+            SaveCommonDetailCommand = new DelegateCommand(ExecuteSaveCommonDetail);
+            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
+                AreaList = new ObservableCollection<Area>(unitofWork.Areas.GetAll());
+                ContributionCategoryList = new ObservableCollection<IncomeCategory>(unitofWork.IncomeCategories.GetAll());
+                ExpenseCategoryList = new ObservableCollection<ExpenseCategory>(unitofWork.ExpenseCategories.GetAll());
+            }
+            MasjidName = ConfigurationManager.AppSettings.Get("MasjidName");
+            RegistrationNumber = ConfigurationManager.AppSettings.Get("RegistrationNumber");
+        }
+        public CommonDetailsType CommonDetails { get; private set; }
+
+        private String masjidName;
+        public String MasjidName {
+            get { return masjidName; }
+            set {
+                masjidName = value;
+                OnPropertyChanged("MasjidName");
+                CommonDetails.MasjidName = MasjidName;
+                eventAggregator.GetEvent<PubSubEvent<CommonDetailsType>>().Publish(CommonDetails);
+            }
+        }
+
+        private String registrationNumber;
+        public String RegistrationNumber {
+            get { return registrationNumber; }
+            set {
+                registrationNumber = value;
+                OnPropertyChanged("RegistrationNumber");
+                CommonDetails.RegistrationNumber = RegistrationNumber;
+                eventAggregator.GetEvent<PubSubEvent<CommonDetailsType>>().Publish(CommonDetails);
+            }
+        }
         private string areaText;
         public string AreaText {
             get { return areaText; }
@@ -84,22 +129,6 @@ namespace Administrator {
                 expenseCategoryList = value;
                 OnPropertyChanged("ExpenseCategoryList");
                 eventAggregator.GetEvent<PubSubEvent<ObservableCollection<ExpenseCategory>>>().Publish(ExpenseCategoryList);
-            }
-        }
-        public SettingsViewModel() {
-            AddAreaCommand = new DelegateCommand(ExecuteAddArea, CanExecuteAddArea);
-            DeleteCommand = new DelegateCommand<Area>(ExecuteDelete);
-
-            AddContributionCategoryCommand = new DelegateCommand(ExecuteAddContributionCategory, CanExecuteAddContributionCategory);
-            DeleteContributionCategoryCommand = new DelegateCommand<IncomeCategory>(ExecuteContributionCategoryDelete);
-
-            AddExpenseCategoryCommand = new DelegateCommand(ExecuteAddExpenseCategory, CanExecuteAddExpenseCategory);
-            DeleteExpenseCategoryCommand = new DelegateCommand<ExpenseCategory>(ExecuteExpenseCategoryDelete);
-
-            using(var unitofWork = new UnitOfWork(new MahalluDBContext())) {
-                AreaList = new ObservableCollection<Area>(unitofWork.Areas.GetAll());
-                ContributionCategoryList = new ObservableCollection<IncomeCategory>(unitofWork.IncomeCategories.GetAll());
-                ExpenseCategoryList = new ObservableCollection<ExpenseCategory>(unitofWork.ExpenseCategories.GetAll());
             }
         }
 
@@ -222,5 +251,21 @@ namespace Administrator {
                 }
             }
         }
+
+        private DelegateCommand saveCommonDetailCommand;
+
+        public DelegateCommand SaveCommonDetailCommand {
+            get { return saveCommonDetailCommand; }
+            set { saveCommonDetailCommand = value; }
+        }
+        private void ExecuteSaveCommonDetail() {
+            Configuration config = ConfigurationManager.OpenExeConfiguration(System.Windows.Forms.Application.ExecutablePath);
+            config.AppSettings.Settings.Remove("MasjidName");
+            config.AppSettings.Settings.Add("MasjidName", MasjidName);
+            config.AppSettings.Settings.Remove("RegistrationNumber");
+            config.AppSettings.Settings.Add("RegistrationNumber", RegistrationNumber);
+            config.Save(ConfigurationSaveMode.Minimal);
+        }
+
     }
 }

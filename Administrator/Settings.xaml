@@ -21,6 +21,7 @@
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="150"/>
@@ -29,7 +30,8 @@
                 <TextBlock  Grid.Row="0" Text="Masjid Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBlock  Grid.Row="1" Text="Registration #" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBox Grid.Row="0" Grid.Column="1" Text="{Binding MasjidName}"  Margin="0,9,20,9" TabIndex="0"/>
-                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Registration}" Margin="0,9,20,9" TabIndex="2"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding RegistrationNumber}" Margin="0,9,20,9" TabIndex="2"/>
+                <Button Command="{Binding SaveCommonDetailCommand}" Content="Save" Width="100" Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" Margin="0,8,0,8"/>
             </Grid>
         </DockPanel>
         <DockPanel LastChildFill="True" Grid.Row="0" Grid.Column="1" Margin="2,4,4,2" Background="DarkGoldenrod">

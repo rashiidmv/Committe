@@ -53,6 +53,7 @@
     <Reference Include="Microsoft.Practices.Unity">
       <HintPath>..\Libs\Prism\Microsoft.Practices.Unity.dll</HintPath>
     </Reference>
+    <Reference Include="Prism, Version=7.1.0.431, Culture=neutral, PublicKeyToken=40ee6c3a2184dc59" />
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
@@ -149,6 +150,10 @@
     <ProjectReference Include="..\MahalluManager.Infra\MahalluManager.Infra.csproj">
       <Project>{0dcc9302-a5e4-4b24-8286-974c843dc970}</Project>
       <Name>MahalluManager.Infra</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MahalluManager.Model\MahalluManager.Model.csproj">
+      <Project>{8118725e-51f1-4c9d-bc83-8e261ca3489f}</Project>
+      <Name>MahalluManager.Model</Name>
     </ProjectReference>
     <ProjectReference Include="..\Marriage\Marriage.csproj">
       <Project>{8a04b069-6928-4ea7-9086-2d4750fa86e9}</Project>
