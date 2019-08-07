@@ -5,8 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Resident"
              mc:Ignorable="d" Height="Auto" Width="Auto"
-             d:DesignHeight="590" d:DesignWidth="1000">
-     <Grid Background="BlanchedAlmond">
+             d:DesignHeight="590" d:DesignWidth="1400">
+    <Grid Background="BlanchedAlmond">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -85,37 +85,6 @@
             </Grid.ColumnDefinitions>
             <TextBlock  Grid.Row="0" Grid.ColumnSpan="2" FontWeight="Bold" Text="Member Details" VerticalAlignment="Center" HorizontalAlignment="Center"/>
             <Grid Grid.Row="1" Grid.Column="0" Background="Bisque">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
-                <RowDefinition Height="*"/>
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="130"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock  Grid.Row="0" Text="Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="1" TextWrapping="Wrap" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Job" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBox  Grid.Row="0" Grid.Column="1" Text="{Binding MemberName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9"/>
-                <DatePicker  Grid.Row="1" Grid.Column="1" SelectedDate="{Binding DOB}" Margin="0,9,20,9"
-                         DisplayDateStart="{Binding StartDate}"  
-                        DisplayDateEnd="{Binding EndDate}" Width="120" HorizontalAlignment="Left"/>
-            <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding Job}" Margin="0,9,20,9"/>
-            <StackPanel Grid.Row="3" Grid.Column="1"  Orientation="Horizontal">
-                <CheckBox Name="Abroad" Content="Abroad" IsChecked="{Binding IsAbroad}" Margin="0,9,20,9"/>
-                <CheckBox Name="Guardian" Content="Guardian" IsChecked="{Binding IsGuardian}" IsEnabled="{Binding EnbalbeIsGuardian}" Margin="0,9,20,9"/>
-            </StackPanel>
-            <TextBox  IsEnabled="{Binding ElementName=Abroad, Path=IsChecked}" Grid.Row="4" Grid.Column="1" Text="{Binding Country}" Margin="0,9,20,9"/>
-        </Grid>
-            <Grid Grid.Row="1" Grid.Column="1" Background="Bisque">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
@@ -131,21 +100,56 @@
                     <ColumnDefinition Width="130"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <StackPanel Grid.Row="0" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal" >
+                <TextBlock  Grid.Row="0" Text="Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="1" TextWrapping="Wrap" Text="Gender" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="2" TextWrapping="Wrap" Text="Date of Birth" VerticalAlignment="Center" Margin="40,0,0,0"/>
+
+                <TextBlock  Grid.Row="3" Text="Marriage Status" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Qualification" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Grid.Row="0" Grid.Column="1" Text="{Binding MemberName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9"/>
+                <StackPanel Grid.Row="1" Grid.Column="1" HorizontalAlignment="Left" Orientation="Horizontal" >
                     <RadioButton Content="Male" IsChecked="{Binding Male}" Margin="0,9,20,9" />
                     <RadioButton Content="Female" IsChecked="{Binding Female}" Margin="0,9,20,9"/>
                     <RadioButton Content="Other" IsChecked="{Binding Other}" Margin="0,9,20,9"/>
                 </StackPanel>
-                <TextBlock  Grid.Row="1" Text="Age" VerticalAlignment="Center" Margin="40,0,0,0" />
-                <TextBlock  Grid.Row="2" Text="Marriage Status" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBlock  Grid.Row="3" TextWrapping="Wrap" Text="Qualification" VerticalAlignment="Center" Margin="40,0,0,0"/>
-            <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Mobile" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Age}" Margin="0,9,20,9" IsEnabled="False"/>
-                <ComboBox  Grid.Row="2" Grid.Column="1" SelectedValue="{Binding MarriageStatus}"
+                <StackPanel Grid.Row="2" Grid.Column="1" Orientation="Horizontal">
+                    <DatePicker  SelectedDate="{Binding DOB}" Margin="0,9,10,9"
+                         DisplayDateStart="{Binding StartDate}"  
+                        DisplayDateEnd="{Binding EndDate}" Width="96" HorizontalAlignment="Left"/>
+                    <TextBlock  Grid.Row="1" Text="Age" VerticalAlignment="Center" Margin="4,0,0,0" />
+                    <TextBox   Text="{Binding Age}" Margin="4,9,20,9" IsEnabled="False" Width="40"/>
+                </StackPanel>
+                <ComboBox  Grid.Row="3" Grid.Column="1" SelectedValue="{Binding MarriageStatus}"
                            ItemsSource="{Binding MarriageStatuses}" Margin="0,9,20,9" />
-                <TextBox  Grid.Row="3" Grid.Column="1" Text="{Binding Qualification}" Margin="0,9,20,9"/>
-            <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding Mobile}" Margin="0,9,20,9"
+                <TextBox  Grid.Row="4" Grid.Column="1" Text="{Binding Qualification}" Margin="0,9,20,9"/>
+            </Grid>
+            <Grid Grid.Row="1" Grid.Column="1" Background="Bisque">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="130"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBox  Grid.Row="0" Grid.Column="1" Text="{Binding Mobile}" Margin="0,9,20,9"
                       MaxLength="10"/>
+                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding Job}" Margin="0,9,20,9"/>
+
+                <TextBlock  Grid.Row="0" TextWrapping="Wrap" Text="Mobile" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBlock  Grid.Row="1" TextWrapping="Wrap" Text="Job" VerticalAlignment="Center" Margin="40,0,0,0"/>
+
+                <TextBlock  Grid.Row="4" TextWrapping="Wrap" Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
+
+                <CheckBox Grid.Row="2" Grid.Column="1" Name="Guardian" Content="Guardian" IsChecked="{Binding IsGuardian}" IsEnabled="{Binding EnbalbeIsGuardian}" Margin="0,9,20,9"/>
+                <CheckBox Grid.Row="3" Grid.Column="1" Name="Abroad" Content="Abroad" IsChecked="{Binding IsAbroad}" Margin="0,9,20,9"/>
+                <TextBox  IsEnabled="{Binding ElementName=Abroad, Path=IsChecked}" Grid.Row="4" Grid.Column="1" Text="{Binding Country}" Margin="0,9,20,9"/>
+
             </Grid>
             <StackPanel HorizontalAlignment='Right' Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button   Content="Save Member" Command="{Binding SaveMemberCommand}" Width="100" Margin="0,8,20,8"/>
@@ -158,13 +162,12 @@
                           SelectedValue="{Binding CurrentMember}" AutoGenerateColumns="False" 
                           CanUserAddRows="False" IsReadOnly="True">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="Name" Binding="{Binding Name}" Width="*"/>
+                        <DataGridTextColumn Header="Name" Binding="{Binding MemberName}" Width="*"/>
                         <DataGridCheckBoxColumn Header="Guardian" Binding="{Binding IsGuardian}" Width="Auto" CanUserResize="False"/>
-                        <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="*"/>
                         <DataGridTextColumn Header="Date of Birth" Binding="{Binding DOB}" Width="*"/>
-                        <DataGridTextColumn Header="Job" Binding="{Binding Job}" Width="*"/>
-                        <DataGridCheckBoxColumn Header="Abroad" Binding="{Binding Abroad}" Width="Auto" CanUserResize="False"/>
-                        <DataGridTextColumn Header="Country" Binding="{Binding Country}" Width="*"/>
+                        <DataGridTextColumn Header="Gender" Binding="{Binding Gender}" Width="*"/>
+                        <DataGridTextColumn Header="Mobile" Binding="{Binding Mobile}" Width="*"/>
+                        <DataGridTextColumn Header="Marriage Status" Binding="{Binding MarriageStatus}" Width="*"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </DockPanel>

@@ -19,6 +19,7 @@ namespace MahalluManager.Model {
             get { return memberName; }
             set {
                 memberName = value;
+                OnPropertyChanged("MemberName");
             }
         }
         private DateTime dob;
@@ -27,6 +28,7 @@ namespace MahalluManager.Model {
             get { return dob; }
             set {
                 dob = value;
+                OnPropertyChanged("DOB");
             }
         }
 
@@ -78,8 +80,30 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("Guardian");
             }
         }
-        public String Gender { get; set; }
-        public String MarriageStatus { get; set; }
-        public String Qualification { get; set; }
+        private String gender;
+        public String Gender {
+            get { return gender; }
+            set {
+                gender = value;
+                OnPropertyChanged("Gender");
+            }
+        }
+
+        private String marriageStatus;
+        public String MarriageStatus {
+            get { return marriageStatus; }
+            set {
+                marriageStatus = value;
+                OnPropertyChanged("MarriageStatus");
+            }
+        }
+        private String qualification;
+        public String Qualification {
+            get { return qualification; }
+            set {
+                qualification = value;
+                OnPropertyChanged("Qualification");
+            }
+        }
     }
 }

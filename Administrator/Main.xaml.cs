@@ -30,17 +30,17 @@ namespace Administrator {
             };
             tabControl1.Items.Add(expense);
 
-            TabItem settings = new TabItem {
-                Header = "Settings",
-                Content = new Settings()
-            };
-            tabControl1.Items.Add(settings);
-
             TabItem marriage = new TabItem {
                 Header = "Marriage Certificate",
                 Content = new MarriageCertificateView()
             };
             tabControl1.Items.Add(marriage);
+
+            TabItem settings = new TabItem {
+                Header = "Settings",
+                Content = new Settings()
+            };
+            tabControl1.Items.Add(settings);
         }
 
         public IViewModel ViewModel {

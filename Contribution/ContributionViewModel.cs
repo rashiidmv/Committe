@@ -83,14 +83,12 @@ namespace Contribution {
                     }
                 }
                 Residence residence = GetResidence(residenceMember);
-                residenceMember.Job = residence.Name;
-                residenceMember.Qualification = residence.Number;
                 if(!isPresent) {
                     members.Add(residenceMember);
-                    SearchableMembers.Add(residenceMember.MemberName + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
+                    SearchableMembers.Add(residenceMember.MemberName + " \t@" + residence.Name + "_" + residence.Number + "@");
                 } else if(isPresent && e.Operation == MahalluManager.Model.Common.Operation.Delete) {
                     members.Remove(residenceMember);
-                    SearchableMembers.Remove(residenceMember.MemberName + " \t@" + residenceMember.Job + "_" + residenceMember.Qualification + "@");
+                    SearchableMembers.Remove(residenceMember.MemberName + " \t@" + residence.Name + "_" + residence.Number + "@");
                 }
             });
 

@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Area.cs" />
+    <Compile Include="Common\ContainsComparer.cs" />
     <Compile Include="Common\Operation.cs" />
     <Compile Include="EventTypes\CommonDetailsType.cs" />
     <Compile Include="EventTypes\IncomeType.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Residence.cs" />
     <Compile Include="ResidenceMember.cs" />
+    <Compile Include="SeedData\MarriageStatus.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\MahalluManager.Infra\MahalluManager.Infra.csproj">

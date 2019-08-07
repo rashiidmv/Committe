@@ -6,23 +6,71 @@
              xmlns:local="clr-namespace:Resident"
              xmlns:common="clr-namespace:Common;assembly=Common"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="950" d:DesignWidth="800">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True">
+        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True" Background="AliceBlue">
             <DockPanel DockPanel.Dock="Top" LastChildFill="True" Margin="8,8,8,8">
                 <CheckBox Content="Show Header"  IsChecked="{Binding ShowHeader}" />
                 <TextBox Text="{Binding HeaderText}" Margin="8,0,0,0" DockPanel.Dock="Top" />
             </DockPanel>
-            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Margin="8,8,8,8">
-                <Button Content="Show Report" Command="{Binding ShowReportCommand}"/>
-                <Button Content="Print Report" Margin="8,0,0,0" Command="{Binding PrintReportCommand}"/>
-            </StackPanel>
-            <common:InputOuputColumns Margin="20" InputList="{Binding ResidenceColumns, Mode=TwoWay}"
+            <Grid  DockPanel.Dock="Top">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Grid.Row="0" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding Area,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <TextBox   Grid.Row="3" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding HouseName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+
+                <Button Grid.Row="0" Grid.Column="2" Content="Clear" Command="{Binding ClearArea}" Margin="0,9,20,9"/>
+                <TextBlock  Grid.Row="1" Grid.Column="0"  Text="Marriage Status" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MarriageStatus, UpdateSourceTrigger=PropertyChanged}" ToolTip="Keywords can be seperated by ;"
+                            Margin="0,9,20,9" />
+                <Button Grid.Row="1" Grid.Column="2" Content="Clear" Command="{Binding ClearMarriageStatus}" Margin="0,9,20,9"/>
+
+                <TextBlock  Grid.Row="2" Grid.Column="0"  Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox   Grid.Row="2" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding Country,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <Button Grid.Row="2" Grid.Column="2" Content="Clear" Command="{Binding ClearCountry}" Margin="0,9,20,9"/>
+                <TextBlock  Grid.Row="3" Grid.Column="0"  Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox   Grid.Row="3" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding HouseName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <Button Grid.Row="3" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseName}" Margin="0,9,20,9"/>
+
+                <TextBlock  Grid.Row="4" Grid.Column="0"  Text="Qualification" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <Button Grid.Row="4" Grid.Column="2" Content="Clear" Command="{Binding ClearQualification}" Margin="0,9,20,9"/>
+                <TextBox   Grid.Row="4" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Qualification,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+
+                <TextBlock  Grid.Row="5" Grid.Column="0"  Text="Gender" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <Button Grid.Row="5" Grid.Column="2" Content="Clear" Command="{Binding ClearGender}" Margin="0,9,20,9"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Gender,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+            </Grid>
+            <common:InputOuputColumns DockPanel.Dock="Top" Margin="20" InputList="{Binding ResidenceColumns, Mode=TwoWay}"
                                       OutputList="{Binding SelectedResidenceColumns, Mode=TwoWay}" />
+            <Grid  DockPanel.Dock="Top" HorizontalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="80"/>
+                    <ColumnDefinition Width="80"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Row="0" Grid.Column="0" Content="Show Report" Command="{Binding ShowReportCommand}" Margin="0,9,4,9"/>
+                <Button Grid.Row="0" Grid.Column="1" Content="Print Report" Command="{Binding PrintReportCommand}" Margin="4,9,0,9"/>
+                <TextBlock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2" HorizontalAlignment="Center" Text="{Binding SearchStatus}" />
+            </Grid>
         </DockPanel>
         <FlowDocumentScrollViewer Background="Green" Grid.Column="1" 
                             Document="{Binding Result}" />

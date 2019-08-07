@@ -80,7 +80,7 @@ namespace Common {
             Output = (ObservableCollection<String>)e.NewValue;
         }
         private void AddColumn_Click(object sender, RoutedEventArgs e) {
-            if(InputColumnList?.Items?.Count > 0) {
+            if(InputColumnList?.Items?.Count > 0 && InputColumnList.SelectedIndex < 0) {
                 InputColumnList.SelectedIndex = 0;
             }
             String selectedValue = (String)InputColumnList.SelectedValue;
@@ -91,7 +91,7 @@ namespace Common {
         }
 
         private void RemoveColumn_Click(object sender, RoutedEventArgs e) {
-            if(OutputColumnList?.Items?.Count > 0) {
+            if(OutputColumnList?.Items?.Count > 0 && OutputColumnList.SelectedIndex < 0) {
                 OutputColumnList.SelectedIndex = 0;
             }
             String selectedValue = (String)OutputColumnList.SelectedValue;

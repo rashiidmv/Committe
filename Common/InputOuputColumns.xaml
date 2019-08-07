@@ -7,6 +7,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="2*"/>
             <ColumnDefinition Width="*"/>
@@ -14,7 +17,7 @@
         </Grid.ColumnDefinitions>
         <DockPanel LastChildFill="True" Grid.Column="0" VerticalAlignment="Center">
             <TextBlock Text="Columns to select" DockPanel.Dock="Top"/>
-            <ListBox Height="100" Name="InputColumnList"/>
+            <ListBox Height="140" Name="InputColumnList"/>
         </DockPanel>
         <StackPanel Orientation="Vertical" Margin="10,0,10,0" Grid.Column="1" VerticalAlignment="Center">
             <Button Content="Add" Width="64" Name="AddColumn" Click="AddColumn_Click" />
@@ -24,7 +27,7 @@
         </StackPanel>
         <DockPanel LastChildFill="True" Grid.Column="2" VerticalAlignment="Center">
             <TextBlock Text="Columns selected" DockPanel.Dock="Top"/>
-            <ListBox Height="100" Name="OutputColumnList"/>
+            <ListBox Height="140" Name="OutputColumnList"/>
         </DockPanel>
     </Grid>
 </UserControl>

@@ -3,7 +3,9 @@ using iTextSharp.text.pdf;
 using MahalluManager.DataAccess;
 using MahalluManager.Infra;
 using MahalluManager.Model;
+using MahalluManager.Model.EventTypes;
 using Microsoft.Practices.Prism.Commands;
+using Prism.Events;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -16,6 +18,10 @@ using System.Windows.Media.Imaging;
 namespace Marriage {
     public class MarriageCertificateViewModel : ViewModelBase {
         public MarriageCertificateViewModel() {
+            eventAggregator.GetEvent<PubSubEvent<CommonDetailsType>>().Subscribe((e) => {
+                MasjidName = ((CommonDetailsType)e).MasjidName;
+                RegNo = ((CommonDetailsType)e).RegistrationNumber;
+            });
             InitializeDatePicker();
             GenerateCertificateCommand = new DelegateCommand(ExecuteGenerateCertificate, CanExecuteGenerateCertificate);
             SaveMarriageCommand = new DelegateCommand(ExecuteSaveMarriage);
@@ -63,7 +69,7 @@ namespace Marriage {
 
         private string masjidName;
         public string MasjidName {
-            get { return masjidName + "Muhiyidheen Masjid, Iringal Moorad"; }
+            get { return masjidName; }
             set {
                 masjidName = value;
                 OnPropertyChanged("MasjidName");

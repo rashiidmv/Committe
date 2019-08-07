@@ -30,13 +30,15 @@ namespace Resident {
             DeleteMemberCommand = new DelegateCommand(ExecuteDeleteMember, CanExecuteDeleteMember);
             RefreshResidence();
             SearchByHouseName = true;
+            MarriageStatuses = new ObservableCollection<string>(MahalluManager.Model.SeedData.MarriageStatus.MarriageStatuses);
             InitializeDatePicker();
         }
 
-        public List<String> MarriageStatuses {
-            get {
-                return new List<String>() { "Married", "Batchelor", "Spinster", "Widower", "Widow", "Divorcee" };
-            }
+        private ObservableCollection<String> marriageStatuses;
+
+        public ObservableCollection<String> MarriageStatuses {
+            get { return marriageStatuses; }
+            set { marriageStatuses = value; }
         }
 
         private DateTime startDate;
@@ -693,8 +695,8 @@ namespace Resident {
             Mobile = String.Empty;
             IsAbroad = false;
             IsGuardian = false;
-            Country = MarriageStatus = qualification = String.Empty;
-
+            Country = MarriageStatus = Qualification = String.Empty;
+            Female = Male = Other = false;
         }
 
         private Residence GetResidence() {
@@ -760,10 +762,10 @@ namespace Resident {
                 MessageBox.Show("Please enter gender");
                 return false;
             }
-            if(String.IsNullOrEmpty(MarriageStatus)) {
-                MessageBox.Show("Please enter marriage status");
-                return false;
-            }
+            //if(String.IsNullOrEmpty(MarriageStatus)) {
+            //    MessageBox.Show("Please enter marriage status");
+            //    return false;
+            //}
             if(CurrentMember == null) {
                 ResidenceMember residenceMember = unitOfWork.ResidenceMembers.Find((x) => x.MemberName == MemberName
                                                     && x.Residence_Id == CurrentResidence.Id).FirstOrDefault();
