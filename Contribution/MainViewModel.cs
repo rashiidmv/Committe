@@ -147,7 +147,7 @@ namespace Contribution {
                 SearchStatus = String.Empty;
                 return;
             }
-            if(DateTime.Compare(StartDate.Date,EndDate.Date) > 0) {
+            if(DateTime.Compare(StartDate.Date, EndDate.Date) > 0) {
                 MessageBox.Show("Start Date should be before End Date");
                 return;
             }
@@ -240,8 +240,19 @@ namespace Contribution {
                     Result.Blocks.Add(header);
                 }
                 Result.Blocks.Add(p);
-                p = new Paragraph();
-                Result.Blocks.Add(p);
+                if(i + 38 < x.Count()) {
+                    p = new Paragraph();
+                    Result.Blocks.Add(p);
+                }
+            }
+            if(SelectedContributionColumns.Contains("Amount") && x.Count() > 0) {
+                decimal totalAmount = 0;
+                foreach(var item in x) {
+                    totalAmount += item.ToatalAmount;
+                }
+                Paragraph totalAmountPara = new Paragraph();
+                totalAmountPara.Inlines.Add("Total = " + totalAmount);
+                Result.Blocks.Add(totalAmountPara);
             }
         }
         private Paragraph p = null;
