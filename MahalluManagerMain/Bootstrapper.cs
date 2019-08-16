@@ -32,7 +32,7 @@ namespace MahalluManagerMain {
             ModuleCatalog m = new ModuleCatalog();
             m.AddModule(typeof(ContributionModule));
             m.AddModule(typeof(ResidentModule)); 
-            m.AddModule(typeof(MarriageModule));
+            //m.AddModule(typeof(MarriageModule));
             m.AddModule(typeof(ExpenseModule));
             m.AddModule(typeof(AdministratorModule));
             return m;

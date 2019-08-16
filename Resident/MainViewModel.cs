@@ -158,7 +158,6 @@ namespace Resident {
             }
         }
         private String searchStatus;
-
         public String SearchStatus {
             get { return searchStatus; }
             set {
@@ -189,8 +188,10 @@ namespace Resident {
             get { return result; }
             set {
                 result = value;
-                result.PageWidth = 740;
-                result.TextAlignment = System.Windows.TextAlignment.Center;
+                if(result != null) {
+                    result.PageWidth = 740;
+                    result.TextAlignment = System.Windows.TextAlignment.Center;
+                }
                 OnPropertyChanged("Result");
             }
         }
@@ -241,6 +242,12 @@ namespace Resident {
             set { showReportCommand = value; }
         }
         private void ExecuteShowReport() {
+            if(SelectedResidenceColumns.Count == 0) {
+                MessageBox.Show("No Columns selected");
+                Result = null;
+                SearchStatus = String.Empty;
+                return;
+            }
             Result = new FlowDocument();
             List<Residence> input = null;
             using(UnitOfWork unitOfWork = new UnitOfWork(new MahalluDBContext())) {

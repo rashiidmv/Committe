@@ -75,6 +75,10 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{15907F67-FC0D-4658-B3C9-629B2B96A678}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MahalluManager.DataAccess\MahalluManager.DataAccess.csproj">
       <Project>{e4e1222d-282e-468c-9329-c2de5d877d63}</Project>
       <Name>MahalluManager.DataAccess</Name>

@@ -14,31 +14,48 @@ namespace Summary {
                 Selected = ((SelectedYearType)e).SelectedYear;
             });
             eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Subscribe((e) => {
-                Contribution income = ((IncomeType)e).Contribution;
+                IncomeType incomeType = (IncomeType)e;
+
                 bool isPresent = false;
+                Contribution temp = null;
                 foreach(var item in ContributionList) {
-                    if(item.Id==income.Id) {
-                        item.ToatalAmount = income.ToatalAmount;
+                    if(item.Id == incomeType.Contribution.Id) {
+                        item.ToatalAmount = incomeType.Contribution.ToatalAmount;
                         isPresent = true;
+                        if(incomeType.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                            temp = item;
+                            break;
+                        }
                     }
                 }
+                if(temp != null) {
+                    contributionList.Remove(temp);
+                }
                 if(!isPresent) {
-                    ContributionList.Add(income);
+                    ContributionList.Add(incomeType.Contribution);
                 }
                 TotalIncome = CalcuateTotalIncome();
             });
 
             eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Subscribe((e) => {
-                Expense expense = ((ExpenseType)e).Expense;
+                ExpenseType expenseType = (ExpenseType)e;
                 bool isPresent = false;
+                Expense temp = null;
                 foreach(var item in ExpenseList) {
-                    if(item.Id == expense.Id) {
-                        item.ToatalAmount = expense.ToatalAmount;
+                    if(item.Id == expenseType.Expense.Id) {
+                        item.ToatalAmount = expenseType.Expense.ToatalAmount;
                         isPresent = true;
+                        if(expenseType.Operation == MahalluManager.Model.Common.Operation.Delete) {
+                            temp = item;
+                            break;
+                        }
                     }
                 }
+                if(temp != null) {
+                    ExpenseList.Remove(temp);
+                }
                 if(!isPresent) {
-                    ExpenseList.Add(expense);
+                    ExpenseList.Add(expenseType.Expense);
                 }
                 TotalExpense = CalcuateTotalExpense();
             });

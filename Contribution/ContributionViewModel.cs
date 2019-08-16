@@ -422,7 +422,7 @@ namespace Contribution {
                         unitofWork.Contributions.Remove(contribution);
                         unitofWork.Complete();
 
-                        IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution };
+                        IncomeType incomeType = new IncomeType() { Contribution = CurrentContribution, Operation = MahalluManager.Model.Common.Operation.Delete };
                         eventAggregator.GetEvent<PubSubEvent<IncomeType>>().Publish(incomeType);
 
                         ContributionList.Remove(CurrentContribution);
@@ -884,7 +884,7 @@ namespace Contribution {
         private void ClearContribution() {
             Category = null;
             TotalAmount = ContributionReceiptNumber = string.Empty;
-            CreatedOn = DateTime.Now;
+            CreatedOn = DateTime.Now.Date;
         }
 
         private bool ValidateContribution() {
@@ -1019,7 +1019,7 @@ namespace Contribution {
             if(CurrentContribution == null) {
                 ContributionReceiptNumber = string.Empty;
                 TotalAmount = string.Empty;
-                CreatedOn = DateTime.Now;
+                CreatedOn = DateTime.Now.Date;
             }
         }
     }

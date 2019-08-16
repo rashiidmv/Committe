@@ -278,7 +278,7 @@ namespace Expense {
                         unitofWork.Expenses.Remove(expense);
                         unitofWork.Complete();
 
-                        ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense };
+                        ExpenseType totatExpenseType = new ExpenseType() { Expense = CurrentExpense , Operation=MahalluManager.Model.Common.Operation.Delete};
                         eventAggregator.GetEvent<PubSubEvent<ExpenseType>>().Publish(totatExpenseType);
 
                         ExpenseList.Remove(CurrentExpense);
@@ -436,7 +436,7 @@ namespace Expense {
             if(CurrentExpense == null) {
                 ExpenseBillNo = string.Empty;
                 TotalAmount = string.Empty;
-                CreatedOn = DateTime.Now;
+                CreatedOn = DateTime.Now.Date;
             }
         }
         private void InitializeDatePicker() {
@@ -518,7 +518,7 @@ namespace Expense {
         private void ClearExpense() {
             ExpenseCategory = null;
             TotalAmount = ExpenseBillNo = string.Empty;
-            CreatedOn = DateTime.Now;
+            CreatedOn = DateTime.Now.Date;
         }
         private void ClearExpensesDetailsList() {
             if(ExpenseDetailList != null && ExpenseDetailList.Count > 0) {
