@@ -13,7 +13,8 @@
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
         <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True" Background="AliceBlue">
-            <DockPanel DockPanel.Dock="Top" LastChildFill="True" Margin="8,8,8,8">
+            <DockPanel DockPanel.Dock="Top" Margin="8,8,8,8">
+                <CheckBox DockPanel.Dock="Top" HorizontalAlignment="Left" Content="With Details"  IsChecked="{Binding WithDetails}" />
                 <CheckBox Content="Show Header"  IsChecked="{Binding ShowHeader}" />
                 <TextBox Text="{Binding HeaderText}" Margin="8,0,0,0" DockPanel.Dock="Top" />
             </DockPanel>
