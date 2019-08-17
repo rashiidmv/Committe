@@ -555,7 +555,7 @@ namespace Expense {
         private ExpenseDetails GetExpenseDetails() {
             var expenseDetail = new ExpenseDetails();
             expenseDetail.Name = Name?.Trim();
-            expenseDetail.CreatedOn = CreatedOn;
+            expenseDetail.CreatedOn = Date;
             expenseDetail.BillNo = ExpenseDetailBillNo?.Trim();
             expenseDetail.CareOf = CareOf?.Trim();
             expenseDetail.Expense_Id = CurrentExpense.Id;

@@ -1,6 +1,7 @@
 ﻿using MahalluManager.DataAccess;
 using MahalluManager.Infra;
 using MahalluManager.Model;
+using MahalluManager.Model.Common;
 using Microsoft.Practices.Prism.Commands;
 using Prism.Events;
 using System;
@@ -24,10 +25,14 @@ namespace Contribution {
             SelectedContributionColumns = new ObservableCollection<string>();
 
             ClearCategory = new DelegateCommand(ExecuteClearCategory, CanExecuteClearCategory);
+            ClearHouseNumber = new DelegateCommand(ExecuteClearHouseNumber, CanExecuteClearHouseNumber);
+            ClearHouseName = new DelegateCommand(ExecuteClearHouseName, CanExecuteClearHouseName);
+            ClearMemberName = new DelegateCommand(ExecuteClearMemberName, CanExecuteClearMemberName);
             ShowReportCommand = new DelegateCommand(ExecuteShowReport);
             PrintReportCommand = new DelegateCommand(ExecutePrintReport);
             StartDate = DateTime.Now;
             EndDate = DateTime.Now;
+            ShowDetailsFields = Visibility.Collapsed;
         }
 
         public ObservableCollection<string> WithoutDetailsColumns {
@@ -67,6 +72,16 @@ namespace Contribution {
                 OnPropertyChanged("ShowHeader");
             }
         }
+        private Visibility showDetailsFields;
+
+        public Visibility ShowDetailsFields {
+            get { return showDetailsFields; }
+            set {
+                showDetailsFields = value;
+                OnPropertyChanged("ShowDetailsFields");
+
+            }
+        }
 
         private bool withDetails;
         public bool WithDetails {
@@ -79,8 +94,10 @@ namespace Contribution {
 
                 if(withDetails) {
                     ContributionColumns = WithDetailsColumns;
+                    ShowDetailsFields = Visibility.Visible;
                 } else {
                     ContributionColumns = WithoutDetailsColumns;
+                    ShowDetailsFields = Visibility.Collapsed;
                 }
                 OnPropertyChanged("WithDetails");
             }
@@ -144,7 +161,34 @@ namespace Contribution {
             get { return selectedContributionColumns; }
             set { selectedContributionColumns = value; }
         }
+        private String memberName;
+        public String MemberName {
+            get { return memberName; }
+            set {
+                memberName = value;
+                OnPropertyChanged("MemberName");
+                ClearMemberName.RaiseCanExecuteChanged();
+            }
+        }
+        private String houseName;
+        public String HouseName {
+            get { return houseName; }
+            set {
+                houseName = value;
+                OnPropertyChanged("HouseName");
+                ClearHouseName.RaiseCanExecuteChanged();
+            }
+        }
 
+        private String houseNumber;
+        public String HouseNumber {
+            get { return houseNumber; }
+            set {
+                houseNumber = value;
+                OnPropertyChanged("HouseNumber");
+                ClearHouseNumber.RaiseCanExecuteChanged();
+            }
+        }
         private IncomeCategory category;
         public IncomeCategory Category {
             get { return category; }
@@ -166,6 +210,40 @@ namespace Contribution {
         private void ExecuteClearCategory() {
             Category = null;
         }
+        private DelegateCommand clearHouseNumber;
+        public DelegateCommand ClearHouseNumber {
+            get { return clearHouseNumber; }
+            set { clearHouseNumber = value; }
+        }
+        private bool CanExecuteClearHouseNumber() {
+            return !String.IsNullOrEmpty(HouseNumber);
+        }
+        private void ExecuteClearHouseNumber() {
+            HouseNumber = String.Empty;
+        }
+        private DelegateCommand clearHouseName;
+        public DelegateCommand ClearHouseName {
+            get { return clearHouseName; }
+            set { clearHouseName = value; }
+        }
+        private bool CanExecuteClearHouseName() {
+            return !String.IsNullOrEmpty(HouseName);
+        }
+        private void ExecuteClearHouseName() {
+            HouseName = String.Empty;
+        }
+        private DelegateCommand clearMemberName;
+        public DelegateCommand ClearMemberName {
+            get { return clearMemberName; }
+            set { clearMemberName = value; }
+        }
+        private bool CanExecuteClearMemberName() {
+            return !String.IsNullOrEmpty(MemberName);
+        }
+        private void ExecuteClearMemberName() {
+            MemberName = String.Empty;
+        }
+
         private DelegateCommand showReportCommand;
         public DelegateCommand ShowReportCommand {
             get { return showReportCommand; }
@@ -214,9 +292,42 @@ namespace Contribution {
                     } else {
                         inputDetails = unitOfWork.ContributionDetails.GetAll().Where(x => DateTime.Compare(x.CreatedOn, StartDate) >= 0 && DateTime.Compare(x.CreatedOn, EndDate) <= 0).ToList();
                     }
-                    //if(Category != null) {
-                    //    input = input.Where(x => x.CategoryName == Category.Name).ToList(); ;
-                    //}
+                }
+                String[] temp = null;
+                if(!String.IsNullOrEmpty(HouseNumber)) {
+                    if(HouseNumber.Contains(";")) {
+                        temp = HouseNumber.Split(';');
+                    } else {
+                        temp = new string[1];
+                        temp[0] = HouseNumber;
+                    }
+                    if(temp != null) {
+                        inputDetails = inputDetails.Where(x => temp.Contains(x.HouserNumber.ToString(), new ContainsComparer())).ToList();
+                    }
+                }
+                if(!String.IsNullOrEmpty(HouseName)) {
+                    temp = null;
+                    if(HouseName.Contains(";")) {
+                        temp = HouseName.Split(';');
+                    } else {
+                        temp = new string[1];
+                        temp[0] = HouseName;
+                    }
+                    if(temp != null) {
+                        inputDetails = inputDetails.Where(x => temp.Contains(x.HouserName, new ContainsComparer())).ToList();
+                    }
+                }
+                if(!String.IsNullOrEmpty(MemberName)) {
+                    temp = null;
+                    if(MemberName.Contains(";")) {
+                        temp = MemberName.Split(';');
+                    } else {
+                        temp = new string[1];
+                        temp[0] = MemberName;
+                    }
+                    if(temp != null) {
+                        inputDetails = inputDetails.Where(x => temp.Contains(x.MemberName, new ContainsComparer())).ToList();
+                    }
                 }
                 if(ValidateReportParameters()) {
                     BuildReport(input, inputDetails);
@@ -323,8 +434,8 @@ namespace Contribution {
                            ReceiptNo = detail.ReceiptNo,
                            CareOf = detail.CareOf
                        });
-            if(x.Count() ==0 && category!=null && !Category.DetailsRequired) {
-                MessageBox.Show("Details are not available for category "+Category.Name);
+            if(x.Count() == 0 && category != null && !Category.DetailsRequired) {
+                MessageBox.Show("Details are not available for category " + Category.Name);
                 return;
             }
             if(x != null && x.Count() > 0) {
@@ -349,7 +460,7 @@ namespace Contribution {
                 }
                 if(SelectedContributionColumns.Contains("House Number")) {
                     GridViewColumn houseNumber = new GridViewColumn() {
-                        Header = "House #", DisplayMemberBinding = new Binding("HouserNumber"), Width = 180
+                        Header = "House#", DisplayMemberBinding = new Binding("HouserNumber"), Width = 60
                     };
                     g.Columns.Add(houseNumber);
                 }
@@ -376,7 +487,7 @@ namespace Contribution {
                     var amount = new GridViewColumn() {
                         Header = "Amount",
                         DisplayMemberBinding = new Binding("Amount"),
-                        Width = 80
+                        Width = 100
                     };
                     g.Columns.Add(amount);
                 }

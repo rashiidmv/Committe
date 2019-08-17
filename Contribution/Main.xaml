@@ -12,7 +12,7 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True" Background="AliceBlue">
+        <DockPanel Grid.Row="0" Grid.Column="0" LastChildFill="True" Background="LightGreen">
             <DockPanel DockPanel.Dock="Top" Margin="8,8,8,8">
                 <CheckBox DockPanel.Dock="Top" HorizontalAlignment="Left" Content="With Details"  IsChecked="{Binding WithDetails}" />
                 <CheckBox Content="Show Header"  IsChecked="{Binding ShowHeader}" />
@@ -20,6 +20,9 @@
             </DockPanel>
             <Grid  DockPanel.Dock="Top">
                 <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
@@ -38,6 +41,15 @@
 
                 <TextBlock  Grid.Row="2" Grid.Column="0"  Text="End Date" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <DatePicker Grid.Row="2" Grid.Column="1" HorizontalAlignment="Left" SelectedDate="{Binding EndDate}"  Margin="0,8,20,8" Width="94" />
+                <TextBlock Visibility="{Binding ShowDetailsFields}" Grid.Row="3" Grid.Column="0" TextWrapping="Wrap" Text="House Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Visibility="{Binding ShowDetailsFields}" Grid.Row="3" Grid.Column="1" Text="{Binding HouseNumber, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9"/>
+                <Button  Visibility="{Binding ShowDetailsFields}" Grid.Row="3" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseNumber}" Margin="0,9,20,9"/>
+                <TextBlock  Visibility="{Binding ShowDetailsFields}" Grid.Row="4" Grid.Column="0" TextWrapping="Wrap" Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox   Visibility="{Binding ShowDetailsFields}" Grid.Row="4" Grid.Column="1" Text="{Binding HouseName, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9"/>
+                <Button Visibility="{Binding ShowDetailsFields}" Grid.Row="4" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseName}" Margin="0,9,20,9"/>
+                <TextBlock  Visibility="{Binding ShowDetailsFields}" Grid.Row="5" Grid.Column="0" TextWrapping="Wrap" Text="Member Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Visibility="{Binding ShowDetailsFields}" Grid.Row="5" Grid.Column="1" Text="{Binding MemberName, UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9"/>
+                <Button Visibility="{Binding ShowDetailsFields}" Grid.Row="5" Grid.Column="2" Content="Clear" Command="{Binding ClearMemberName}" Margin="0,9,20,9"/>
             </Grid>
             <common:InputOuputColumns DockPanel.Dock="Top" Margin="20" InputList="{Binding ContributionColumns, Mode=TwoWay}"
                                       OutputList="{Binding SelectedContributionColumns, Mode=TwoWay}" />

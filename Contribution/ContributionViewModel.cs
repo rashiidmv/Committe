@@ -943,7 +943,7 @@ namespace Contribution {
             }
 
             contributionDetail.Amount = _amount;
-            contributionDetail.CreatedOn = CreatedOn;
+            contributionDetail.CreatedOn = Date;
             contributionDetail.ReceiptNo = DetailReceiptNumber?.Trim();
             contributionDetail.CareOf = CareOf?.Trim();
             contributionDetail.Contribution_Id = CurrentContribution.Id;
