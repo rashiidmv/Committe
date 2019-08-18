@@ -25,6 +25,7 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
+                    <RowDefinition Height="40"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
@@ -33,27 +34,32 @@
                 </Grid.ColumnDefinitions>
                 <TextBlock  Grid.Row="0" Grid.Column="0" TextWrapping="Wrap" Text="Area" VerticalAlignment="Center" Margin="40,0,0,0"/>
                 <TextBox  Grid.Row="0" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding Area,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
-
                 <Button Grid.Row="0" Grid.Column="2" Content="Clear" Command="{Binding ClearArea}" Margin="0,9,20,9"/>
-                <TextBlock  Grid.Row="1" Grid.Column="0"  Text="Marriage Status" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBox  Grid.Row="1" Grid.Column="1" Text="{Binding MarriageStatus, UpdateSourceTrigger=PropertyChanged}" ToolTip="Keywords can be seperated by ;"
+
+                <TextBlock  Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="House Number" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Grid.Row="1" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding HouseNumber,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <Button Grid.Row="1" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseNumber}" Margin="0,9,20,9"/>
+
+                <TextBlock  Grid.Row="2" Grid.Column="0"  Text="Marriage Status" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox  Grid.Row="2" Grid.Column="1" Text="{Binding MarriageStatus, UpdateSourceTrigger=PropertyChanged}" ToolTip="Keywords can be seperated by ;"
                             Margin="0,9,20,9" />
-                <Button Grid.Row="1" Grid.Column="2" Content="Clear" Command="{Binding ClearMarriageStatus}" Margin="0,9,20,9"/>
+                <Button Grid.Row="2" Grid.Column="2" Content="Clear" Command="{Binding ClearMarriageStatus}" Margin="0,9,20,9"/>
 
-                <TextBlock  Grid.Row="2" Grid.Column="0"  Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBox   Grid.Row="2" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding Country,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
-                <Button Grid.Row="2" Grid.Column="2" Content="Clear" Command="{Binding ClearCountry}" Margin="0,9,20,9"/>
-                <TextBlock  Grid.Row="3" Grid.Column="0"  Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <TextBox   Grid.Row="3" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding HouseName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
-                <Button Grid.Row="3" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseName}" Margin="0,9,20,9"/>
+                <TextBlock  Grid.Row="3" Grid.Column="0"  Text="Country" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox   Grid.Row="3" Grid.Column="1"  ToolTip="Keywords can be seperated by ;" Text="{Binding Country,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <Button Grid.Row="3" Grid.Column="2" Content="Clear" Command="{Binding ClearCountry}" Margin="0,9,20,9"/>
+                
+                <TextBlock  Grid.Row="4" Grid.Column="0"  Text="House Name" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <TextBox   Grid.Row="4" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding HouseName,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <Button Grid.Row="4" Grid.Column="2" Content="Clear" Command="{Binding ClearHouseName}" Margin="0,9,20,9"/>
 
-                <TextBlock  Grid.Row="4" Grid.Column="0"  Text="Qualification" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <Button Grid.Row="4" Grid.Column="2" Content="Clear" Command="{Binding ClearQualification}" Margin="0,9,20,9"/>
-                <TextBox   Grid.Row="4" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Qualification,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <TextBlock  Grid.Row="5" Grid.Column="0"  Text="Qualification" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <Button Grid.Row="5" Grid.Column="2" Content="Clear" Command="{Binding ClearQualification}" Margin="0,9,20,9"/>
+                <TextBox   Grid.Row="5" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Qualification,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
 
-                <TextBlock  Grid.Row="5" Grid.Column="0"  Text="Gender" VerticalAlignment="Center" Margin="40,0,0,0"/>
-                <Button Grid.Row="5" Grid.Column="2" Content="Clear" Command="{Binding ClearGender}" Margin="0,9,20,9"/>
-                <TextBox   Grid.Row="5" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Gender,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
+                <TextBlock  Grid.Row="6" Grid.Column="0"  Text="Gender" VerticalAlignment="Center" Margin="40,0,0,0"/>
+                <Button Grid.Row="6" Grid.Column="2" Content="Clear" Command="{Binding ClearGender}" Margin="0,9,20,9"/>
+                <TextBox   Grid.Row="6" Grid.Column="1" ToolTip="Keywords can be seperated by ;" Text="{Binding Gender,UpdateSourceTrigger=PropertyChanged}" Margin="0,9,20,9" />
             </Grid>
             <common:InputOuputColumns DockPanel.Dock="Top" Margin="20" InputList="{Binding ResidenceColumns, Mode=TwoWay}"
                                       OutputList="{Binding SelectedResidenceColumns, Mode=TwoWay}" />

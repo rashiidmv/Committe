@@ -17,7 +17,7 @@ namespace Resident {
         public MainViewModel() {
             ShowReportCommand = new DelegateCommand(ExecuteShowReport);
             PrintReportCommand = new DelegateCommand(ExecutePrintReport);
-            ResidenceColumns = new ObservableCollection<string>() { "House Name", "Area",
+            ResidenceColumns = new ObservableCollection<string>() { "House Number","House Name", "Area",
                 "Name","Date of Birth", "Marriage Status", "Gender",
                 "Job", "Mobile","Country","Guardian","Qualification"
             };
@@ -26,6 +26,7 @@ namespace Resident {
             ClearMarriageStatus = new DelegateCommand(ExecuteClearMarriageStatus, CanExecuteClearMarriageStatus);
             ClearArea = new DelegateCommand(ExecuteClearArea, CanExecuteClearArea);
             ClearHouseName = new DelegateCommand(ExecuteClearHouseName, CanExecuteClearHouseName);
+            ClearHouseNumber = new DelegateCommand(ExecuteClearHouseNumber, CanExecuteClearHouseNumber);
             ClearQualification = new DelegateCommand(ExecuteClearQualification, CanExecuteClearQualification);
             ClearGender = new DelegateCommand(ExecuteClearGender, CanExecuteClearGender);
 
@@ -78,6 +79,17 @@ namespace Resident {
         private bool CanExecuteClearHouseName() {
             return !String.IsNullOrEmpty(HouseName);
         }
+        private DelegateCommand clearHouseNumber;
+        public DelegateCommand ClearHouseNumber {
+            get { return clearHouseNumber; }
+            set { clearHouseNumber = value; }
+        }
+        private void ExecuteClearHouseNumber() {
+            HouseNumber = String.Empty;
+        }
+        private bool CanExecuteClearHouseNumber() {
+            return !String.IsNullOrEmpty(HouseNumber);
+        }
         private DelegateCommand clearQualification;
         public DelegateCommand ClearQualification {
             get { return clearQualification; }
@@ -128,6 +140,15 @@ namespace Resident {
                 houseName = value;
                 OnPropertyChanged("HouseName");
                 ClearHouseName.RaiseCanExecuteChanged();
+            }
+        }
+        private string houseNumber;
+        public string HouseNumber {
+            get { return houseNumber; }
+            set {
+                houseNumber = value;
+                OnPropertyChanged("HouseNumber");
+                ClearHouseNumber.RaiseCanExecuteChanged();
             }
         }
         private string qualification;
@@ -276,6 +297,18 @@ namespace Resident {
                         input = input.Where(x => temp.Contains(x.Name, new ContainsComparer())).ToList();
                     }
                 }
+                if(!String.IsNullOrEmpty(HouseNumber)) {
+                    temp = null;
+                    if(HouseNumber.Contains(";")) {
+                        temp = HouseNumber.Split(';');
+                    } else {
+                        temp = new string[1];
+                        temp[0] = HouseNumber;
+                    }
+                    if(temp != null) {
+                        input = input.Where(x => temp.Contains(x.Number, new ContainsComparer())).ToList();
+                    }
+                }
             }
 
             List<ResidenceMember> members = null;
@@ -356,7 +389,7 @@ namespace Resident {
         private void BuildReport(List<Residence> residences, List<ResidenceMember> members) {
             var x = residences.Join(members, residence => residence.Id, member => member.Residence_Id, (residence, member) =>
             new {
-                residence.Name, residence.Area,
+                residence.Name, residence.Area,residence.Number,
                 MemberName = member.MemberName,
                 DOB = member.DOB.ToShortDateString(), member.MarriageStatus, member.Gender,
                 Mobile = member.Mobile,
@@ -382,6 +415,13 @@ namespace Resident {
                 GridView g = new GridView();
                 l.Width = 700; //690
                 l.MaxWidth = 700;
+                if(SelectedResidenceColumns.Contains("House Number")) {
+                    GridViewColumn residenceNumber = new GridViewColumn() {
+                        Header = "House#", DisplayMemberBinding = new Binding("Number"), Width = 60
+                    };
+                    g.Columns.Add(residenceNumber);
+                }
+
                 if(SelectedResidenceColumns.Contains("House Name")) {
                     GridViewColumn residenceName = new GridViewColumn() {
                         Header = "House Name", DisplayMemberBinding = new Binding("Name"), Width = 180
