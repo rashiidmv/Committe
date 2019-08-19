@@ -29,6 +29,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Expense", "Expense\Expense.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "Common\Common.csproj", "{15907F67-FC0D-4658-B3C9-629B2B96A678}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataLoader", "DataLoader\DataLoader.csproj", "{4C7EA0E3-6637-49DE-A256-4D704B43DFDD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -83,6 +85,10 @@ Global
 		{15907F67-FC0D-4658-B3C9-629B2B96A678}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{15907F67-FC0D-4658-B3C9-629B2B96A678}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{15907F67-FC0D-4658-B3C9-629B2B96A678}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C7EA0E3-6637-49DE-A256-4D704B43DFDD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C7EA0E3-6637-49DE-A256-4D704B43DFDD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C7EA0E3-6637-49DE-A256-4D704B43DFDD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C7EA0E3-6637-49DE-A256-4D704B43DFDD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
