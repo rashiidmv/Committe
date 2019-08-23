@@ -659,7 +659,7 @@ namespace Resident {
             Guardian = string.Empty;
         }
         private void ClearResidenceDetails() {
-            MemberList.Clear();
+            MemberList?.Clear();
             CurrentMember = null;
         }
         private void ClearResidence() {
