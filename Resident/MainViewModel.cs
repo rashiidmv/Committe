@@ -359,7 +359,7 @@ namespace Resident {
                         temp[0] = Gender;
                     }
                     if(temp != null) {
-                        members = members.Where(x => temp.Contains(x.Gender)).ToList();
+                        members = members.Where(x => temp.Contains(x.Gender, new ContainsComparer())).ToList();
                     }
                 }
             }
