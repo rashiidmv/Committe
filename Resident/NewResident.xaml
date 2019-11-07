@@ -76,7 +76,7 @@
                 <RowDefinition Height="40"/>
                 <RowDefinition Height="200"/>
                 <RowDefinition Height="40"/>
-                <RowDefinition Height="40"/>
+                <RowDefinition Height="48"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
@@ -129,7 +129,6 @@
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
                     <RowDefinition Height="40"/>
-                    <RowDefinition Height="40"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -151,7 +150,12 @@
                 <TextBox  IsEnabled="{Binding ElementName=Abroad, Path=IsChecked}" Grid.Row="4" Grid.Column="1" Text="{Binding Country}" Margin="0,9,20,9"/>
 
             </Grid>
-            <StackPanel HorizontalAlignment='Right' Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
+            <DockPanel Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">
+                <TextBlock  TextWrapping="Wrap" Text="Remarks" VerticalAlignment="Center" Margin="40,0,46,0"/>
+                <TextBox  Grid.Column="1" Text="{Binding Remarks}" Margin="0,9,20,9"/>
+                
+            </DockPanel>
+            <StackPanel HorizontalAlignment='Right' Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" Orientation="Horizontal">
                 <Button   Content="Save Member" Command="{Binding SaveMemberCommand}" Width="100" Margin="0,8,20,8"/>
                 <Button   Content="New Member" Command="{Binding NewMemberCommand}" Width="84" Margin="0,8,20,8"/>
                 <Button  Content="Delete" Command="{Binding DeleteMemberCommand}" Width="48" Margin="0,8,20,8"/>

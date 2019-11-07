@@ -49,6 +49,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Area.cs" />
+    <Compile Include="CashSource.cs" />
     <Compile Include="Common\ContainsComparer.cs" />
     <Compile Include="Common\Operation.cs" />
     <Compile Include="EventTypes\CommonDetailsType.cs" />

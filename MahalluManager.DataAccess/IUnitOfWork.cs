@@ -13,7 +13,7 @@ namespace MahalluManager.DataAccess {
         IRepository<Expense> Expenses { get; }
         IRepository<ExpenseDetails> ExpenseDetails { get; }
         IRepository<MarriageCertificate> MarriageCertificates { get; }
-
+        IRepository<CashSource> CashSources { get; }
         int Complete();
     }
 }

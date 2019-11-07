@@ -651,9 +651,9 @@ namespace Marriage {
             document.Open();
 
             PdfContentByte pdfContentByte = writer.DirectContent;
-            int textDown = 0;
+            int textDown = -50;
             if(CurrentMarriage.GroomPhoto == null && CurrentMarriage.BridePhoto == null) {
-                textDown = 100;
+                textDown = 50;
             }
 
             Paragraph title = new Paragraph();
@@ -674,12 +674,12 @@ namespace Marriage {
                 Image i = Image.GetInstance(CurrentMarriage.GroomPhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
-                i.SetAbsolutePosition(200, 370);
+                i.SetAbsolutePosition(200, 420);
                 pdfContentByte.AddImage(i);
                 i = Image.GetInstance(CurrentMarriage.BridePhoto);
                 i.Alignment = Image.LEFT_ALIGN;
                 i.ScaleToFit(94f, 144f);
-                i.SetAbsolutePosition(310, 370);
+                i.SetAbsolutePosition(310, 420);
                 pdfContentByte.AddImage(i);
             }
 
@@ -708,17 +708,17 @@ namespace Marriage {
             Paragraph registation = new Paragraph("Reg.No : " + RegNo);
             registation.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLDOBLIQUE, 11f, BaseColor.BLACK);
             ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(column1LeftMargin - 30, 386, 416, 30));
+            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 436, 416, 30));
             ct.AddElement(registation);
             ct.Go();
 
             Paragraph groomDetailsLabels = new Paragraph("Name of Bridegroom   :\n" +
                                                          "Date of Birth                :\n" +
-                                                         "Name of father            :\n" +
+                                                         "Name of Father           :\n" +
                                                          "Permenant Address    :");
             groomDetailsLabels.Leading = 12;
             groomDetailsLabels.Font = FontFactory.GetFont(FontFactory.HELVETICA, 11f, BaseColor.BLACK);
-            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 366, 416, 30));
+            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 416, 416, 30));
             ct.AddElement(groomDetailsLabels);
             ct.Go();
             Chunk groomName = new Chunk(GroomName);
@@ -732,17 +732,17 @@ namespace Marriage {
                 + GroomDistrict + ", " + GroomState + ",\n" + GroomCountry + " - " + GroomPincode;
             groomDetails.Add(details);
             groomDetails.Leading = 12;
-            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 366, 416, 30));
+            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 416, 416, 30));
             ct.AddElement(groomDetails);
             ct.Go();
 
             Paragraph brideDetailsLabels = new Paragraph("Name of Bride             :\n" +
                                                          "Date of Birth                :\n" +
-                                                         "Name of father            :\n" +
+                                                         "Name of Father           :\n" +
                                                          "Permenant Address    :");
             brideDetailsLabels.Leading = 12;
             brideDetailsLabels.Font = FontFactory.GetFont(FontFactory.HELVETICA, 11f, BaseColor.BLACK);
-            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 276, 416, 30));
+            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 326, 416, 30));
             ct.AddElement(brideDetailsLabels);
             ct.Go();
             Chunk brideName = new Chunk(BrideName);
@@ -756,37 +756,46 @@ namespace Marriage {
                 + BrideDistrict + ", " + BrideState + ",\n" + BrideCountry + " - " + BridePincode;
             brideDetails.Add(details);
             brideDetails.Leading = 12;
-            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 276, 416, 30));
+            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 326, 416, 30));
             ct.AddElement(brideDetails);
             ct.Go();
+
+
+            Paragraph placeDateLabels = new Paragraph("Place of Marriage        :\n" +
+                                                      "Date of Marriage         :\n");
+            placeDateLabels.Leading = 12;
+            placeDateLabels.Font = FontFactory.GetFont(FontFactory.HELVETICA, 11f, BaseColor.BLACK);
+            ct.SetSimpleColumn(new Rectangle(column1LeftMargin, 230, 416, 30));
+            ct.AddElement(placeDateLabels);
+            ct.Go();
+            Paragraph placeDateDetails = new Paragraph();
+            placeDateDetails.Font = FontFactory.GetFont(FontFactory.HELVETICA, 11f, BaseColor.BLACK);
+
+            details = MarriagePlace + "\n" + MarriageDate.ToShortDateString();
+            placeDateDetails.Add(details);
+            placeDateDetails.Leading = 12;
+            ct.SetSimpleColumn(new Rectangle(column2LeftMargin, 230, 416, 30));
+            ct.AddElement(placeDateDetails);
+            ct.Go();
+
 
             //pdfContentByte.SetColorFill(BaseColor.BLACK);
             //pdfContentByte.SetFontAndSize(bf, 12);
 
-            Chunk dateOfMarriage = new Chunk("'" + MarriageDate.ToShortDateString() + "'");
-            dateOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
-            Chunk placeOfMarriage = new Chunk("'" + MarriagePlace + "'");
-            placeOfMarriage.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
             Chunk masjidName = new Chunk("'" + MasjidName + "'");
-            masjidName.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLDOBLIQUE, 12f, BaseColor.BLACK);
+            masjidName.Font = FontFactory.GetFont(FontFactory.HELVETICA_OBLIQUE, 12f, BaseColor.BLACK);
 
             Paragraph content = new Paragraph();
             content.SpacingBefore = 10;
             content.SpacingAfter = 10;
             content.Font = FontFactory.GetFont(FontFactory.HELVETICA, 12f, BaseColor.BLACK);
             string contentText1 = "             Certify that the Marriage between the above mentioned persons was solemnised by Mahallu Khazi of ";
-            string contentText2 = " in the presence of their friends and relatives on ";
-            string contentText3 = " at ";
-            string contentText4 = " according to the Islamic Shareeath Law.";
+            string contentText2 = " in the presence of their friends and relatives according to the Islamic Shareeath Law.";
             content.Add(contentText1);
             content.Add(masjidName);
             content.Add(contentText2);
-            content.Add(dateOfMarriage);
-            content.Add(contentText3);
-            content.Add(placeOfMarriage);
-            content.Add(contentText4);
             content.Alignment = Element.ALIGN_JUSTIFIED;
-            ct.SetSimpleColumn(new Rectangle(30, 180, 540, 50));
+            ct.SetSimpleColumn(new Rectangle(30, 210, 540, 50));
             ct.AddElement(content);
             ct.Go();
 
@@ -794,7 +803,7 @@ namespace Marriage {
             secretary.Alignment = Element.ALIGN_RIGHT;
             secretary.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
             ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(30, 120, 540, 30));
+            ct.SetSimpleColumn(new Rectangle(30, 150, 540, 30));
             ct.AddElement(secretary);
             ct.Go();
 
@@ -802,7 +811,7 @@ namespace Marriage {
             place.Alignment = Element.ALIGN_LEFT;
             place.Font = FontFactory.GetFont(FontFactory.HELVETICA_BOLD, 12f, BaseColor.BLACK);
             ct = new ColumnText(writer.DirectContent);
-            ct.SetSimpleColumn(new Rectangle(40, 120, 540, 30));
+            ct.SetSimpleColumn(new Rectangle(40, 150, 540, 30));
             ct.AddElement(place);
             ct.Go();
 

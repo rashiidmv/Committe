@@ -235,7 +235,7 @@ namespace Resident {
                 if(ValidateResidenceMember(unitOfWork)) {
                     ResidenceMember residenceMember = GetResidenceMember();
                     if(CurrentMember != null) {
-                        CurrentMember.MemberName = residenceMember.MemberName;
+                        CurrentMember.MemberName = residenceMember.MemberName.ToUpper();
                         CurrentMember.DOB = residenceMember.DOB;
                         CurrentMember.Job = residenceMember.Job;
                         CurrentMember.Mobile = residenceMember.Mobile;
@@ -244,6 +244,7 @@ namespace Resident {
                         CurrentMember.IsGuardian = residenceMember.IsGuardian;
                         CurrentMember.MarriageStatus = residenceMember.MarriageStatus;
                         CurrentMember.Qualification = residenceMember.Qualification;
+                        CurrentMember.Remarks = residenceMember.Remarks;
                         CurrentMember.Gender = residenceMember.Gender;
                         unitOfWork.ResidenceMembers.Update(CurrentMember);
                         MessageBox.Show(CurrentMember.MemberName + " updated successfully !", "New Member", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -580,7 +581,14 @@ namespace Resident {
             }
         }
 
-
+        private string remarks;
+        public string Remarks {
+            get { return remarks; }
+            set {
+                remarks = value;
+                OnPropertyChanged("Remarks");
+            }
+        }
 
         private bool enbalbeIsGuardian;
         public bool EnbalbeIsGuardian {
@@ -682,6 +690,7 @@ namespace Resident {
                     Other = true;
                 MarriageStatus = CurrentMember.MarriageStatus;
                 Qualification = CurrentMember.Qualification;
+                Remarks = CurrentMember.Remarks;
                 SetGuardian();
             } else {
                 ClearMemberDetails();
@@ -695,7 +704,7 @@ namespace Resident {
             Mobile = String.Empty;
             IsAbroad = false;
             IsGuardian = false;
-            Country = MarriageStatus = Qualification = String.Empty;
+            Country = MarriageStatus = Qualification = Remarks = String.Empty;
             Female = Male = Other = false;
         }
 
@@ -708,7 +717,7 @@ namespace Resident {
         }
         private ResidenceMember GetResidenceMember() {
             var residenceMember = new ResidenceMember();
-            residenceMember.MemberName = MemberName.Trim();
+            residenceMember.MemberName = MemberName.Trim().ToUpper();
             residenceMember.DOB = DOB;
             residenceMember.Job = Job?.Trim();
             residenceMember.Mobile = Mobile?.Trim();
@@ -728,6 +737,7 @@ namespace Resident {
             residenceMember.Gender = gender;
             residenceMember.MarriageStatus = MarriageStatus;
             residenceMember.Qualification = Qualification;
+            residenceMember.Remarks = Remarks;
             residenceMember.Residence_Id = CurrentResidence.Id;
             return residenceMember;
         }

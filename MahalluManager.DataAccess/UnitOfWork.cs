@@ -17,6 +17,8 @@ namespace MahalluManager.DataAccess {
             Expenses = new Repository<Expense>(mahalluDBContext);
             ExpenseDetails = new Repository<ExpenseDetails>(mahalluDBContext);
             MarriageCertificates = new Repository<MarriageCertificate>(mahalluDBContext);
+            CashSources = new Repository<CashSource>(mahalluDBContext);
+
         }
         public IResidenceRepository Residences { get; private set; }
         public IRepository<ResidenceMember> ResidenceMembers { get; private set; }
@@ -28,6 +30,7 @@ namespace MahalluManager.DataAccess {
         public IRepository<Expense> Expenses { get; private set; }
         public IRepository<ExpenseDetails> ExpenseDetails { get; private set; }
         public IRepository<MarriageCertificate> MarriageCertificates { get; private set; }
+        public IRepository<CashSource> CashSources { get; private set; }
 
         public int Complete() {
             return mahalluDBContext.SaveChanges();

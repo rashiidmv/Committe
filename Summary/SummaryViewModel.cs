@@ -138,15 +138,22 @@ namespace Summary {
             }
         }
 
+        private Decimal selectedYearBalance;
+
         public Decimal SelectedYearBalance {
-            get {
-                return (TotalIncome - TotalExpense);
+            get { return selectedYearBalance; }
+            set {
+                selectedYearBalance = value;
+                SelectedYearType selectedYearType = new SelectedYearType();
+                selectedYearType.SelectedYear = selected;
+                eventAggregator.GetEvent<PubSubEvent<SelectedYearType>>().Publish(selectedYearType);
+                eventAggregator.GetEvent<PubSubEvent<SystemTotalType>>().Publish(new SystemTotalType { SelectedYear = selected, Balance = SelectedYearBalance });
             }
         }
 
         public String TotalBalance {
             get {
-                Decimal selectedYearBalance = (TotalIncome - TotalExpense);
+                SelectedYearBalance = (TotalIncome - TotalExpense);
                 return "Total Balance = " + PreviousYearBalance + "(Previous Balance) + " + selectedYearBalance + " = " + (PreviousYearBalance + selectedYearBalance);
             }
         }

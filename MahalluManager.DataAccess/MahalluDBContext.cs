@@ -13,5 +13,6 @@ namespace MahalluManager.DataAccess {
         public DbSet<Expense> Expense { get; set; }
         public DbSet<ExpenseDetails> ExpenseDetail { get; set; }
         public DbSet<MarriageCertificate> MarriageCertificate { get; set; }
+        public DbSet<CashSource> CashSource { get; set; }
     }
 }

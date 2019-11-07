@@ -101,6 +101,10 @@
     <Compile Include="SettingsViewModel.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{15907F67-FC0D-4658-B3C9-629B2B96A678}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Contribution\Contribution.csproj">
       <Project>{95a32abe-5e11-4db3-b464-a19bc6df8b4b}</Project>
       <Name>Contribution</Name>

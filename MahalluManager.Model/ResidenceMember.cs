@@ -105,5 +105,13 @@ namespace MahalluManager.Model {
                 OnPropertyChanged("Qualification");
             }
         }
+        private String remarks;
+        public String Remarks {
+            get { return remarks; }
+            set {
+                remarks = value;
+                OnPropertyChanged("Remarks");
+            }
+        }
     }
 }
