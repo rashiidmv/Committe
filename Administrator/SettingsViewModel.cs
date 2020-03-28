@@ -275,7 +275,7 @@ namespace Administrator {
             if(CurrentCashSource != null) {
                 SourceNameText = CurrentCashSource.SourceName;
                 SourceAmount = CurrentCashSource.Amount.ToString();
-                IsEnableAmount = false;
+                IsEnableAmount = IsDeposite = IsWithdrawal = false;
             } else {
                 ClearCurrentCashSource();
             }
@@ -321,13 +321,13 @@ namespace Administrator {
                 SourceTotal = SourceTotal + amount;
                 SourceAmount = CurrentCashSource.Amount.ToString();
 
-                IsEnableAmount = false;
+                IsEnableAmount = IsWithdrawal = IsDeposite = false;
                 unitofWork.Complete();
             }
         }
 
         private bool CanExecuteTransaction() {
-            return SourceNameText != null && SourceNameText != String.Empty;
+            return SourceNameText != null && SourceNameText != String.Empty && IsEnableAmount;
         }
         private void DeleteTransaction(CashSource cashSource) {
             MessageBoxResult messageBoxResult = MessageBox.Show("Are you sure to delete", "Delete", MessageBoxButton.YesNo, MessageBoxImage.Warning);
